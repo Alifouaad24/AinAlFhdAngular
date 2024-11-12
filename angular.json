@@ -26,16 +26,56 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+             "src/app/favicon.ico",
+              "src/app/assets",
+              "src/app/assets/css",
+              "src/app/assets/img/",
+              "src/app/assets/img/kaiadmin/logo_light.svg",
+              "src/app/assets/fonts"
             ],
             "styles": [
-              "src/styles.scss",
-              "node_modules/bootstrap/scss/bootstrap.scss"
-              
+              "src/styles.scss",                            
+              "node_modules/bootstrap/scss/bootstrap.scss",  
+              "src/assets/css/bootstrap.min.css",          
+              "src/app/assets/css/kaiadmin.min.css",   
+              "src/app/assets/css/plugins.min.css",    
+              "src/app/assets/css/fonts.min.css",    
+              "src/app/assets/css/demo.css"   
             ],
             "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "src/app/assets/js/core/bootstrap.min.js",
+              "src/app/assets/js/core/jquery-3.7.1.min.js",
+              "src/app/assets/js/core/popper.min.js",
+              "src/app/assets/js/plugin/bootstrap-tagsinput/bootstrap-tagsinput.min.js",
+              "src/app/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js",
+              "src/app/assets/js/plugin/chart-circle/circles.min.js",
+              "src/app/assets/js/plugin/chart.js/chart.min.js",
+              "src/app/assets/js/plugin/datatables/datatables.min.js",
+              "src/app/assets/js/plugin/datepicker/bootstrap-datetimepicker.min.js",
+              "src/app/assets/js/plugin/dropzone/dropzone.min.js",
+              "src/app/assets/js/plugin/fullcalendar/fullcalendar.min.js",
+              "src/app/assets/js/plugin/gmaps/gmaps.js",
+              "src/app/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js",
+              "src/app/assets/js/plugin/jquery.magnific-popup/jquery.magnific-popup.min.js",
+              "src/app/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js",
+              "src/app/assets/js/plugin/jquery.validate/jquery.validate.min.js",
+              "src/app/assets/js/plugin/jsvectormap/jsvectormap.min.js",
+              "src/app/assets/js/plugin/jsvectormap/world.js",
+              "src/app/assets/js/plugin/list.js/list.min.js",
+              "src/app/assets/js/plugin/moment/moment.min.js",
+              "src/app/assets/js/plugin/owl-carousel/owl.carousel.min.js",
+              "src/app/assets/js/plugin/select2/select2.full.min.js",
+              "src/app/assets/js/plugin/sortable/sortable.min.js",
+              "src/app/assets/js/plugin/sticky-sidebar/sticky-sidebar.min.js",
+              "src/app/assets/js/plugin/summernote/summernote-lite.min.js",
+              "src/app/assets/js/plugin/sweetalert/sweetalert.min.js",
+              "src/app/assets/js/plugin/webfont/webfont.min.js",
+              "src/app/assets/js/demo.js",
+              "src/app/assets/js/kaiadmin.js",
+              "src/app/assets/js/kaiadmin.min.js",
+              "src/app/assets/js/setting-demo.js",
+              "src/app/assets/js/setting-demo2.js"
             ]
           },
           "configurations": {

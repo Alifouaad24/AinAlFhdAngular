@@ -10,6 +10,6 @@ import { RouterModule } from '@angular/router';
 })
 export class FirstComponent {
 
-  @Input() nameq: string = '';
+
 
 }

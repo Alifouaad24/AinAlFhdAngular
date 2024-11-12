@@ -11,10 +11,6 @@ import {  RouterModule, RouterOutlet } from '@angular/router';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'Ain';
-  name = 'Ali F alali';
 
-  firstMethod(): void{
-    console.log(this.title + " For Test")
-  }
+title: string = "Ain AlFahd Angular App.";
 }
