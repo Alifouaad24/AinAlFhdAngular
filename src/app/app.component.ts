@@ -1,39 +1,50 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+
 
 import { ApiService } from './Services/api.service';
 import { HttpClientModule } from '@angular/common/http';
-import { User, Address, Geo, Company } from './Models/User';
+import { Receipt } from './Models/Recipt';
+import { OrdersComponent } from './orders/orders.component';
+import { CustomersComponent } from './customers/customers.component';
+import { routes } from './app.routes';
+import { RouterLink, RouterOutlet } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HttpClientModule, CommonModule],
+  imports: [RouterOutlet, RouterLink, HttpClientModule, CommonModule, OrdersComponent, CustomersComponent ],
   providers:[ApiService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  title = 'AngularAinAlfahdNew';
+  title = 'Ain AlFahd Company';
   http = inject(ApiService);
 
-  Users!: User[];
+  recipts: Receipt[] = [];
 
   getData(): void{
-    console.log(this.title);
-    this.http.getData("users").subscribe((r) => {
-      this.Users = r;
-      console.log(r[0]);
+    this.http.getData("api/Reciept/GetLastFiveRecords").subscribe((r: Receipt[]) => {
+      this.recipts = r;
+      console.log(r)
     })
   }
 
   ngOnInit(): void {
     this.getData();
+  
   }
 
-  addUser(): void{
-    console.log("r[0]");
+  divideNum(num: number | undefined): string{
+    if (num === undefined) {
+      return 'N/A';
+    }
+    let magnitude = Math.pow(10, Math.floor(Math.log10(num) - 1));
+    let final =  Math.ceil(num / magnitude) * magnitude;
+    return final.toLocaleString();
   }
 
 }
