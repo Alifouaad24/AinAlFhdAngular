@@ -3,6 +3,7 @@ import { OrdersComponent } from './orders/orders.component';
 import { CustomersComponent } from './customers/customers.component';
 import { CustomerSearchComponent } from './customers/customer-search/customer-search.component';
 import { LastSomeReciptsComponent } from './Recipts/last-some-recipts/last-some-recipts.component';
+import { LangingPageComponent } from './langing-page/langing-page.component';
 
 export const routes: Routes = [
     {
@@ -20,5 +21,9 @@ export const routes: Routes = [
     {
         path: "last5recipts",
         component: LastSomeReciptsComponent
+    },
+    {
+        path: "LangingPage",
+        component: LangingPageComponent
     }
 ];
