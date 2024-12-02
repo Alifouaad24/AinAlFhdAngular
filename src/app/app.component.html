@@ -1,67 +1,47 @@
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">إدارة الإيصالات</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link btn btn-info" routerLink="Orders" routerLinkActive="active">الطلبات</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link btn btn-info" routerLink="Customers" routerLinkActive="active">العملاء</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link btn btn-info" routerLink="SearchCustomer" routerLinkActive="active">بحث عن عميل</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  
-<div class="container-fluid">
-    <div class="row">
-      <!-- القسم الخاص بالجدول -->
-      <div class="col-md-6">
-        <h1 class="bg-light text-center p-4">جدول الإيصالات</h1>
-        <div class="table-container">
-          <table class="custom-table">
-            <thead>
-              <tr class="fw-bold text-center fs-3">
-                <th>تاريخ الوصل</th>
-                <th>عملة البيع</th>
-                <th>سعر البيع</th>
-                <th>العملة</th>
-                <th>التكلفة</th>
-                <th>الوزن</th>
-                <th>اسم العميل</th>
-                <th>#</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                class="fw-bold text-center fs-6"
-                *ngFor="let receipt of recipts; let i = index"
-              >
-                <td>{{ receipt.recieptDate | date:'dd-MM-yyyy' }}</td>
-                <td>{{ receipt.sellingCurrency }}</td>
-                <td>{{ divideNum(receipt.sellingPrice) }}</td>
-                <td>{{ receipt.currency }}</td>
-                <td>{{ receipt.cost }}</td>
-                <td>{{ receipt.weight }} Kg</td>
-                <td>{{ receipt.customer?.custName || 'غير معروف' }}</td>
-                <td>{{ receipt.recieptId }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-  
-      <div class="col-md-6">
-            <router-outlet></router-outlet>
-      </div>
+<nav class="navbar navbar-expand-lg bggray p-2">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <!-- <li class="nav-item">
+          <a class="nav-link btn btn-info" routerLink="Orders" routerLinkActive="active">الطلبات</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn btn-info" routerLink="Customers" routerLinkActive="active">العملاء</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn btn-info" routerLink="SearchCustomer" routerLinkActive="active">بحث عن عميل</a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bg-dark rounded" routerLink="last5recipts">
+            عرض آخر 5 إيصالات
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
-  
+</nav>
+
+
+<div class="row d-flex col-md-12">
+
+  <div class="col-md-10 p-5 bgbody">
+    <router-outlet></router-outlet>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar col-md-2 bgSlider text-white p-3" style="height: 94vh;" [ngClass]=" {'collapsed': isCollapsed}">
+    <h2 class="text-center"><i class="fas fa-home"></i>
+    </h2>
+    <ul class="list-unstyled mt-5">
+      <li class="nav-item bggold rounded">
+        <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 " routerLink="SearchCustomer" routerLinkActive="active">
+          بحث عن عميل <span>&ThinSpace;</span><i class="fas fa-search"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
