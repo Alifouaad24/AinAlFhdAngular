@@ -19,11 +19,11 @@ export const routes: Routes = [
         component: CustomerSearchComponent
     },
     {
-        path: "last5recipts",
+        path: 'last5recipts',
         component: LastSomeReciptsComponent
     },
     {
-        path: "LangingPage",
+        path: '',
         component: LangingPageComponent
     }
 ];
