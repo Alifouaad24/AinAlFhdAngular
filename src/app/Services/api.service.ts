@@ -10,7 +10,7 @@ export class ApiService {
   baseUrl: string = "http://saifsfo-002-site19.atempurl.com/";
   constructor(private http: HttpClient) { }
 
-  getData(endPoint: string): Observable<any>{
+  getData(endPoint: string): Observable<any> {
 
     var data = this.http.get(`${this.baseUrl}${endPoint}`);
     return data;

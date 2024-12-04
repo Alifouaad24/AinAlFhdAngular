@@ -1,0 +1,59 @@
+<div class="col-md-12">
+    <div class="row col-md-12">
+        <div>
+            <h2 class="text-white text-center mb-5 fw-bold">أدخل اسم أو رقم العميل للبحث</h2>
+            <div class="d-flex flex-column align-items-center col-md-12 position-relative">
+                <input class="form-control w-50" #wordToseach (input)="filterSuggestions(wordToseach.value)"
+                    [ngModel]="searchTerm" placeholder="ابحث هنا..." />
+
+                <ul *ngIf="filteredSuggestions.length > 0" class="list-group suggestions-list"
+                    style="max-height: 200px; overflow-y: auto; cursor: pointer;">
+                    <li *ngFor="let suggestion of filteredSuggestions" class="list-group-item"
+                        (click)="selectSuggestion(suggestion)">
+                        {{ suggestion }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5 col-md-10" style="max-height: 299px; height: 300px; overflow-y: auto;">
+        <table class="table table-striped table-bordered table-hover" *ngIf="res1.length > 0">
+            <thead class="table-dark">
+                <tr class="text-center">
+                    <th>رقم جوال العميل</th>
+                    <th>اسم العميل</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let customer of res1; let i = index">
+                    <td class="text-center">
+                        <a [href]="'https://wa.me/' + customer.custMob" target="_blank"
+                            (click)="SetCustomet(customer.custName, customer.id)" class="text-decoration-none">
+                            {{ customer.custMob }}
+                        </a>
+                    </td>
+                    <td class="text-center" (click)="SetCustomet(customer.custName, customer.id)">
+                        {{customer.custName}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="col-md-12 d-flex flex-column align-items-center p-5">
+        <div class="col-md-4">
+            <input hidden readonly type="text" class="form-control" [(ngModel)]="CustomerName" />
+            <input hidden readonly type="text" #idRef class="form-control" [(ngModel)]="CustomerId" />
+        </div>
+        <h3 class="text-white">الخدمات</h3>
+        <div *ngIf="roles.length > 0">
+            <div *ngFor="let role of roles; let ii = index">
+                <input type="checkbox" [name]="'checkbox_' + role.id" [value]="role.id" #checkbox
+                    class="p-3 m-2 checkboxCss" [checked]="isRoleAssigned(role.id)" />
+                <label class="text-white">{{role.description}}</label>
+            </div>
+        </div>
+    </div>
+</div>
