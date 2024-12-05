@@ -15,4 +15,10 @@ export class ApiService {
     var data = this.http.get(`${this.baseUrl}${endPoint}`);
     return data;
   }
+
+
+  postData(endPoint: string, data: any): Observable<any> {
+    var data1 = this.http.post(`${this.baseUrl}${endPoint}`, data);
+    return data1;
+  }
 }

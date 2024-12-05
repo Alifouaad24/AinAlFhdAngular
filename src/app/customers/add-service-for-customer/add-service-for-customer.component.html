@@ -51,9 +51,16 @@
         <div *ngIf="roles.length > 0">
             <div *ngFor="let role of roles; let ii = index">
                 <input type="checkbox" [name]="'checkbox_' + role.id" [value]="role.id" #checkbox
-                    class="p-3 m-2 checkboxCss" [checked]="isRoleAssigned(role.id)" />
+                    [(ngModel)]="selectedServices[role.id]" class="p-3 m-2 checkboxCss"
+                    [checked]="isRoleAssigned(role.id)" (change)="onCheckboxChange(role.id, checkbox.checked)" />
+
                 <label class="text-white">{{role.description}}</label>
             </div>
+        </div>
+        <div class="d-flex col-md-12 flex-column align-items-center mt-5">
+            <button class="btn btn-success col-md-1" (click)="AddServices()">
+                حفظ
+            </button>
         </div>
     </div>
 </div>

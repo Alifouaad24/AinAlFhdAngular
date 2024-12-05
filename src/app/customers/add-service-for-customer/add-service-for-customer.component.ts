@@ -3,6 +3,9 @@ import { ApiService } from '../../Services/api.service';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { catchError, tap } from 'rxjs';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-service-for-customer',
@@ -14,7 +17,7 @@ import { CommonModule } from '@angular/common';
 export class AddServiceForCustomerComponent implements OnInit {
 
   @ViewChildren('checkbox') checkboxes: QueryList<ElementRef> | undefined;
-
+  constructor(private toastr: ToastrService) { }
   apiService = inject(ApiService);
   res: any[] = [];
   res1: any[] = [];
@@ -26,6 +29,8 @@ export class AddServiceForCustomerComponent implements OnInit {
   idConverted?: number;
   roles: any[] = []
   detectRoles: any[] = [];
+  selectedServices: { [key: number]: number } = {};
+
 
   ngOnInit(): void {
     this.apiService.getData(`api/CustomerServices/GetAllServices`).subscribe((result: any[]) => {
@@ -83,12 +88,53 @@ export class AddServiceForCustomerComponent implements OnInit {
 
     this.res1 = [];
 
-    console.log("ggg");
     this.apiService.getData(`api/CustomerServices/GetCustomerServices/${id}`).subscribe((result11) => {
       result11.map((e: any) => {
         this.detectRoles.push(e)
         console.log(e)
       });
     })
+  }
+  onCheckboxChange(roleId: number, isChecked: boolean): void {
+    if (isChecked) {
+      this.selectedServices[roleId] = roleId;
+    } else {
+      delete this.selectedServices[roleId];
+    }
+  }
+
+
+  AddServices(): void {
+    const payload = {
+      selectedServices: this.selectedServices
+    };
+
+    const custId = this.CustomerId;
+    const selectedServiceIds = Object.values(this.selectedServices);
+    console.log('customerId  ' + custId);
+    console.log('Selected Service IDs:   ', selectedServiceIds);
+
+
+    if (custId && custId > 0) {
+
+      this.apiService.postData(`api/CustomerServices/addServicesForCustomer?custId=${custId}`, payload)
+        .pipe(
+          tap((response) => {
+            console.log('تم الحفظ بنجاح:', response);
+          }),
+          catchError((error) => {
+            console.error('حدث خطأ أثناء الإرسال:', error);
+            throw error;
+          })
+        )
+        .subscribe();
+
+      this.selectedServices = [];
+
+    } else {
+      this.toastr.warning('من فضلك اختر عميلًا أولاً.', 'تحذير');
+    }
+
+
   }
 }

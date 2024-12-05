@@ -1,15 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-
-
 import { ApiService } from './Services/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Receipt } from './Models/Recipt';
 import { OrdersComponent } from './orders/orders.component';
 import { CustomersComponent } from './customers/customers.component';
-import { routes } from './app.routes';
 import { RouterLink, RouterOutlet } from '@angular/router';
-
 
 
 @Component({
