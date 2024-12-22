@@ -17,8 +17,18 @@ export class ApiService {
   }
 
 
-  postData(endPoint: string, data: any): Observable<any> {
-    var data1 = this.http.post(`${this.baseUrl}${endPoint}`, data);
-    return data1;
+  postData(endPoint: string, dataToSend: any): Observable<any> {
+    var data = this.http.post(`${this.baseUrl}${endPoint}`, dataToSend);
+    return data;
+  }
+
+  putData(endPoint: string, dataToSend: any): Observable<any> {
+    var deta = this.http.put(`${this.baseUrl}${endPoint}`, dataToSend);
+    return deta;
+  }
+
+  deleteData(endPoint: string): Observable<any> {
+    var deta = this.http.delete(`${this.baseUrl}${endPoint}`);
+    return deta;
   }
 }

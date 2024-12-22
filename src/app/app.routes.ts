@@ -5,6 +5,9 @@ import { CustomerSearchComponent } from './customers/customer-search/customer-se
 import { LastSomeReciptsComponent } from './Recipts/last-some-recipts/last-some-recipts.component';
 import { LangingPageComponent } from './langing-page/langing-page.component';
 import { AddServiceForCustomerComponent } from './customers/add-service-for-customer/add-service-for-customer.component';
+import { ShippingTypesComponent } from './Shipping/shipping-types/shipping-types.component';
+import { Address } from './Models/User';
+import { AddShippingTypeComponent } from './Shipping/add-shipping-type/add-shipping-type.component';
 
 export const routes: Routes = [
     {
@@ -30,5 +33,17 @@ export const routes: Routes = [
     {
         path: 'AddServiceForCustomer',
         component: AddServiceForCustomerComponent
+    },
+    {
+        path: 'ShippingTypes',
+        component: ShippingTypesComponent
+    },
+    {
+        path: 'AddUpdateShippingTypes/:id',
+        component: AddShippingTypeComponent
+    },
+    {
+        path: 'AddUpdateShippingTypes',
+        component: AddShippingTypeComponent
     }
 ];

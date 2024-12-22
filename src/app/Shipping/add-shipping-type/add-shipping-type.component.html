@@ -1,0 +1,14 @@
+<div class="m-3 text-center text-light fs-3 fw-bold">{{ isAdd ? 'تعديل نوع الشحن' : 'إضافة نوع شحن جديد' }}</div>
+
+<div class="container mt-4 col-md-12">
+    <div class="d-flex justify-content-center align-items-center flex-column col-md-12">
+        <div class="col-md-4">
+            <input type="text" [(ngModel)]="Description" class="form-control border-primary" />
+        </div>
+        <br />
+        <div class="col-md-2 mt-2">
+            <button (click)="AddShippingType()" class="btn btn-primary ms-2">{{ isAdd ? 'تحديث' : 'إضافة' }}</button>
+        </div>
+    </div>
+</div>
+

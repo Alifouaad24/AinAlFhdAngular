@@ -5,9 +5,7 @@
             <thead>
                 <tr class="fw-bold text-center fs-3">
                     <th>تاريخ الوصل</th>
-                    <th>عملة البيع</th>
                     <th>سعر البيع</th>
-                    <th>العملة</th>
                     <th>التكلفة</th>
                     <th>الوزن</th>
                     <th>اسم العميل</th>
@@ -17,10 +15,8 @@
             <tbody>
                 <tr class="fw-bold text-center bg-dark text-white fs-6" *ngFor="let receipt of recipts; let i = index">
                     <td>{{ receipt.recieptDate | date:'dd-MM-yyyy'}}</td>
-                    <td>{{ receipt.sellingCurrency }}</td>
-                    <td>{{ divideNum(receipt.sellingPrice) }}</td>
-                    <td>{{ receipt.currency }}</td>
-                    <td>{{ receipt.cost }}</td>
+                    <td>{{ divideNum(receipt.sellingPrice) }} IQ</td>
+                    <td>{{ receipt.cost }} $</td>
                     <td>{{ receipt.weight }} Kg</td>
                     <td>{{ receipt.customer?.custName || 'غير معروف' }}</td>
                     <td>{{ receipt.recieptId }}</td>
