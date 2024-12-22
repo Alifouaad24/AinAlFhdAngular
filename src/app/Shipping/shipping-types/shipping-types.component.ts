@@ -32,11 +32,9 @@ export class ShippingTypesComponent implements OnInit {
   }
 
   DeleteType(id: number): void{
-    console.log("DeleteType data");
     this.api.deleteData(`api/ShippingTypes/${id}`).subscribe((data) =>{
     })
     this.SippingTypes = this.SippingTypes.filter(ship => ship.shippingTypeId !== id);
   }
-
 
 }

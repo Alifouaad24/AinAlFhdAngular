@@ -8,6 +8,7 @@ import { AddServiceForCustomerComponent } from './customers/add-service-for-cust
 import { ShippingTypesComponent } from './Shipping/shipping-types/shipping-types.component';
 import { Address } from './Models/User';
 import { AddShippingTypeComponent } from './Shipping/add-shipping-type/add-shipping-type.component';
+import { ShippingBatchComponent } from './Shipping/shipping-batch/shipping-batch.component';
 
 export const routes: Routes = [
     {
@@ -45,5 +46,9 @@ export const routes: Routes = [
     {
         path: 'AddUpdateShippingTypes',
         component: AddShippingTypeComponent
+    },
+    {
+        path: 'ShippingBatch',
+        component: ShippingBatchComponent
     }
 ];
