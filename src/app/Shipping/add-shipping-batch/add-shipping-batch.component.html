@@ -1,0 +1,47 @@
+<p class="text-center text-light fs-3">إضافة وجبة جديدة</p>
+
+<div class="col-md-12">
+    <div class="mb-3 col-md-6">
+        <label for="shippingDate | 'yyyy-MM-dd' " class="form-label fw-bold text-light fs-5">تاريخ الشحن من دبي</label>
+        <input 
+          id="shippingDate" 
+          type="date" 
+          class="form-control border-primary" 
+          [(ngModel)]="ShippingDate" >
+      </div>
+      <div class="mb-3 col-md-6">
+      <label for="shippingDate | 'yyyy-MM-dd' " class="form-label fw-bold text-light fs-5">تاريخ وصول الوجبة</label>
+      <input 
+        id="shippingDate" 
+        type="date" 
+        class="form-control border-primary" 
+        [(ngModel)]="ShippingDate" >
+    </div>
+    <div class="mb-3 col-md-6">
+    <label for="shippingDate | 'yyyy-MM-dd' " class="form-label fw-bold text-light fs-5">تاريخ ادخال الوجبة</label>
+    <input 
+      id="shippingDate" 
+      type="date" 
+      class="form-control border-primary" 
+      [(ngModel)]="ShippingDate" >
+  </div>
+  <div class="mb-3 col-md-6">
+  <label for="shippingDate | 'yyyy-MM-dd' " class="form-label fw-bold text-light fs-5">نوع الشحن</label>
+  <select 
+    id="shippingType" 
+    class="form-control border-primary" 
+    [(ngModel)]="selectedShippingType">
+    <option *ngFor="let type of shippingTypes" [value]="type.shippingTypeId">
+      {{ type.description }}
+    </option>
+  </select>
+</div>
+<div class="mb-3 col-md-6">
+<label for="shippingDate | 'yyyy-MM-dd' " class="form-label fw-bold text-light fs-5">التكلفة بالدولار</label>
+<input 
+  id="shippingDate" 
+  type="date" 
+  class="form-control border-primary" 
+  [(ngModel)]="ShippingDate" >
+</div>
+</div>

@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { ApiService } from '../Services/api.service';
+import { Receipt } from '../Models/Recipt';
 
 @Component({
   selector: 'app-langing-page',
@@ -11,6 +13,34 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 })
 export class LangingPageComponent {
 
-  title: string = "Ain AlFhd Company";
+  title = 'Ain AlFahd Company';
+  http = inject(ApiService);
+
+  recipts: Receipt[] = [];
+  isCollapsed = false;
+
+  toggleSidebar() {
+    this.isCollapsed = !this.isCollapsed;
+  }
+  getData(): void {
+    this.http.getData("api/Reciept/GetLastFiveRecords").subscribe((r: Receipt[]) => {
+      this.recipts = r;
+      console.log(r)
+    })
+  }
+
+  ngOnInit(): void {
+    this.getData();
+
+  }
+
+  divideNum(num: number | undefined): string {
+    if (num === undefined) {
+      return 'N/A';
+    }
+    let magnitude = Math.pow(10, Math.floor(Math.log10(num) - 1));
+    let final = Math.ceil(num / magnitude) * magnitude;
+    return final.toLocaleString();
+  }
 
 }

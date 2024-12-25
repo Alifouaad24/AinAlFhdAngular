@@ -1,1 +1,45 @@
-<p>shipping-batch works!</p>
+<h2 class="text-center text-light p-2">جدول الوجبات</h2>
+<a class="text-white p-2 fs-5 pe-3  me-2 rounded col-md-2 btn btn-primary"
+         routerLink="/AddUpdateShippingBatch">
+    إضافة وجبة جديدة
+  </a>
+
+<table class="table table-hover text-center mt-4" style="border-radius: 10px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <thead style="background-color: #f3a808; color: white;">
+        <tr>
+            <th style="width: 20%;">تعديلات</th>
+            <th>التكلفة بالدولار</th>
+            <th>نوع الشحن</th>
+            <th>تاريخ ادخال الوجبة</th>
+            <th>تاريخ وصول الشحنة</th>
+            <th>تاريخ الشحن من دبي</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let ships of ShippingBatches; let i = index" class="align-middle" 
+            [class.table-primary]="i % 2 === 0" 
+            [class.table-light]="i % 2 !== 0">
+            <td>
+                <button [routerLink]="['/AddUpdateShippingTypes', ships.shippingBatchId]" class="btn btn-sm btn-primary me-2">
+                    <i class="fas fa-edit"></i>
+                </button>                
+                <button (click)="DeleteBatch(ships.shippingBatchId)" class="btn btn-sm btn-danger">
+                    <i class="fas fa-trash" ></i>
+                </button>
+            </td>
+            <td class="fw-bold text-success">
+                {{ ships.batchCostUS ? ships.batchCostUS + '$' : '' }}
+              </td>
+              
+            <td class="fw-bold text-success">{{ ships.shippingTypes.description }}</td>
+            <td class="fw-bold text-success">{{ ships.entryDate | date: 'yyyy-MM-dd' }}</td>
+            <td class="fw-bold text-success">{{ ships.arrivelDate | date: 'yyyy-MM-dd' }}</td>
+            <td class="fw-bold text-success">
+                {{ ships.shippingDate | date: 'yyyy-MM-dd' }}
+              </td>
+              
+        </tr>
+    </tbody>
+</table>
+
+(click)="DeleteType(ship.shippingBatchId)"
