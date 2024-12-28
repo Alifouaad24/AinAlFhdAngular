@@ -20,10 +20,17 @@ export class CustomerSearchComponent implements OnInit {
   res1: any[] = [];
   searchTerm: string = '';
   filteredSuggestions: string[] = [];
+  filteredSuggestion: string = '';
   suggestions: string[] = [];
   isVisible: boolean = false;
   isNumValid = true;
   isNumValid2 = true;
+  selectedCityForEdit?: number;
+  selectedAreaForEdit?: number;
+  EditLandMark?: string;
+  custId?: number;
+  CustName12?: string;
+  CustNun12?: string;
 
   constructor(private api: ApiService, private fb: FormBuilder) {}
 
@@ -37,12 +44,12 @@ export class CustomerSearchComponent implements OnInit {
     });
 
     this.customerForm = this.fb.group({
-      CustName: ['', [Validators.required]],
-      CustNum: ['', [Validators.required, Validators.pattern(/^(079|078|077)[0-9]{8}$/),
+      custName: ['', [Validators.required]],
+      custMob: ['', [Validators.required, Validators.pattern(/^(079|078|077)[0-9]{8}$/),
          Validators.minLength(11), Validators.maxLength(11)]],
-      selectedCity: ['', Validators.required],
-      selectedArea: ['', Validators.required],
-      selectedLandMark: ['']
+      custCity: ['', Validators.required],
+      custArea: ['', Validators.required],
+      custLandMark: ['']
     });
   }
 
@@ -61,34 +68,56 @@ export class CustomerSearchComponent implements OnInit {
     this.api.postData("api/Customers", payLoad).subscribe(response => {
       console.log(response);
     })
-
     this.isVisible = !this.isVisible;
-
   }
 
 
   filterSuggestions(value: string): void {
     if (value.length >= 3) {
-      this.api.getData(`api/Customers/SearchAboutCustomerApi/${value}`).subscribe((result) => {
-        this.filteredSuggestions = result.map((el: any) => {
-          return el.custName;
-        });
-      })
+      if (/^\d/.test(value)){
+        this.filteredSuggestions.pop();
+        this.api.getData(`api/Customers/SearchAboutDetectedCustomerApi/${value}`).subscribe((result) => {
+          this.res = result;
+          this.filteredSuggestions.push(result.custName);
+        })
+
+      }else{
+        this.api.getData(`api/Customers/SearchAboutCustomerApi/${value}`).subscribe((result) => {
+          this.filteredSuggestions = result.map((el: any) => {
+            return el.custName;
+          });
+        })
+      }
+
     } else {
       this.filteredSuggestions = [];
     }
   }
 
   selectSuggestion(suggestion: string): void {
+    this.res1 = [];
     this.searchTerm = suggestion;
     this.filteredSuggestions = [];
 
-    this.api.getData(`api/Customers/SearchAboutCustomerApi/${suggestion}`).subscribe((result1) => {
-      result1.map((e: any) => {
-        this.res1.push(e)
-      });
+    this.api.getData(`api/Customers/SearchAboutDetectedCustomerApi/${suggestion}`).subscribe((result1) => {
+      this.res1.push(result1)
+      console.log(result1)
     })
+  }
 
+  EditCustData(customer: any): void {
+
+    const payLoad = {
+      'custArea': customer.custArea,
+      'custCity': customer.custCity,
+      'custLandmark': customer.custLandmark,
+      'custName': customer.custName,
+      'custNum': customer.custMob
+    }
+    console.log(payLoad,this.custId )
+    this.api.putData(`api/Customers/${customer.id}`, payLoad).subscribe(res =>{
+      console.log(res)
+    })
   }
 
 }

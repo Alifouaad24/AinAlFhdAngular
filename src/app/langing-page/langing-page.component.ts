@@ -19,6 +19,7 @@ export class LangingPageComponent {
   recipts: Receipt[] = [];
   isCollapsed = false;
   selectSideBar: string ='MainScreen';
+  env: string = ''
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
@@ -36,6 +37,9 @@ export class LangingPageComponent {
 
   ngOnInit(): void {
     this.getData();
+    this.http.getData("api/Enviroment").subscribe(res => {
+      this.env = res.db_env;
+    })
 
   }
 
