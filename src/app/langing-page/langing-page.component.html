@@ -4,36 +4,71 @@
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <!-- <li class="nav-item">
-            <a class="nav-link btn btn-info" routerLink="Orders" routerLinkActive="active">الطلبات</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link btn btn-info" routerLink="Customers" routerLinkActive="active">العملاء</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link btn btn-info" routerLink="SearchCustomer" routerLinkActive="active">بحث عن عميل</a>
-          </li> -->
-          <li class="nav-item">
-            <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded" routerLink="last5recipts">
-              عرض آخر 5 إيصالات
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded" routerLink="ShippingTypes">
-              أنواع الشحن
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded" routerLink="ShippingBatch">
-              الوجبات
-            </a>
-          </li>
-  
-        </ul>
+      <div class="d-flex justify-content-around">
+
+        <div class="bg-light rounded p-2 fw-bold">
+          Env: 
+        </div>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <div class="navbar-nav d-flex flex-start">
+            <!-- <li class="nav-item">
+              <a class="nav-link btn btn-info" routerLink="Orders" routerLinkActive="active">الطلبات</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn btn-info" routerLink="Customers" routerLinkActive="active">العملاء</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn btn-info" routerLink="SearchCustomer" routerLinkActive="active">بحث عن عميل</a>
+            </li> -->
+            <!-- <li class="nav-item">
+              <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded" routerLink="last5recipts">
+                عرض آخر 5 إيصالات
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded" routerLink="ShippingTypes">
+                أنواع الشحن
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded" routerLink="ShippingBatch">
+                الوجبات
+              </a>
+            </li> -->
+            <li class="nav-item">
+              <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded"
+               (click)="showSideBar('Delevary')">
+                توصيل
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded"
+               (click)="showSideBar('Store')">
+                مخزن
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded"
+               (click)="showSideBar('SeaShipping')">
+                شحن بحري
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded"
+               (click)="showSideBar('AirShipping')">
+                شحن جوي
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded"
+               (click)="showSideBar('MainScreen')">
+                الرئيسية
+              </a>
+            </li>
+          </div>
+        </div>
       </div>
-    </div>
+      </div>
   </nav>
   
   
@@ -43,12 +78,13 @@
       <router-outlet></router-outlet>
     </div>
   
-    <!-- Sidebar -->
-    <div class="sidebar col-md-2 bgSlider text-white p-3" style="height: 94vh;" [ngClass]=" {'collapsed': isCollapsed}">
+    <!-- Sidebar MainScreen-->
+    <div class="sidebar col-md-2 bgSlider text-white p-3" style="height: 94vh;"
+     [ngClass]=" {'collapsed': isCollapsed}" *ngIf="selectSideBar === 'MainScreen'">
       <h2 class="text-center"><i class="fas fa-home"></i>
       </h2>
       <ul class="list-unstyled mt-5">
-        <li class="nav-item bggold rounded">
+        <!-- <li class="nav-item bggold rounded">
           <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink="SearchCustomer"
             routerLinkActive="active">
             بحث عن عميل <span>&ThinSpace;</span><i class="fas fa-search"></i>
@@ -59,7 +95,295 @@
             routerLinkActive="active">
             إضافة خدمة لعميل <span>&ThinSpace;</span><i class="fas fa-search"></i>
           </a>
+        </li> -->
+
+
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink="SearchCustomer"
+            routerLinkActive="active">
+             الرئيسية<span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+             الزبائن<span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+             تتبع <span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              الحسابات <span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              المستخدمين <span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              اكواد She In <span>&ThinSpace;</span> 
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              الصفحات <span>&ThinSpace;</span> 
+          </a>
         </li>
       </ul>
     </div>
+
+    <!-- Sidebar Air -->
+    <div class="sidebar col-md-2 bgSlider text-white p-3" 
+      style="height: 94vh;" [ngClass]=" {'collapsed': isCollapsed}" *ngIf="selectSideBar === 'AirShipping'">
+      <h2 class="text-center"><i class="fas fa-home"></i>
+      </h2>
+      <ul class="list-unstyled mt-5">
+        <!-- <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink="SearchCustomer"
+            routerLinkActive="active">
+            بحث عن عميل <span>&ThinSpace;</span><i class="fas fa-search"></i>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 " routerLink="AddServiceForCustomer"
+            routerLinkActive="active">
+            إضافة خدمة لعميل <span>&ThinSpace;</span><i class="fas fa-search"></i>
+          </a>
+        </li> -->
+
+
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+             الخيار الاول<span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+             الزبائن<span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+             تتبع <span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              الحسابات <span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              المستخدمين <span>&ThinSpace;</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+
+    <!-- Sidebar Sea -->
+    <div class="sidebar col-md-2 bgSlider text-white p-3" 
+      style="height: 94vh;" [ngClass]=" {'collapsed': isCollapsed}" *ngIf="selectSideBar === 'SeaShipping'">
+      <h2 class="text-center"><i class="fas fa-home"></i>
+      </h2>
+      <ul class="list-unstyled mt-5">
+        <!-- <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink="SearchCustomer"
+            routerLinkActive="active">
+            بحث عن عميل <span>&ThinSpace;</span><i class="fas fa-search"></i>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 " routerLink="AddServiceForCustomer"
+            routerLinkActive="active">
+            إضافة خدمة لعميل <span>&ThinSpace;</span><i class="fas fa-search"></i>
+          </a>
+        </li> -->
+
+
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+             الخيار الاول<span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+             الزبائن<span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+             تتبع <span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              الحسابات <span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              المستخدمين <span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              الخيار السادس <span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              الخيار السابع <span>&ThinSpace;</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+      <!-- Sidebar Store -->
+      <div class="sidebar col-md-2 bgSlider text-white p-3" 
+      style="height: 94vh;" [ngClass]=" {'collapsed': isCollapsed}" *ngIf="selectSideBar === 'Store'">
+      <h2 class="text-center"><i class="fas fa-home"></i>
+      </h2>
+      <ul class="list-unstyled mt-5">
+        <!-- <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink="SearchCustomer"
+            routerLinkActive="active">
+            بحث عن عميل <span>&ThinSpace;</span><i class="fas fa-search"></i>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 " routerLink="AddServiceForCustomer"
+            routerLinkActive="active">
+            إضافة خدمة لعميل <span>&ThinSpace;</span><i class="fas fa-search"></i>
+          </a>
+        </li> -->
+
+
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              الخيار الاول<span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              الزبائن<span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              تتبع <span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              الحسابات <span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              المستخدمين <span>&ThinSpace;</span>
+          </a>
+        </li>
+        <li class="nav-item bggold rounded">
+          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+            routerLinkActive="active">
+              الخيار السادس <span>&ThinSpace;</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Sidebar Delevary -->
+    <div class="sidebar col-md-2 bgSlider text-white p-3" 
+    style="height: 94vh;" [ngClass]=" {'collapsed': isCollapsed}" *ngIf="selectSideBar === 'Delevary'">
+    <h2 class="text-center"><i class="fas fa-home"></i>
+    </h2>
+    <ul class="list-unstyled mt-5">
+      <!-- <li class="nav-item bggold rounded">
+        <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink="SearchCustomer"
+          routerLinkActive="active">
+          بحث عن عميل <span>&ThinSpace;</span><i class="fas fa-search"></i>
+        </a>
+      </li>
+      <li class="nav-item bggold rounded">
+        <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 " routerLink="AddServiceForCustomer"
+          routerLinkActive="active">
+          إضافة خدمة لعميل <span>&ThinSpace;</span><i class="fas fa-search"></i>
+        </a>
+      </li> -->
+
+
+      <li class="nav-item bggold rounded">
+        <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+          routerLinkActive="active">
+           الخيار الاول<span>&ThinSpace;</span>
+        </a>
+      </li>
+      <li class="nav-item bggold rounded">
+        <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+          routerLinkActive="active">
+           الزبائن<span>&ThinSpace;</span>
+        </a>
+      </li>
+      <li class="nav-item bggold rounded">
+        <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+          routerLinkActive="active">
+           تتبع <span>&ThinSpace;</span>
+        </a>
+      </li>
+      <li class="nav-item bggold rounded">
+        <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+          routerLinkActive="active">
+            الحسابات <span>&ThinSpace;</span>
+        </a>
+      </li>
+      <li class="nav-item bggold rounded">
+        <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+          routerLinkActive="active">
+            المستخدمين <span>&ThinSpace;</span>
+        </a>
+      </li>
+      <li class="nav-item bggold rounded">
+        <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+          routerLinkActive="active">
+            الخيار السادس <span>&ThinSpace;</span>
+        </a>
+      </li>
+      <li class="nav-item bggold rounded">
+        <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" routerLink=""
+          routerLinkActive="active">
+            الخيار السابع <span>&ThinSpace;</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
   </div>

@@ -18,6 +18,7 @@ export class LangingPageComponent {
 
   recipts: Receipt[] = [];
   isCollapsed = false;
+  selectSideBar: string ='MainScreen';
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
@@ -27,6 +28,10 @@ export class LangingPageComponent {
       this.recipts = r;
       console.log(r)
     })
+  }
+
+  showSideBar(selectSide: string): void{
+    this.selectSideBar = selectSide;
   }
 
   ngOnInit(): void {

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { ApiService } from '../../Services/api.service';
 
 @Component({
   selector: 'app-log-in',
@@ -11,7 +12,7 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 })
 export class LogInComponent {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private api: ApiService) {}
 
   showPassword: boolean = false;
   email: string = '';

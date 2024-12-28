@@ -1,5 +1,50 @@
-<h2 class="text-white text-center mb-5 fw-bold">أدخل اسم أو رقم العميل للبحث</h2>
-<div class="d-flex flex-column align-items-center col-md-12">
+<div class="d-flex justify-content-around col-md-12">
+    <button class="btn btn-primary mb-3 col-md-1" (click)="toggleVisibility()"><i class="fas fa-plus"></i></button>
+    <h2 class="text-white text-center mb-5 fw-bold col-md-11">أدخل اسم أو رقم العميل للبحث</h2>
+</div>
+
+<div class="container p-4 mb-3 " *ngIf="isVisible">
+    <form [formGroup]="customerForm" *ngIf="customerForm" (ngSubmit)="AddCustomer()">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="text-light">رقم هاتف العميل</label>
+                <input type="text" class="form-control" formControlName="CustNum" minlength="11" maxlength="11">
+                <div *ngIf="customerForm.get('CustNum')?.invalid && customerForm.get('CustNum')?.touched" class="text-danger">
+                     رقم الهاتف مطلوب ويجب أن يحتوي على أرقام فقط ب 11 خانة.
+                  </div>
+            </div>
+        <div class="col-md-6">
+            <label class="text-light">اسم العميل</label>
+            <input type="text" class="form-control" formControlName="CustName">
+        </div>
+
+        <div class="col-md-6">
+            <label class="text-light"> مدينة العميل</label>
+            <select class="form-select" formControlName="selectedCity">
+                <option *ngFor="let city of cities" [value]="city.id">{{ city.description }}</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="text-light"> منطقة العميل</label>
+            <select class="form-select" formControlName="selectedArea">
+                <option *ngFor="let area of areas" [value]="area.id">{{ area.description }}</option>
+            </select>
+        </div>
+        <div class="col-12">
+            <label class="text-light">نقطة علام</label>
+            <input type="text" class="form-control" formControlName="selectedLandMark">
+        </div>
+        <div class="col-md-12 d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary col-md-2 text-center" 
+                [disabled]="customerForm?.invalid">إضافة</button>
+        </div>
+        </div>
+    </form>
+  </div>
+  
+
+
+<div class="d-flex flex-column align-items-center col-md-12" *ngIf="!isVisible">
     <input class="form-control w-50" #wordToseach (input)="filterSuggestions(wordToseach.value)" [ngModel]="searchTerm"
         placeholder="ابحث هنا..." />
 
