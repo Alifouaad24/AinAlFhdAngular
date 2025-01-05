@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { OnEndResult } from 'esbuild';
 import { ApiService } from '../../Services/api.service';
 import { CommonModule } from '@angular/common';
@@ -13,10 +13,14 @@ import { CommonModule } from '@angular/common';
 })
 export class ShippingBatchComponent implements OnInit {
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private router: Router, private route: ActivatedRoute) {}
   ShippingBatches: any [] = [];
+
   ngOnInit(): void {
     this.GetAllShippingBatch();
+    this.route.paramMap.subscribe(r => {
+      this.GetAllShippingBatch();
+    })
   }
 
   GetAllShippingBatch(): void {
@@ -27,9 +31,16 @@ export class ShippingBatchComponent implements OnInit {
   }
 
   DeleteBatch(id: number): void {
-    console.log("dfdrfsrg")
-    this.api.deleteData(`api/ShippingBatch/${id}`);
-    this.ShippingBatches = this.ShippingBatches.filter(el => el.ShippingBatchId !== id);
+    console.log("dfdrfsrg", id)
+    this.api.deleteData(`api/ShippingBatch/${id}`).subscribe((res: any) => {});
+    this.ShippingBatches = this.ShippingBatches.filter(el => el.shippingBatchId != id);
+    console.log('Updated ShippingBatches:', this.ShippingBatches);
+  }
+
+  goToAddRecipt(id: number): void{
+    console.log("sss")
+    this.router.navigate(['LangingPage/ShippingBatch/AddRecipt'], { queryParams: { ShippId: id } });
+
   }
 
 }

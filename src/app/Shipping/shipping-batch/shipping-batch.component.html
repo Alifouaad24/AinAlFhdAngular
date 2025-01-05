@@ -1,6 +1,6 @@
 <h2 class="text-center text-light p-2">جدول الوجبات</h2>
 <a class="text-white p-2 fs-5 pe-3  me-2 rounded col-md-2 btn btn-primary"
-         routerLink="/AddUpdateShippingBatch">
+[routerLink]="['AddUpdateShippingBatch']">
     إضافة وجبة جديدة
   </a>
 
@@ -24,17 +24,17 @@
                     <i class="fas fa-edit"></i>
                 </button>                
                 <button (click)="DeleteBatch(ships.shippingBatchId)" class="btn btn-sm btn-danger">
-                    <i class="fas fa-trash" ></i>
+                    <i class="fas fa-trash"></i>
                 </button>
             </td>
             <td class="fw-bold text-success">
                 {{ ships.batchCostUS ? ships.batchCostUS + '$' : '' }}
               </td>
               
-            <td class="fw-bold text-success">{{ ships.shippingTypes.description }}</td>
-            <td class="fw-bold text-success">{{ ships.entryDate | date: 'yyyy-MM-dd' }}</td>
-            <td class="fw-bold text-success">{{ ships.arrivelDate | date: 'yyyy-MM-dd' }}</td>
-            <td class="fw-bold text-success">
+            <td (click)="goToAddRecipt(ships.shippingBatchId)" class="fw-bold text-success">{{ ships.shippingTypes.description }}</td>
+            <td (click)="goToAddRecipt(ships.shippingBatchId)" class="fw-bold text-success">{{ ships.entryDate | date: 'yyyy-MM-dd' }}</td>
+            <td (click)="goToAddRecipt(ships.shippingBatchId)" class="fw-bold text-success">{{ ships.arrivelDate | date: 'yyyy-MM-dd' }}</td>
+            <td (click)="goToAddRecipt(ships.shippingBatchId)" class="fw-bold text-success">
                 {{ ships.shippingDate | date: 'yyyy-MM-dd' }}
               </td>
               
@@ -42,4 +42,4 @@
     </tbody>
 </table>
 
-(click)="DeleteType(ship.shippingBatchId)"
+<!-- (click)="DeleteType(ship.shippingBatchId)" -->

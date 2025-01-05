@@ -16,6 +16,8 @@ export class Receipt {
     sellingPrice?: number;
     totalPriceFromCust?: number;
     weight?: number;
+    shippingBatch?: any;
+    shippingBatchId?: number
   
     constructor(data?: Partial<Receipt>) {
       if (data) {

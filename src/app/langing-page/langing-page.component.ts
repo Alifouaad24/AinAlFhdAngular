@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { ApiService } from '../Services/api.service';
 import { Receipt } from '../Models/Recipt';
 
 @Component({
   selector: 'app-langing-page',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, CommonModule],
+  imports: [RouterLink, RouterOutlet, CommonModule, RouterModule],
   templateUrl: './langing-page.component.html',
   styleUrl: './langing-page.component.scss'
 })
@@ -20,7 +20,7 @@ export class LangingPageComponent {
   isCollapsed = false;
   selectSideBar: string ='MainScreen';
   env: string = ''
-
+  activeButton = ''
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
   }
@@ -33,6 +33,7 @@ export class LangingPageComponent {
 
   showSideBar(selectSide: string): void{
     this.selectSideBar = selectSide;
+    this.activeButton = selectSide
   }
 
   ngOnInit(): void {

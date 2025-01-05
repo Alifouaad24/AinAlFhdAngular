@@ -37,30 +37,40 @@
             </li> -->
             <li class="nav-item">
               <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded"
+              routerLink="MainScreenForDelevary"
+              [ngClass]="{'btn-primary1': activeButton === 'Delevary', 'btn-info1': activeButton !== 'Delevary'}"
                (click)="showSideBar('Delevary')">
                 توصيل
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded"
+              [ngClass]="{'btn-primary1': activeButton === 'Store', 'btn-info1': activeButton !== 'Store'}"
+              routerLink="MainScreenForStore"
                (click)="showSideBar('Store')">
                 مخزن
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded"
+              [ngClass]="{'btn-primary1': activeButton === 'SeaShipping', 'btn-info1': activeButton !== 'SeaShipping'}"
+              routerLink="MainScreenForSea"
                (click)="showSideBar('SeaShipping')">
                 شحن بحري
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded"
+              [ngClass]="{'btn-primary1': activeButton === 'AirShipping', 'btn-info1': activeButton !== 'AirShipping'}"
+              routerLink="MainScreenForAir"
                (click)="showSideBar('AirShipping')">
                 شحن جوي
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link btn btn-info text-white p-2 fs-5 pe-3 bgNav me-2 rounded"
+              [ngClass]="{'btn-primary1': activeButton === 'MainScreen', 'btn-info1': activeButton !== 'MainScreen'}"
+              routerLink="MainScreenForMain"
                (click)="showSideBar('MainScreen')">
                 الرئيسية
               </a>
@@ -74,12 +84,12 @@
   
   <div class="row d-flex col-md-12">
   
-    <div class="col-md-10 p-5 bgbody">
+    <div class="col-md-10 p-4 bgbody">
       <router-outlet></router-outlet>
     </div>
   
     <!-- Sidebar MainScreen-->
-    <div class="sidebar col-md-2 bgSlider text-white p-3" style="height: 94vh;"
+    <div class="sidebar col-md-2 bgSlider text-white p-3" style="height: 91vh;"
      [ngClass]=" {'collapsed': isCollapsed}" *ngIf="selectSideBar === 'MainScreen'">
       <h2 class="text-center"><i class="fas fa-home"></i>
       </h2>
@@ -165,16 +175,17 @@
 
         <li class="nav-item bggold rounded">
           <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" 
-            routerLinkActive="active">
-             الخيار الاول<span>&ThinSpace;</span>
+            routerLinkActive="active" routerLink="Recipts">
+              عمليات الدفع <span>&ThinSpace;</span>
           </a>
         </li>
         <li class="nav-item bggold rounded">
           <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" 
-            routerLinkActive="active">
-             الزبائن<span>&ThinSpace;</span>
+            routerLinkActive="active" routerLink="ShippingBatch">
+             الوجبات والإيصالات<span>&ThinSpace;</span>
           </a>
         </li>
+        <!-- 
         <li class="nav-item bggold rounded">
           <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" 
             routerLinkActive="active">
@@ -192,7 +203,7 @@
             routerLinkActive="active">
               المستخدمين <span>&ThinSpace;</span>
           </a>
-        </li>
+        </li> -->
       </ul>
     </div>
 

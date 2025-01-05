@@ -15,6 +15,7 @@ import { City } from '../../Models/City';
 export class CustomerSearchComponent implements OnInit {
   customerForm!: FormGroup;
   areas: Area []= [];
+  allAreas: Area []= [];
   cities: City []= [];
   res: any[] = [];
   res1: any[] = [];
@@ -31,16 +32,20 @@ export class CustomerSearchComponent implements OnInit {
   custId?: number;
   CustName12?: string;
   CustNun12?: string;
+  updated: boolean = false
 
   constructor(private api: ApiService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.api.getData("api/Cities").subscribe(response =>{
+      console.log("cities", response)
       this.cities = response;
     });
     
     this.api.getData("api/Area").subscribe(response =>{
+      console.log("areas", response)
       this.areas = response
+      this.allAreas = response
     });
 
     this.customerForm = this.fb.group({
@@ -53,6 +58,14 @@ export class CustomerSearchComponent implements OnInit {
     });
   }
 
+  cityChanged(event: Event): void{
+    this.areas = this.allAreas
+    var cityIdValue = Number((event.target as HTMLSelectElement ).value);
+    console.log("cityIdValue", cityIdValue)
+    this.areas = this.areas.filter(area => 
+      area.cityId == cityIdValue
+    )
+  }
 
 
   toggleVisibility(): void {
@@ -101,6 +114,7 @@ export class CustomerSearchComponent implements OnInit {
 
     this.api.getData(`api/Customers/SearchAboutDetectedCustomerApi/${suggestion}`).subscribe((result1) => {
       this.res1.push(result1)
+      this.areas = this.areas.filter(el => el.cityId === result1.custCity)
       console.log(result1)
     })
   }
@@ -115,9 +129,11 @@ export class CustomerSearchComponent implements OnInit {
       'custNum': customer.custMob
     }
     console.log(payLoad,this.custId )
-    this.api.putData(`api/Customers/${customer.id}`, payLoad).subscribe(res =>{
-      console.log(res)
-    })
+    this.api.putData(`api/Customers/${customer.id}`, payLoad).subscribe(res =>{})
+    this.updated = true
+    setTimeout(() => {
+      this.updated = !this.updated
+    }, 3000);
   }
 
 }

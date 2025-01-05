@@ -1,6 +1,8 @@
-<div class="d-flex justify-content-around col-md-12">
+<div class="d-flex justify-content-center col-md-12">
+    <h2 *ngIf="updated" class="text-white text-center mb-1 fw-bold col-md-11">تم التعديل بنجاح</h2>
+</div>
+<div class="d-flex justify-content-start col-md-12">
     <button class="btn btn-primary mb-3 col-md-1" (click)="toggleVisibility()"><i class="fas fa-plus"></i></button>
-    <h2 class="text-white text-center mb-5 fw-bold col-md-11">أدخل اسم أو رقم العميل للبحث</h2>
 </div>
 
 <div class="container p-4 mb-3 " *ngIf="isVisible">
@@ -46,7 +48,7 @@
 
 <div class="d-flex flex-column align-items-center col-md-12" *ngIf="!isVisible">
     <input class="form-control w-50" #wordToseach (input)="filterSuggestions(wordToseach.value)" [ngModel]="searchTerm"
-        placeholder="ابحث هنا..." />
+        placeholder="أدخل اسم أو رقم العميل للبحث..." />
 
     <ul *ngIf="filteredSuggestions.length > 0" class="list-group"
         style="max-height: 300px; overflow-y: auto; cursor: pointer;">>
@@ -87,7 +89,7 @@
                     </select>
                 </td>
                 <td class="text-center">
-                    <select class="form-select" [(ngModel)]="customer.custCity">
+                    <select class="form-select" (change)="cityChanged($event)" [(ngModel)]="customer.custCity">
                         <option *ngFor="let city of cities" [value]="city.id">{{ city.description }}</option>
                     </select>
                 </td>
