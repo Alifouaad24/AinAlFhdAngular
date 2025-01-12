@@ -18,7 +18,8 @@ export class Receipt {
     weight?: number;
     shippingBatch?: any;
     shippingBatchId?: number
-  
+    costIQ?: number
+    sellingUSD?: number
     constructor(data?: Partial<Receipt>) {
       if (data) {
         Object.assign(this, data);

@@ -14,6 +14,8 @@
                     <th>تاريخ الوجبة</th>
                     <th>تاريخ الوصل</th>
                     <th>سعر البيع</th>
+                    <th>سعر المبيع بالدولار</th>
+                    <th>التكلفة بالدينار العراقي</th>
                     <th>التكلفة</th>
                     <th>الوزن</th>
                     <th>اسم العميل</th>
@@ -26,13 +28,15 @@
                         <button class="btn btn-danger  me-1" (click)="DeleteRecipt(receipt.recieptId)">
                             <i class="fas fa-trash"></i>
                         </button>
-                        <a class="btn btn-warning" [routerLink]="['AddRecipt/', receipt.recieptId]">
+                        <a class="btn btn-warning" [routerLink]="['AddRecipt', receipt.recieptId]">
                             <i class="fa fa-edit"></i>
                         </a>
                     </td>
                     <td>{{ receipt.shippingBatch?.arrivelDate | date:'dd-MM-yyyy'}}</td>
                     <td>{{ receipt.recieptDate | date:'dd-MM-yyyy'}}</td>
                     <td>{{ divideNum(receipt.sellingPrice) }} IQ</td>
+                    <td>{{ receipt.sellingUSD }} $</td>
+                    <td>{{ receipt.costIQ }} IQ</td>
                     <td>{{ receipt.cost }} $</td>
                     <td>{{ receipt.weight }} Kg</td>
                     <td>{{ receipt.customer?.custName || 'غير معروف' }}</td>

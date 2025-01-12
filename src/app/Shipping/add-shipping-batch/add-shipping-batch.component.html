@@ -1,33 +1,45 @@
-<p class="text-center text-light fs-3">إضافة وجبة جديدة</p>
+<p class="text-center text-light fs-3">{{isUpdateScreen ? 'تعديل الوجبة' : 'إضافة وجبة جديدة'}}</p>
+<div class="col-md-12 d-flex justify-content-end">
+<div class="col-md-6 ">
+  <div class="mb-3 col-md-12">
 
-<div class="col-md-12">
-      <div class="mb-3 col-md-6">
-          <label for="shippingDate | 'yyyy-MM-dd' " class="form-label fw-bold text-light fs-5">تاريخ الشحن من دبي</label>
-          <input 
+          <div class="text-end">
+           <label for="shippingDate | 'yyyy-MM-dd' " class="form-label fw-bold text-light fs-5">تاريخ الشحن من دبي</label>
+          </div>          
+          <input  
             id="shippingDate" 
             type="date" 
             class="form-control border-primary" 
             [(ngModel)]="ShippingDate" />
         </div>
-        <div class="mb-3 col-md-6">
-        <label for="ArriveDate | 'yyyy-MM-dd' " class="form-label fw-bold text-light fs-5">تاريخ وصول الوجبة</label>
+        <div class="mb-3 col-md-12">
+
+          <div class="text-end">
+            <label for="ArriveDate | 'yyyy-MM-dd' " class="form-label fw-bold text-light fs-5">تاريخ وصول الوجبة</label>
+          </div>
+        
         <input 
           id="ArriveDate" 
           type="date" 
           class="form-control border-primary" 
           [(ngModel)]="ArriveDate" >
       </div>
-      <div hidden class="mb-3 col-md-6">
-      <label for="EntryDate | 'yyyy-MM-dd' " class="form-label fw-bold text-light fs-5">تاريخ ادخال الوجبة</label>
+      <div hidden class="mb-3 col-md-12">
+        <div>
+          <label for="EntryDate | 'yyyy-MM-dd' " class="form-label fw-bold text-light fs-5">تاريخ ادخال الوجبة</label>
+        </div>
+      
       <input   
         id="EntryDate" 
         type="date" 
         class="form-control border-primary" 
         [(ngModel)]="EntryDate" >
     </div>
-    <div class="mb-3 col-md-6">
-    <label for="ShippingTypeId" class="form-label fw-bold text-light fs-5">نوع الشحن</label>
-    <select 
+    <div class="mb-3 col-md-12">
+<div class="text-end">
+  <label for="ShippingTypeId" class="form-label fw-bold text-light fs-5">نوع الشحن</label>
+
+</div>    <select  disabled
       id="ShippingTypeId" 
       class="form-control border-primary" 
       [(ngModel)]="ShippingTypeId">
@@ -36,17 +48,20 @@
       </option>
     </select>
   </div>
-  <div class="mb-3 col-md-6">
-  <label for="CostInUSD | 'yyyy-MM-dd' " class="form-label fw-bold text-light fs-5">التكلفة بالدولار</label>
-  <input 
+  <div hidden class="mb-3 col-md-12">
+    <div class="text-end">
+      <label for="CostInUSD | 'yyyy-MM-dd' " class="form-label fw-bold text-light fs-5">التكلفة بالدولار</label>
+    </div>
+    <input 
     id="CostInUSD" 
     type="number" 
     class="form-control border-primary" 
     [(ngModel)]="CostInUSD" >
   </div>
-  <div class="mb-5 col-md-6 text-center">
+  <div class="mb-5 col-md-12 text-center">
     <button class="btn btn-success mb-3 col-md-2" (click)="AddBatch()">
-      إضافة
+      {{ isUpdateScreen ?  'تعديل' : 'إضافة' }}
     </button>
   </div>
+</div>
 </div>

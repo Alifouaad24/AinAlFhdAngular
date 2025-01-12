@@ -180,10 +180,12 @@
           </a>
         </li>
         <li class="nav-item bggold rounded">
-          <a class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2" 
-            routerLinkActive="active" routerLink="ShippingBatch">
-             الوجبات والإيصالات<span>&ThinSpace;</span>
-          </a>
+          <a 
+          class="nav-link btn btn-info text-end p-2 fs-5 pe-3 mb-2"
+          routerLinkActive="active" 
+          [routerLink]="['ShippingBatch', { Shipping: 'Air' }]">
+          الوجبات والإيصالات<span>&ThinSpace;</span>
+        </a>
         </li>
         <!-- 
         <li class="nav-item bggold rounded">

@@ -26,7 +26,8 @@ export class AddReciptComponent implements OnInit {
       totalPriceFromCust: [0, Validators.required],
       customerId: [this.id],
       recieptDate: [new Date().toISOString().split('T')[0], Validators.required],
-
+      costIQ: [0],
+      sellingUSD: [0],
       sellingDiscount: [0],
       isFinanced: [false],
       currentState: [true],
@@ -35,6 +36,7 @@ export class AddReciptComponent implements OnInit {
     });
   }
 
+  costIIQ?: number
   isAdded: boolean = false
   recId: number | null = null;
   ssId!: number
@@ -58,6 +60,8 @@ export class AddReciptComponent implements OnInit {
   exchangeRate: number = 0; 
   sellingCurrency= 'IQ'
   isAdd: boolean = false
+  sellingPriceInDoular?: number
+  weightUp?: number
 
 
   ngOnInit(): void {
@@ -93,6 +97,8 @@ export class AddReciptComponent implements OnInit {
         isFinanced: res.isFinanced || false,
         currentState: res.currentState || true,
         notes: res.notes || '',
+        costIQ: res.costIQ,
+        sellingUSD: res.sellingUSD,
         shippingBatchId: res.shippingBatchId || 0,
       }, { emitEvent: false });
      });
@@ -132,15 +138,22 @@ export class AddReciptComponent implements OnInit {
       const discountToSaif = formValues.discount
       const total = weight * costPerUnit - discountToSaif;
       const exchangeRate = this.exchangeRate
+      const totalInIQ = weight * costPerUnit * exchangeRate - discountToSaif;
       const costSelectOfSaif = this.costSelectOfSaif
-      const PriceForSell = costSelectOfSaif * weight * exchangeRate;
+      const PriceForSell = costSelectOfSaif * Math.ceil(weight) * exchangeRate;
       const formattedPrice = PriceForSell.toLocaleString('en-US', { maximumFractionDigits: 3 });
+
+      this.weightUp =  Math.ceil(weight)
+      this.costIIQ = totalInIQ
+      this.sellingPriceInDoular = costSelectOfSaif * Math.ceil(weight)
 
       if (this.receiptForm.get('cost')?.value !== total) {
         this.receiptForm.patchValue(
           { cost: total, 
-            sellingPrice: this.roundByFirstDigit(PriceForSell),
-            totalPriceFromCust: this.roundByFirstDigit(PriceForSell),
+            sellingPrice: this.roundWithSmallStep(PriceForSell) || 0,//.toLocaleString(),
+            totalPriceFromCust: this.roundWithSmallStep(PriceForSell) || 0,//.toLocaleString(),
+            costIQ: totalInIQ,
+            sellingUSD: costSelectOfSaif * Math.ceil(weight),
             sellingDiscount: this.receiptForm.get('totalPriceFromCust')?.value - this.receiptForm.get('sellingPrice')?.value
            },
           { emitEvent: false }
@@ -178,11 +191,10 @@ export class AddReciptComponent implements OnInit {
   }
 
 
-  roundByFirstDigit(value: number): number {
-    const length = value.toString().length;
-    const nearest = Math.pow(10, length - 1); 
-    return Math.ceil(value / nearest) * nearest;
-  }
+  roundWithSmallStep(value: number): number {
+    const magnitude = Math.pow(10, Math.floor(Math.log10(value) - 1));
+    return Math.ceil(value / magnitude) * magnitude;
+}
 
 
   onCostSaifChange(event: Event): void {

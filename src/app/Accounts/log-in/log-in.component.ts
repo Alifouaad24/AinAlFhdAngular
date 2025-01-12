@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ApiService } from '../../Services/api.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-log-in',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, FormsModule],
+  imports: [RouterLink, RouterOutlet, FormsModule, CommonModule ],
   templateUrl: './log-in.component.html',
   styleUrl: './log-in.component.scss'
 })

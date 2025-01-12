@@ -22,7 +22,7 @@
               </div>
             </div>
 
-            <div class="form-group mb-1 col-md-2">
+            <div class="form-group mb-1 col-md-1">
               <label for="costSelect" class="form-label text-light text-end">تكلفة</label>
               <select
                 id="costSelect"
@@ -30,7 +30,7 @@
                 [ngModelOptions]="{standalone: true}"
                 (change)="onCostChange($event)"
                 class="border-1 form-control text-center ms-1"
-                style="width:80px"
+                style="width:50px"
               >
                 <option *ngFor="let cost1 of unitCost" [value]="cost1">{{ cost1 }}</option>
               </select>
@@ -38,7 +38,12 @@
             
         
             <div class="form-group mb-3 col-md-2">
-              <label for="cost" class="form-label text-light text-end">الكلفة</label>
+              <label for="cost" class="form-label text-light text-end">الكلفة IO</label>
+              <input id="cost" formControlName="costIQ" class="form-control" readonly />
+            </div>
+
+            <div class="form-group mb-3 col-md-2">
+              <label for="cost" class="form-label text-light text-end">الكلفة $</label>
               <input id="cost" formControlName="cost" class="form-control" readonly />
             </div>
         
@@ -66,20 +71,25 @@
             <div class="form-group mb-3 col-md-4">
               <input id="customerId" formControlName="customerId" hidden />
             </div>
-            <div class="form-group mb-3 col-md-12">
+            <div class="form-group mb-3 col-md-10">
               <label class="form-label text-light text-start">اسم العميل</label>
               <input [(ngModel)]="nameCust" [ngModelOptions]="{standalone: true}" class="form-control" readonly />
             </div>
-          </div>
-
-          <div class="row mt-4">
             <div class="form-group mb-3 col-md-2">
               <label for="exchangeRate" class="form-label text-light text-start">سعر الصرف</label>
               <input id="exchangeRate" [(ngModel)]="exchangeRate"
               [ngModelOptions]="{standalone: true}" class="form-control" readonly />
             </div>
+          </div>
+
+          <div class="row mt-4">
+            <div style="margin-right: 10px;" class="form-group mb-3 col-md-1">
+              <label for="sellingPrice" class="form-label text-light text-start">الوزن</label>
+              <input id="sellingPrice" style="width:70px; margin-right: 10px;" [(ngModel)]="weightUp" 
+              [ngModelOptions]="{standalone: true}" class="form-control" readonly />
+            </div>
         
-            <div class="form-group mb-1 col-md-2">
+            <div class="form-group mb-1 col-md-1">
               <label for="costSelect" class="form-label text-light text-end">تكلفة</label>
               <select
                 id="costSelect"
@@ -87,28 +97,35 @@
                 [ngModelOptions]="{standalone: true}"
                 (change)="onCostSaifChange($event)"
                 class="border-1 form-control text-center ms-1"
-                style="width:80px"
+                style="width:50px"
               >
                 <option *ngFor="let cost of unitCostSaif" [value]="cost">{{ cost }}</option>
               </select>
             </div>
 
             <div class="form-group mb-3 col-md-2">
+              <label for="sellingPrice" class="form-label text-light text-start">سعر المبيع $</label>
+              <input id="sellingPrice" formControlName="sellingUSD" 
+               class="form-control" readonly />
+            </div>
+
+            <div class="form-group mb-3 col-md-2">
               <label for="sellingPrice" class="form-label text-light text-start">سعر المبيع</label>
               <input id="sellingPrice" formControlName="sellingPrice" class="form-control" readonly />
             </div>
-        
+
             <div class="form-group mb-3 col-md-2">
               <label for="sellingDiscount" class="form-label text-light text-end">التعديلات</label>
               <input id="sellingDiscount" formControlName="sellingDiscount" class="form-control" readonly />
             </div>
+        
         
             <div class="form-group mb-3 col-md-2">
               <label for="totalPriceFromCust" class="form-label text-light text-end">المبلغ</label>
               <input id="totalPriceFromCust" formControlName="totalPriceFromCust" class="form-control" />
             </div>
         
-            <div class="form-group mb-3 col-md-2">
+            <div style="width:80px; margin-right: 10px;"  class="form-group mb-3 col-md-2">
               <label for="sellingCurrency" class="form-label text-light text-end">العملة</label>
               <input id="sellingCurrency" [(ngModel)]="sellingCurrency"
               [ngModelOptions]="{standalone: true}" class="form-control" readonly />

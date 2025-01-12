@@ -3,24 +3,53 @@ import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/route
 import { OnEndResult } from 'esbuild';
 import { ApiService } from '../../Services/api.service';
 import { CommonModule } from '@angular/common';
+import { PopupComponent } from '../../popup/popup.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-shipping-batch',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, CommonModule ],
+  imports: [RouterLink, RouterOutlet, CommonModule, MatDialogModule ],
   templateUrl: './shipping-batch.component.html',
   styleUrl: './shipping-batch.component.scss'
 })
 export class ShippingBatchComponent implements OnInit {
 
-  constructor(private api: ApiService, private router: Router, private route: ActivatedRoute) {}
-  ShippingBatches: any [] = [];
 
+  constructor(private api: ApiService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) {}
+  ShippingBatches: any [] = [];
+  param: string =''
+  showPopup = false;
+  showPopupDeleteConfirm = false;
+  selectIdForDelete?: number | undefined
+  PopTitle?: string
+  popDesc?: string
   ngOnInit(): void {
     this.GetAllShippingBatch();
-    this.route.paramMap.subscribe(r => {
+    this.route.params.subscribe(params => {
+      this.param = params['Shipping'];
+      console.log("params", this.param)
       this.GetAllShippingBatch();
     })
+  }
+
+  openPopup(id: number) {
+    console.log("bIIId", id)
+    this.selectIdForDelete = id
+    this.showPopup = true;
+
+    this.PopTitle = "حذف سجل"
+    this.popDesc = "هل تريد حذف السجل بالتأكيد ؟"
+  }
+
+  openPopup2(message: string) {
+    this.showPopupDeleteConfirm = true;
+    this.popDesc = message;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.showPopupDeleteConfirm = false;
   }
 
   GetAllShippingBatch(): void {
@@ -30,11 +59,18 @@ export class ShippingBatchComponent implements OnInit {
     })
   }
 
-  DeleteBatch(id: number): void {
-    console.log("dfdrfsrg", id)
-    this.api.deleteData(`api/ShippingBatch/${id}`).subscribe((res: any) => {});
+  DeleteBatch(id: number | undefined): void {
+    this.api.deleteData(`api/ShippingBatch/${id}`).subscribe((res: any) => {
+      
+    },
+    (error) =>{
+      console.log(error.error.text )
+      this.openPopup2(error.error.text || error.error);
+    }
+  );
     this.ShippingBatches = this.ShippingBatches.filter(el => el.shippingBatchId != id);
     console.log('Updated ShippingBatches:', this.ShippingBatches);
+    this.closePopup();
   }
 
   goToAddRecipt(id: number): void{
