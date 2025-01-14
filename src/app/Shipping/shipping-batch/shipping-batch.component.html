@@ -46,8 +46,10 @@
 
                 <td (click)="goToAddRecipt(ships.shippingBatchId)" class="fw-bold text-success">{{ ships.notes }}</td> 
                 <td (click)="goToAddRecipt(ships.shippingBatchId)" class="fw-bold text-success">{{ ships.reciptsNu}}</td> 
-                <td (click)="goToAddRecipt(ships.shippingBatchId)" class="fw-bold text-success">{{ ships.sellingIQ }}</td> 
-
+                <td (click)="goToAddRecipt(ships.shippingBatchId)" class="fw-bold text-success">
+                  {{ ships.sellingIQ | number:'1.0-0' }}
+                </td>
+                
 
 
 
@@ -55,7 +57,7 @@
                     {{ ships.batchCostUS ? ships.batchCostUS + '$' : '' }}
                   </td>
                   
-                <td (click)="goToAddRecipt(ships.shippingBatchId)" class="fw-bold text-success">{{ ships.arrivelDate | date: 'yyyy-MM-dd' }}</td> 
+                <td (click)="goToShippTransactions(ships.shippingBatchId)" class="fw-bold text-success">{{ ships.arrivelDate | date: 'yyyy-MM-dd' }}</td> 
             </tr>
         </tbody>
     </table>

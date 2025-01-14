@@ -79,4 +79,8 @@ export class ShippingBatchComponent implements OnInit {
 
   }
 
+  goToShippTransactions(id: number){
+    this.router.navigate(['LangingPage/Recipts'], {queryParams: { ShippIdToFilter: id }});
+  }
+
 }

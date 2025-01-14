@@ -23,6 +23,7 @@ constructor(private route: ActivatedRoute) {}
   totalCost: number = 0;
   totalLines: number = 0;
   totalProfit: number = 0
+  shipIdToFilter?: number
 
   getData(): void {
     this.http.getData("api/Reciept").subscribe((r: Receipt[]) => {
@@ -33,7 +34,11 @@ constructor(private route: ActivatedRoute) {}
         this.totalLines++;
       });
       console.log(r)
+      if(this.shipIdToFilter != null ){
+        this.filterRecipts(this.shipIdToFilter)
+      }
     })
+
   }
 
   ngOnInit(): void {
@@ -42,6 +47,13 @@ constructor(private route: ActivatedRoute) {}
         this.getData();
       }
     });
+
+    this.route.queryParams.subscribe(param => {
+      if(param['ShippIdToFilter'] != null){
+        console.log("ShippIdToFilter: ",param['ShippIdToFilter'])
+        this.shipIdToFilter = param['ShippIdToFilter'];
+      }
+    })
     this.getData();
 
   }
@@ -53,6 +65,22 @@ constructor(private route: ActivatedRoute) {}
     let magnitude = Math.pow(10, Math.floor(Math.log10(num) - 1));
     let final = Math.ceil(num / magnitude) * magnitude;
     return final.toLocaleString();
+  }
+
+
+  filterRecipts(id: number){
+    this.recipts = this.recipts.filter(el => el.shippingBatchId == id)
+
+    this.totalProfit = 0;
+    this.totalCost = 0;
+    this.totalLines = 0;
+
+    this.recipts.map(el =>{
+      this.totalProfit +=  el.totalPriceFromCust!;
+      this.totalCost +=  el.cost!;
+      this.totalLines++;
+    })
+
   }
 
 
