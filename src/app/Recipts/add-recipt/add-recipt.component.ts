@@ -62,6 +62,18 @@ export class AddReciptComponent implements OnInit {
   isAdd: boolean = false
   sellingPriceInDoular?: number
   weightUp?: number
+  showPopupAddedConfirm = false;
+  popDesc?: string
+
+
+  openPopup2(message: string) {
+    this.showPopupAddedConfirm = true;
+    this.popDesc = message;
+  }
+
+  closePopup() {
+    this.showPopupAddedConfirm = false;
+  }
 
 
   ngOnInit(): void {
@@ -175,10 +187,19 @@ export class AddReciptComponent implements OnInit {
         this.receiptForm.patchValue(
           { 
             sellingDiscount: this.receiptForm.get('totalPriceFromCust')?.value - 
-              this.receiptForm.get('sellingPrice')?.value
+              this.receiptForm.get('sellingPrice')?.value,
            },
           { emitEvent: false }
         );
+      }
+      if(this.receiptForm.get('sellingUSD')?.value !== this.receiptForm.get('totalPriceFromCust')?.value / this.exchangeRate){
+        this.receiptForm.patchValue(
+          { 
+            sellingUSD: (this.receiptForm.get('totalPriceFromCust')?.value / this.exchangeRate).toFixed(1)
+           },
+          { emitEvent: false }
+        );
+        
       }
     });
   }
@@ -192,8 +213,11 @@ export class AddReciptComponent implements OnInit {
 
 
   roundWithSmallStep(value: number): number {
-    const magnitude = Math.pow(10, Math.floor(Math.log10(value) - 1));
-    return Math.ceil(value / magnitude) * magnitude;
+    // const magnitude = Math.pow(10, Math.floor(Math.log10(value) - 1));
+    // return Math.ceil(value / magnitude) * magnitude;
+
+    const magnitude = 1000; // التقريب لأقرب ألف
+    return Math.round(value / magnitude) * magnitude;
 }
 
 
@@ -223,7 +247,8 @@ export class AddReciptComponent implements OnInit {
         this.http.putData(`api/Reciept/${this.recId}`, this.receiptForm.value).subscribe(
           (response: any) => {
             if (response) {
-              this.router.navigate(['/LangingPage/Recipts'], { queryParams: { updated: 'true' } });
+              //this.router.navigate(['/LangingPage/Recipts'], { queryParams: { updated: 'true' } });
+              this.router.navigate(['/LangingPage/ShippingBatch']);
             } else {
               alert('حدث خطأ أثناء تحديث السجل.');
             }
@@ -242,17 +267,19 @@ export class AddReciptComponent implements OnInit {
         this.http.postData('api/Reciept', this.receiptForm.value).subscribe(
           (response: any) => {
             if (response) {
+              console.log(response)
+              this.openPopup2("تم حفظ الإيصال بنجاح")
               this.isAdded = !this.isAdded
               setTimeout(() => {
                 this.isAdded = false; 
-              }, 3000);
+                this.router.navigate(['/LangingPage/ShippingBatch']);
+              }, 4000);
             } else {
-              alert('حدث خطأ أثناء الحفظ.');
+              this.openPopup2(response.error)
             }
           },
           (error) => {
-            console.error('خطأ في الاتصال بالخادم:', error);
-            alert('حدث خطأ أثناء الاتصال بالخادم.');
+            this.openPopup2(error.error)
           }
         );
       } else {

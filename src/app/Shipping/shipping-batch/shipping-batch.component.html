@@ -1,5 +1,5 @@
-<h2 class="text-center text-light p-2">جدول الوجبات</h2>
-<a class="text-white p-2 fs-5 pe-3  me-2 rounded col-md-2 btn btn-primary"
+<h2 class="text-center text-dark p-2">جدول الوجبات</h2>
+<a *ngIf="isAdmin()" class="text-white p-2 fs-5 pe-3  me-2 rounded col-md-2 btn btn-primary"
 [routerLink]="['AddUpdateShippingBatch', { params: param }]">
     إضافة وجبة جديدة
   </a>
@@ -8,10 +8,9 @@
     <table class="table table-hover text-center mt-4" style="border-radius: 10px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
         <thead style="background-color: #f3a808; color: white;">
             <tr>
-                <th style="width: 20%;">تعديلات</th>
-                <th>ملاحظات</th>
+                <th *ngIf="isAdmin()" style="width: 20%;">تعديلات</th>
                 <th>عدد الإيصالات</th>
-                <th>اجمالي المبيع</th>
+                <th>البيع بالعراقي</th>
                 <th>التكلفة بالدولار</th>
                 <th>تاريخ وصول الشحنة</th>
             </tr>
@@ -20,7 +19,7 @@
             <tr *ngFor="let ships of ShippingBatches; let i = index" class="align-middle" 
                 [class.table-primary]="i % 2 === 0" 
                 [class.table-light]="i % 2 !== 0">
-                <td>
+                <td *ngIf="isAdmin()">
                     <button [routerLink]="['AddUpdateShippingBatch', ships.shippingBatchId]" class="btn btn-sm btn-primary me-2">
                         <i class="fas fa-edit"></i>
                     </button>                
@@ -41,10 +40,6 @@
     
                     <!-- نهاية البو بب -->
                 </td>
-
-
-
-                <td (click)="goToAddRecipt(ships.shippingBatchId)" class="fw-bold text-success">{{ ships.notes }}</td> 
                 <td (click)="goToAddRecipt(ships.shippingBatchId)" class="fw-bold text-success">{{ ships.reciptsNu}}</td> 
                 <td (click)="goToAddRecipt(ships.shippingBatchId)" class="fw-bold text-success">
                   {{ ships.sellingIQ | number:'1.0-0' }}
@@ -61,6 +56,33 @@
             </tr>
         </tbody>
     </table>
+</div>
+
+<div dir="rtl" class="ps-5 ms-3 p-2 m-1 col-md-12">
+  <div dir="rtl" class="col-md-12 d-flex justify-content-between">
+    <div class="col-md-6 text-dark">
+      اجمالي البيع بالدينار العراقي {{totalSellIQ | number:'1.0-0' }}
+    </div>
+    <div class="col-md-6 text-dark">
+      سعر الصرف {{exchangeRate | number:'1.0-0' }}
+    </div>
+  </div>
+  <div dir="rtl" class="col-md-12 d-flex justify-content-between">
+    <div class="col-md-6 text-dark">
+      اجمالي التكلفة بالدولار  {{totalCost | number:'1.0-0' }}
+    </div>
+    <div  class="col-md-6 text-dark">
+      صافي الحساب بالدولار  {{purAcc | number:'1.0-0' }}
+    </div>
+  </div>
+  <div dir="rtl" class="col-md-12 d-flex justify-content-between">
+    <div class="col-md-6 text-dark">
+      اجمالي البيع بالدولار  {{totalSellDollar | number:'1.0-0' }}
+    </div>
+    <div class="col-md-6 text-dark">
+      عدد الايصالات {{numOfRecipts | number:'1.0-0' }}
+    </div>
+  </div>
 </div>
 
 

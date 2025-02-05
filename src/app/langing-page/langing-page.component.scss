@@ -12,6 +12,11 @@
     background-color: #f9f9f9;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
+  li {
+    list-style: none;
+    padding: 0; 
+    margin: 0;
+}
   
   .custom-table thead {
     background-color: #4CAF50;
@@ -86,13 +91,13 @@
   
   
   .bgbody {
+    height: 100vh;
     background: #502c3e;
+    overflow-y: auto;
   }
 
   .active {
-    background-color: #1862ec !important; 
-    color: white;
-    border-color: #0056b3 !important;
+    color: red;
   }
   .btn-primary1 {
     background-color: #4c0163;

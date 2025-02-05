@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
+import { Component, Inject, inject } from '@angular/core';
+import { Router, RouteReuseStrategy, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { ApiService } from '../Services/api.service';
 import { Receipt } from '../Models/Recipt';
+import { RoleService } from '../Auth/role.service';
 
 @Component({
   selector: 'app-langing-page',
@@ -15,15 +16,40 @@ export class LangingPageComponent {
 
   title = 'Ain AlFahd Company';
   http = inject(ApiService);
+  roleService = inject(RoleService);
+  router = inject(Router);
+
+  //constructor(private roleService: RoleService) {}
 
   recipts: Receipt[] = [];
-  isCollapsed = false;
-  selectSideBar: string ='MainScreen';
+  isCollapsedMain = false;
+  isCollapsedAir = false;
+  selectSideBar: string ='';
   env: string = ''
   activeButton = ''
-  toggleSidebar() {
-    this.isCollapsed = !this.isCollapsed;
-  }
+  currentUser: any = null;
+
+  
+  toggleCollapse(type: string) {
+
+    switch (type){
+      case 'main' :{
+        this.isCollapsedMain = !this.isCollapsedMain;
+        this.isCollapsedAir = false
+        break;
+      }
+      case 'air' :{
+        this.isCollapsedAir = !this.isCollapsedAir;
+        this.isCollapsedMain = false
+        break;
+      }
+      
+    }
+    }
+  
+  // toggleSidebar() {
+  //   this.isCollapsed = !this.isCollapsed;
+  // }
   getData(): void {
     this.http.getData("api/Reciept/GetLastFiveRecords").subscribe((r: Receipt[]) => {
       this.recipts = r;
@@ -37,11 +63,24 @@ export class LangingPageComponent {
   }
 
   ngOnInit(): void {
+
     this.getData();
     this.http.getData("api/Enviroment").subscribe(res => {
       this.env = res.db_env;
     })
+    
+    this.currentUser = this.roleService.getCurrentUser()
 
+    this.selectSideBar = this.IsAdmin() ?  "MainScreen" : ""
+  }
+
+  IsAdmin(): boolean {
+    return this.roleService.hasRole('Admin');
+  }
+
+  logout(): void {
+    this.roleService.logout();
+    this.router.navigate(['/login'])
   }
 
   divideNum(num: number | undefined): string {

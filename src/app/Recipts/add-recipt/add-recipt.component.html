@@ -1,152 +1,26 @@
+<style>
+  body {
+    direction: rtl;
+    text-align: right;
+  }
+
+  .form-label {
+    text-align: right !important; 
+    display: block;
+  }
+
+  .form-control, .table {
+    direction: rtl;
+    text-align: right;
+  }
+</style>
+
+
 <div class="row col-12 p-1 d-flex justify-content-between">
-  <div class="col-md-7">
-    <div class="col-md-12 text-center text-success fs-5 fw-bold" *ngIf="isAdded">
-      تم حفظ الوصل بنجاح
-    </div>
-    <form [formGroup]="receiptForm" (ngSubmit)="onSubmit()">
-        <div class="col-md-12 mb-2">
-          <label class="form-label text-light text-start">تاريخ الوجبة</label>
-          <select class="form-control" formControlName="shippingBatchId">
-            <option *ngFor="let batch of shippingBatchs" [value]="batch.shippingBatchId">
-              {{ batch.arrivelDate | date: 'dd-MM-yyyy' }}</option>
-          </select>
-        </div>
-
-        <div class="form-group mb-3 row col-md-12">
-          <input formControlName="recieptId" class="form-control" hidden/>
-            <div class="form-group mb-3 col-md-3">
-              <label class="form-label text-light text-start">الوزن</label>
-              <div class="d-flex justify-content-start">
-                <input formControlName="weight" class="form-control" />
-                <input readonly value="KG" class="border-0 form-control ms-2" />
-              </div>
-            </div>
-
-            <div class="form-group mb-1 col-md-1">
-              <label for="costSelect" class="form-label text-light text-end">تكلفة</label>
-              <select
-                id="costSelect"
-                [(ngModel)]="selectedCostSaif"
-                [ngModelOptions]="{standalone: true}"
-                (change)="onCostChange($event)"
-                class="border-1 form-control text-center ms-1"
-                style="width:50px"
-              >
-                <option *ngFor="let cost1 of unitCost" [value]="cost1">{{ cost1 }}</option>
-              </select>
-            </div>
-            
-        
-            <div class="form-group mb-3 col-md-2">
-              <label for="cost" class="form-label text-light text-end">الكلفة IO</label>
-              <input id="cost" formControlName="costIQ" class="form-control" readonly />
-            </div>
-
-            <div class="form-group mb-3 col-md-2">
-              <label for="cost" class="form-label text-light text-end">الكلفة $</label>
-              <input id="cost" formControlName="cost" class="form-control" readonly />
-            </div>
-        
-            <div class="form-group mb-3 col-md-2">
-              <label for="discount" class="form-label text-light text-end">الخصم</label>
-              <input id="discount" formControlName="discount" class="form-control" />
-            </div>
-        
-            <div class="form-group mb-3 col-md-2">
-              <label for="currency" class="form-label text-light text-end">العملة</label>
-              <input id="currency" [(ngModel)]="currency"
-              [ngModelOptions]="{standalone: true}" class="form-control" readonly />
-            </div>
-
-        </div>
-        <div class="form-group mb-3 col-md-12"></div>
-          <div class="row">
-            <div class="form-group mb-3 col-md-12">
-              <label for="recieptDate" class="form-label text-light text-end">تاريخ الوصل</label>
-              <input id="recieptDate" type="date" formControlName="recieptDate" class="form-control" />
-            </div>
-          </div>
-        
-          <div class="row">
-            <div class="form-group mb-3 col-md-4">
-              <input id="customerId" formControlName="customerId" hidden />
-            </div>
-            <div class="form-group mb-3 col-md-10">
-              <label class="form-label text-light text-start">اسم العميل</label>
-              <input [(ngModel)]="nameCust" [ngModelOptions]="{standalone: true}" class="form-control" readonly />
-            </div>
-            <div class="form-group mb-3 col-md-2">
-              <label for="exchangeRate" class="form-label text-light text-start">سعر الصرف</label>
-              <input id="exchangeRate" [(ngModel)]="exchangeRate"
-              [ngModelOptions]="{standalone: true}" class="form-control" readonly />
-            </div>
-          </div>
-
-          <div class="row mt-4">
-            <div style="margin-right: 10px;" class="form-group mb-3 col-md-1">
-              <label for="sellingPrice" class="form-label text-light text-start">الوزن</label>
-              <input id="sellingPrice" style="width:70px; margin-right: 10px;" [(ngModel)]="weightUp" 
-              [ngModelOptions]="{standalone: true}" class="form-control" readonly />
-            </div>
-        
-            <div class="form-group mb-1 col-md-1">
-              <label for="costSelect" class="form-label text-light text-end">تكلفة</label>
-              <select
-                id="costSelect"
-                [(ngModel)]="costSelectOfSaif"
-                [ngModelOptions]="{standalone: true}"
-                (change)="onCostSaifChange($event)"
-                class="border-1 form-control text-center ms-1"
-                style="width:50px"
-              >
-                <option *ngFor="let cost of unitCostSaif" [value]="cost">{{ cost }}</option>
-              </select>
-            </div>
-
-            <div class="form-group mb-3 col-md-2">
-              <label for="sellingPrice" class="form-label text-light text-start">سعر المبيع $</label>
-              <input id="sellingPrice" formControlName="sellingUSD" 
-               class="form-control" readonly />
-            </div>
-
-            <div class="form-group mb-3 col-md-2">
-              <label for="sellingPrice" class="form-label text-light text-start">سعر المبيع</label>
-              <input id="sellingPrice" formControlName="sellingPrice" class="form-control" readonly />
-            </div>
-
-            <div class="form-group mb-3 col-md-2">
-              <label for="sellingDiscount" class="form-label text-light text-end">التعديلات</label>
-              <input id="sellingDiscount" formControlName="sellingDiscount" class="form-control" readonly />
-            </div>
-        
-        
-            <div class="form-group mb-3 col-md-2">
-              <label for="totalPriceFromCust" class="form-label text-light text-end">المبلغ</label>
-              <input id="totalPriceFromCust" formControlName="totalPriceFromCust" class="form-control" />
-            </div>
-        
-            <div style="width:80px; margin-right: 10px;"  class="form-group mb-3 col-md-2">
-              <label for="sellingCurrency" class="form-label text-light text-end">العملة</label>
-              <input id="sellingCurrency" [(ngModel)]="sellingCurrency"
-              [ngModelOptions]="{standalone: true}" class="form-control" readonly />
-            </div>
-          </div>
-        
-          <div class="form-group mb-3 col-md-12">
-            <label for="notes" class="form-label text-light text-end">ملاحظات</label>
-            <input id="notes" formControlName="notes" class="form-control" />
-          </div>
-        
-          <div class="form-group mb-3 col-md-12 text-center">
-            <button type="submit" class="col-md-4 btn btn-primary">{{isAdd ? 'تحديث' : 'حفظ'}}</button>
-          </div>
-    </form>
-  </div>
-
-  <div class="col-md-4">
+    <div class="col-md-4">
     <div class="container mt-5">
       <div class="row justify-content-center">
-        <h5 class="text-center text-light mb-5">أدخل اسم العميل أو رقم الجوال للبحث</h5>
+        <h5 class="text-center text-dark mb-5">أدخل اسم العميل أو رقم الجوال للبحث</h5>
         <div class="col-md-10">
           <div class="d-flex justify-content-end">
             <input class="form-control" #wordToseach (input)="filterSuggestions(wordToseach.value)" [ngModel]="searchTerm"
@@ -181,7 +55,257 @@
               </tr>
           </tbody>
       </table>
+   </div>
   </div>
+
+  <div class="col-md-7 rtl">
+    <div class="col-md-12 text-center text-success fs-5 fw-bold" *ngIf="isAdded">
+      تم حفظ الوصل بنجاح
+    </div>
+    <form [formGroup]="receiptForm" (ngSubmit)="onSubmit()">
+      <div class="col-md-12 mb-2">
+        <label class="form-label text-dark text-start">تاريخ الوجبة</label>
+        <select class="form-control" formControlName="shippingBatchId">
+          <option *ngFor="let batch of shippingBatchs" [value]="batch.shippingBatchId">
+            {{ batch.arrivelDate | date: 'dd-MM-yyyy' }}
+          </option>
+        </select>
+      </div>
+  
+      <div class="form-group mb-3 row col-md-12">
+        <input formControlName="recieptId" class="form-control" hidden />
+        <div class="form-group mb-3 col-md-2">
+          <label class="form-label text-dark text-start">الوزن</label>
+          <div class="d-flex justify-content-start">
+            <input style="width: 70px;" formControlName="weight" class="form-control" />
+            <p class="m-2">كغ</p>
+          </div>
+        </div>
+  
+        <div class="form-group mb-1 col-md-2">
+          <label for="costSelect" class="form-label text-dark text-end">تكلفة</label>
+          <select
+            id="costSelect"
+            [(ngModel)]="selectedCostSaif"
+            [ngModelOptions]="{ standalone: true }"
+            (change)="onCostChange($event)"
+            class="border-1 form-control text-center ms-1"
+            style="width: 50px"
+          >
+            <option *ngFor="let cost1 of unitCost" [value]="cost1">
+              {{ cost1 }}
+            </option>
+          </select>
+        </div>
+  
+        <div class="form-group mb-3 col-md-2">
+          <label for="cost" class="form-label text-dark text-end">الكلفة IO</label>
+          <input id="cost" formControlName="costIQ" class="form-control" readonly />
+        </div>
+  
+        <div class="form-group mb-3 col-md-2"
+        style="width: 80px;">
+          <label for="cost" class="form-label text-dark text-end">الكلفة $</label>
+          <input id="cost" formControlName="cost" class="form-control" readonly />
+        </div>
+  
+        <div class="form-group mb-3 col-md-2"
+          style="width: 80px;"
+        >
+          <label for="discount" class="form-label text-dark text-end">الخصم$</label>
+          <input id="discount" formControlName="discount" class="form-control" />
+        </div>
+  
+        <div class="form-group mb-3 col-md-2"
+           style="width: 120px;">
+          <label for="currency" class="form-label text-dark text-end">العملة</label>
+          <input
+            id="currency"
+            [(ngModel)]="currency"
+            [ngModelOptions]="{ standalone: true }"
+            class="form-control"
+            readonly
+          />
+        </div>
+      </div>
+  
+      <div class="form-group mb-3 col-md-12"></div>
+      <div class="row">
+        <div class="form-group mb-3 col-md-12">
+          <label for="recieptDate" class="form-label text-dark text-end"
+            >تاريخ الوصل</label
+          >
+          <input
+            id="recieptDate"
+            type="date"
+            formControlName="recieptDate"
+            class="form-control"
+          />
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="form-group mb-3 col-md-4">
+          <input id="customerId" formControlName="customerId" hidden />
+        </div>
+        <div class="form-group mb-3 col-md-10">
+          <label class="form-label text-dark text-start">اسم العميل</label>
+          <input
+            [(ngModel)]="nameCust"
+            [ngModelOptions]="{ standalone: true }"
+            class="form-control"
+            readonly
+          />
+        </div>
+        <div class="form-group mb-3 col-md-2">
+          <label for="exchangeRate" class="form-label text-dark text-start"
+            >سعر الصرف</label
+          >
+          <input
+            id="exchangeRate"
+            [(ngModel)]="exchangeRate"
+            [ngModelOptions]="{ standalone: true }"
+            class="form-control"
+            readonly
+          />
+        </div>
+      </div>
+  
+      <div class="row mt-4">
+        <div
+          style="margin-left: 10px"
+          class="form-group mb-3 col-md-1">
+          <label for="sellingPrice" class="form-label text-dark text-start">الوزن</label
+          >
+          <input
+            id="sellingPrice"
+            style="width: 50px;"
+            [(ngModel)]="weightUp"
+            [ngModelOptions]="{ standalone: true }"
+            class="form-control"
+            readonly
+          />
+        </div>
+  
+        <div class="form-group mb-1 col-md-1"
+        style="width: 50px; margin-left: 10px;">
+          <label for="costSelect" class="form-label text-dark text-end">تكلفة</label>
+          <select
+            id="costSelect"
+            [(ngModel)]="costSelectOfSaif"
+            [ngModelOptions]="{ standalone: true }"
+            (change)="onCostSaifChange($event)"
+            class="border-1 form-control text-center ms-1"
+            style="width: 50px"
+          >
+            <option *ngFor="let cost of unitCostSaif" [value]="cost">
+              {{ cost }}
+            </option>
+          </select>
+        </div>
+  
+        <div class="form-group mb-3 col-md-2">
+          <label
+            for="sellingPrice"
+            class="form-label text-dark text-start"
+            >$ المبيع</label
+          >
+          <input
+            id="sellingPrice"
+            formControlName="sellingUSD"
+            class="form-control"
+            readonly
+          />
+        </div>
+  
+        <div class="form-group mb-3 col-md-2">
+          <label
+            for="sellingPrice"
+            class="form-label text-dark text-start"
+            >IQ المبيع</label
+          >
+          <input
+            id="sellingPrice"
+            formControlName="sellingPrice"
+            class="form-control"
+            readonly
+          />
+        </div>
+  
+        <div class="form-group mb-3 col-md-2"
+        style="width: 100px; margin-right: 5px">
+          <label
+            for="sellingDiscount"
+            class="form-label text-dark text-end"
+            >التعديلات</label
+          >
+          <input
+            id="sellingDiscount"
+            formControlName="sellingDiscount"
+            class="form-control"
+            readonly
+          />
+        </div>
+  
+        <div class="form-group mb-3 col-md-2"
+        style="width: 100px; margin-right: 5px"
+        >
+          <label
+            for="totalPriceFromCust"
+            class="form-label text-dark text-end"
+            >المبلغ</label
+          >
+          <input
+            id="totalPriceFromCust"
+            formControlName="totalPriceFromCust"
+            class="form-control"
+          />
+        </div>
+  
+        <div
+          style="width: 70px; margin-right: 10px"
+          class="form-group mb-3 col-md-1">
+          <label
+            for="sellingCurrency"
+            class="form-label text-dark text-end"
+            >العملة</label
+          >
+          <input
+            id="sellingCurrency"
+            [(ngModel)]="sellingCurrency"
+            [ngModelOptions]="{ standalone: true }"
+            class="form-control"
+            readonly
+          />
+        </div>
+      </div>
+  
+      <div class="form-group mb-3 col-md-12">
+        <label for="notes" class="form-label text-dark text-end">ملاحظات</label>
+        <input id="notes" formControlName="notes" class="form-control" />
+      </div>
+  
+      <div class="form-group mb-3 col-md-12 text-center">
+        <button
+          type="submit"
+          class="col-md-4 btn btn-primary"
+        >
+          {{ isAdd ? "تحديث" : "حفظ" }}
+        </button>
+      </div>
+    </form>
   </div>
-</div>
+
+
+
+      <!-- إظهار البو بب -->
+      <div class="popup position-fixed top-50 start-50 translate-middle bg-white p-4 rounded shadow-lg" *ngIf="showPopupAddedConfirm" style="max-width: 400px; z-index: 1050;">
+        <h2 class="h5 mb-3 text-center"></h2>
+        <p class="mb-4">{{popDesc}}</p>
+        <div class="text-center">
+          <button class="btn btn-primary" (click)="closePopup()">موافق</button>
+        </div>
+      </div>
+
+      <!-- نهاية البو بب -->
   

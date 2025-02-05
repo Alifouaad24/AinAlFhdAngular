@@ -5,6 +5,7 @@ import { ApiService } from '../../Services/api.service';
 import { CommonModule } from '@angular/common';
 import { PopupComponent } from '../../popup/popup.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { RoleService } from '../../Auth/role.service';
 
 @Component({
   selector: 'app-shipping-batch',
@@ -16,7 +17,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 export class ShippingBatchComponent implements OnInit {
 
 
-  constructor(private api: ApiService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) {}
+  constructor(private api: ApiService, private router: Router, private route: ActivatedRoute,
+    private dialog: MatDialog, private roleService: RoleService) {}
   ShippingBatches: any [] = [];
   param: string =''
   showPopup = false;
@@ -24,13 +26,27 @@ export class ShippingBatchComponent implements OnInit {
   selectIdForDelete?: number | undefined
   PopTitle?: string
   popDesc?: string
+
+  numOfRecipts: number = 0
+  totalCost: number = 0
+  totalSellIQ: number = 0
+  purAcc: number = 0
+  totalSellDollar: number = 0 
+  exchangeRate: number = 0; 
+
+
   ngOnInit(): void {
-    this.GetAllShippingBatch();
+    this.getExChg()
+    //this.GetAllShippingBatch();
     this.route.params.subscribe(params => {
       this.param = params['Shipping'];
       console.log("params", this.param)
       this.GetAllShippingBatch();
     })
+  }
+
+  isAdmin(): boolean {
+    return this.roleService.hasRole('Admin');
   }
 
   openPopup(id: number) {
@@ -51,12 +67,36 @@ export class ShippingBatchComponent implements OnInit {
     this.showPopup = false;
     this.showPopupDeleteConfirm = false;
   }
+  getExChg(): void {
+    this.api.getData("api/Enviroment/GetExChg").subscribe(res => {
+      this.exchangeRate = res.exchangeRate;
+      console.log(res)
+    })
+  }
 
   GetAllShippingBatch(): void {
+
+    this.numOfRecipts = 0
+    this.totalCost = 0
+    this.totalSellIQ = 0
+    this.totalSellDollar = 0
+    this.purAcc = 0
+
     this.api.getData('api/ShippingBatch').subscribe(res =>{
       this.ShippingBatches = res;
       console.log("this.ShippingBatches ", this.ShippingBatches);
-    })
+
+      this.ShippingBatches.map((ship) => {
+        this.numOfRecipts += ship.reciptsNu
+        this.totalCost += ship.batchCostUS
+        this.totalSellIQ += ship.sellingIQ
+    });
+
+    console.log("this.numOfRecipts", this.numOfRecipts)
+
+    this.totalSellDollar = this.totalSellIQ / this.exchangeRate
+    this.purAcc = this.totalSellDollar - this.totalCost
+    }) 
   }
 
   DeleteBatch(id: number | undefined): void {
@@ -74,9 +114,10 @@ export class ShippingBatchComponent implements OnInit {
   }
 
   goToAddRecipt(id: number): void{
-    console.log("sss")
-    this.router.navigate(['LangingPage/ShippingBatch/AddRecipt'], { queryParams: { ShippId: id } });
 
+    if(this.isAdmin()){
+      this.router.navigate(['LangingPage/ShippingBatch/AddRecipt'], { queryParams: { ShippId: id } });
+    }
   }
 
   goToShippTransactions(id: number){

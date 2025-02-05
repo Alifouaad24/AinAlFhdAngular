@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ApiService } from '../../Services/api.service';
 import { CommonModule } from '@angular/common';
+import { RoleService } from '../../Auth/role.service';
 
 @Component({
   selector: 'app-log-in',
@@ -13,7 +14,7 @@ import { CommonModule } from '@angular/common';
 })
 export class LogInComponent {
 
-  constructor(private router: Router, private api: ApiService) {}
+  constructor(private router: Router, private api: ApiService, private roleService: RoleService) {}
 
   showPassword: boolean = false;
   email: string = '';
@@ -29,9 +30,10 @@ export class LogInComponent {
 
   onSubmit() {
     console.log("onSubmit")
-    if (this.email === 'Saif@saif.com' && this.password === '123456') {
-  
-      this.router.navigate(['/LangingPage']);
+    if (this.email === 'Saif@saif.com' && this.password === '123456' ||
+       this.email === 'yousif@ainalfahad.com' && this.password === 'Yousif@2025')  {
+      this.roleService.login(this.email);
+      this.router.navigate(['/LangingPage/MainScreenForMain']);
     } else {
       this.errorMessage = 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
     }

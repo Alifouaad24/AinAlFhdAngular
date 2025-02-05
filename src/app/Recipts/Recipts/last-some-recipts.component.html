@@ -3,19 +3,17 @@
     <!-- <a class="btn btn-outline-warning col-md-1 text-light fs-6" [routerLink]="['AddRecipt']">
       <i class="fa fa-plus"></i>
     </a> -->
-    <h1 class="text-white text-center p-4 col-md-10">جدول الإيصالات</h1>
+    <h3 class="text-dark text-center p-1 col-md-10">جدول الإيصالات</h3>
 </div>
 
-    <div class="table-container mt-5" style="max-height: 400px;">
+    <div class="table-container" style="max-height: 350px;">
         <table class="custom-table">
             <thead>
-                <tr class="fw-bold text-center fs-3">
-                    <th>عمليات</th>
+                <tr class="fw-bold text-center fs-5">
+                    <th *ngIf="isAdmin()">عمليات</th>
                     <th>تاريخ الوجبة</th>
                     <th>تاريخ الوصل</th>
-                    <th>سعر البيع</th>
-                    <th>سعر المبيع بالدولار</th>
-                    <th>التكلفة بالدينار العراقي</th>
+                    <th>المبيع</th>
                     <th>التكلفة</th>
                     <th>الوزن</th>
                     <th>اسم العميل</th>
@@ -23,8 +21,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="fw-bold text-center bg-dark text-white fs-6" *ngFor="let receipt of recipts; let i = index">
-                    <td>
+                <tr class="text-center bg-dark text-white fs-6" *ngFor="let receipt of recipts; let i = index">
+                    <td *ngIf="isAdmin()">
                         <button class="btn btn-danger  me-1" (click)="DeleteRecipt(receipt.recieptId)">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -34,9 +32,7 @@
                     </td>
                     <td>{{ receipt.shippingBatch?.arrivelDate | date:'dd-MM-yyyy'}}</td>
                     <td>{{ receipt.recieptDate | date:'dd-MM-yyyy'}}</td>
-                    <td>{{ divideNum(receipt.sellingPrice) }} IQ</td>
-                    <td>{{ receipt.sellingUSD }} $</td>
-                    <td>{{ receipt.costIQ }} IQ</td>
+                    <td>{{ divideNum(receipt.totalPriceFromCust) }} IQ</td>
                     <td>{{ receipt.cost }} $</td>
                     <td>{{ receipt.weight }} Kg</td>
                     <td>{{ receipt.customer?.custName || 'غير معروف' }}</td>
@@ -45,15 +41,64 @@
             </tbody>
         </table>
     </div>
+
+   <div class="text-dark">
     <div class="d-flex justify-content-between ps-4 pe-4">
-        <div class="text-light fw-bold fs-4">
-            {{ totalCost  | number:'1.0-3'}} :مجموع التكلفة 
+        <div class="text-dark fw-bold fs-6">
+           {{ totalLines }} :عدد الإيصالات
         </div>
-        <div class="text-light fw-bold fs-4">
-            {{ totalProfit  | number:'1.0-3' }} :الرصيد
+        <div *ngIf="isAdmin()" class="text-dark fw-bold fs-6">
+          KG {{ totalWeight | number:'1.0-2'}} :اجمالي الوزن
         </div>
-        <div class="text-light fw-bold fs-4">
-            {{ totalLines }}  :عدد الايصالات
+        <div class="text-dark fw-bold fs-6">
+            {{ exChangeRate }}  : سعر الصرف
         </div>
     </div>
+    <div class="d-flex justify-content-between ps-4 pe-4">
+        <div class="text-dark fw-bold fs-6">
+            $ {{ totalCost  | number:'1.0-0' }} : اجمالي التكلفة بالدولار الامريكي
+         </div>
+
+         <div class="text-dark fw-bold fs-6">
+            IQ  {{ totalProfit  | number:'1.0-0'  }}  :اجمالي البيع بالدينار العراقي
+          </div>
+    </div>
+    <div *ngIf="isAdmin()" class="d-flex justify-content-between ps-4 pe-4">
+        <div class="text-dark fw-bold fs-6">
+            $ {{ totalSellUSD  | number:'1.0-0' }} : اجمالي البيع بالدولار الامريكي
+         </div>
+        <div class="text-dark fw-bold fs-6">
+            IQ {{ totalCostIQ  | number:'1.0-0'  }}  :اجمالي التكلفة بالدينار العراقي
+         </div>
+
+    </div>
+    <div *ngIf="isAdmin()" class="d-flex justify-content-between ps-4 pe-4">
+        <div class="text-dark fw-bold fs-6">
+            $ {{ oneKGProfitInUSD  | number:'1.0-0'  }}  : معدل ربح الكيلو الواحد بالدولار
+          </div>
+        <div class="text-dark fw-bold fs-6">
+            IQ {{ oneKGProfitInIQ  | number:'1.0-0' }} : معدل ربح الكيلو الواحد بالدينار
+         </div>
+
+    </div>
+    <div *ngIf="isAdmin()" class="d-flex justify-content-between ps-4 pe-4">
+
+        <div class="text-dark fw-bold fs-6">
+            $  {{ profitsInUSD  | number:'1.0-0'  }}  : صافي الارباح بالدولار الامريكي
+          </div>
+          <div class="text-dark fw-bold fs-6">
+            IQ {{ profitsInIQ  | number:'1.0-0' }} : صافي الارباح بالدينار العراقي
+         </div>
+
+    </div>
+    <div class="d-flex justify-content-center ps-4 pe-4">
+
+        <div class="text-dark fw-bold fs-6">
+            $  {{ pureAcc  | number:'1.0-0'  }}  : صافي الحساب بالدولار الامريكي
+          </div>
+    </div>
+   </div>
+
+    <!--  -->
+
 </div>
