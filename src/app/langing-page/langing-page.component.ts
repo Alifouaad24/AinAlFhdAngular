@@ -22,34 +22,12 @@ export class LangingPageComponent {
   //constructor(private roleService: RoleService) {}
 
   recipts: Receipt[] = [];
-  isCollapsedMain = false;
-  isCollapsedAir = false;
   selectSideBar: string ='';
   env: string = ''
   activeButton = ''
   currentUser: any = null;
 
   
-  toggleCollapse(type: string) {
-
-    switch (type){
-      case 'main' :{
-        this.isCollapsedMain = !this.isCollapsedMain;
-        this.isCollapsedAir = false
-        break;
-      }
-      case 'air' :{
-        this.isCollapsedAir = !this.isCollapsedAir;
-        this.isCollapsedMain = false
-        break;
-      }
-      
-    }
-    }
-  
-  // toggleSidebar() {
-  //   this.isCollapsed = !this.isCollapsed;
-  // }
   getData(): void {
     this.http.getData("api/Reciept/GetLastFiveRecords").subscribe((r: Receipt[]) => {
       this.recipts = r;

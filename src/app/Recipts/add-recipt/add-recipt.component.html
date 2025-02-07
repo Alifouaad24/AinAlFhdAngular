@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div class="container mt-5 col-md-10" *ngIf="res1.length > 0">
+    <div style="max-height: 200px; overflow-y: auto;" class="container mt-5 col-md-10" *ngIf="res1.length > 0">
       <table class="table table-striped table-bordered table-hover">
           <thead class="table-dark">
               <tr class="text-center">
@@ -82,7 +82,7 @@
           </div>
         </div>
   
-        <div class="form-group mb-1 col-md-2">
+        <div class="form-group mb-1 col-md-2" >
           <label for="costSelect" class="form-label text-dark text-end">تكلفة</label>
           <select
             id="costSelect"
@@ -90,7 +90,7 @@
             [ngModelOptions]="{ standalone: true }"
             (change)="onCostChange($event)"
             class="border-1 form-control text-center ms-1"
-            style="width: 50px"
+            style="width: 70px"
           >
             <option *ngFor="let cost1 of unitCost" [value]="cost1">
               {{ cost1 }}
@@ -173,7 +173,7 @@
   
       <div class="row mt-4">
         <div
-          style="margin-left: 10px"
+          style="margin-left: 2px"
           class="form-group mb-3 col-md-1">
           <label for="sellingPrice" class="form-label text-dark text-start">الوزن</label
           >
@@ -196,7 +196,7 @@
             [ngModelOptions]="{ standalone: true }"
             (change)="onCostSaifChange($event)"
             class="border-1 form-control text-center ms-1"
-            style="width: 50px"
+            style="width: 65px"
           >
             <option *ngFor="let cost of unitCostSaif" [value]="cost">
               {{ cost }}
@@ -263,7 +263,7 @@
         </div>
   
         <div
-          style="width: 70px; margin-right: 10px"
+          style="width: 80px; margin-right: 10px"
           class="form-group mb-3 col-md-1">
           <label
             for="sellingCurrency"
@@ -275,6 +275,7 @@
             [(ngModel)]="sellingCurrency"
             [ngModelOptions]="{ standalone: true }"
             class="form-control"
+            style="width: 60px;"
             readonly
           />
         </div>

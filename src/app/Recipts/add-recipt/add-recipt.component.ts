@@ -311,14 +311,15 @@ export class AddReciptComponent implements OnInit {
       this.filteredSuggestions = [];
     }
   }
+
   selectSuggestion(suggestion: string): void {
     this.res1 = [];
     this.searchTerm = suggestion;
     this.filteredSuggestions = [];
 
-    this.http.getData(`api/Customers/SearchAboutDetectedCustomerApi/${suggestion}`).subscribe((result1) => {
-      this.res1.push(result1)
-      console.log(result1)
+    this.http.getData(`api/Customers/SearchAboutCustomerApi/${suggestion}`).subscribe((result1: any) => {
+      this.res1 = result1
+      console.log("this.res1: ",this.res1)
     })
   }
 
