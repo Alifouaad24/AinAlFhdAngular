@@ -212,23 +212,32 @@ export class AddReciptComponent implements OnInit {
   recalculateTotal() {
 
     const currentSellingUSD = this.receiptForm.get('sellingUSD')?.value || 0;
-    const newSellingUSD = +currentSellingUSD + (+this.EditDolar);
-
+    const EDolar = +this.EditDolar == null || undefined ? 0 : +this.EditDolar
+    const newSellingUSD = +currentSellingUSD + EDolar;
+    const finalIQ = newSellingUSD * this.exchangeRate
+    
     this.receiptForm.patchValue({
-      sellingUSD: newSellingUSD
+      sellingUSD: newSellingUSD,
+      sellingPrice: finalIQ
     });
   }
 
   recalculateTotalDinar() {
     const currentSellingPrice = this.EditAiiiii;
     const newValue = +this.EditIIQQ; 
+    const newSellingPrice = currentSellingPrice + newValue;
 
-        if (!isNaN(newValue)) {
-      const newSellingPrice = +currentSellingPrice + newValue;
-  
-      this.receiptForm.patchValue({
-        sellingPrice: newSellingPrice
-      });
+    const sellingUSD = newSellingPrice / this.exchangeRate;
+
+    console.log("Selling USD Before Patch:", sellingUSD);
+
+    if (!isNaN(newValue)) {
+    const newSellingPrice = +currentSellingPrice + newValue;
+
+    this.receiptForm.patchValue({
+      ellingPrice: newSellingPrice,
+      sellingUSD: Math.ceil(+newSellingPrice / this.exchangeRate)
+    }, { emitEvent: false });
     } else {
       this.receiptForm.patchValue({
         sellingPrice: currentSellingPrice
