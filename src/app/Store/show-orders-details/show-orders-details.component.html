@@ -1,0 +1,78 @@
+<div class="text-center fs-4 mb-2" style="font-size: 1.75rem;">
+  منتجات المخزن
+</div>
+
+<div *ngIf="isUpdated">
+   !تم التعديل بنجاح
+</div>
+
+<div class="table-responsive" infiniteScroll
+   [infiniteScrollDistance]="scrollDistance" 
+   [infiniteScrollUpDistance]="scrollUpDistance" 
+   (scrolled)="loadData()">
+
+<table class="table table-bordered text-center align-middle">
+  <thead>
+    <tr>
+      <th>عمليات</th>
+      <th>السعر</th>
+      <th>المقاس</th>
+      <th>SKU</th>
+      <th>صورة المنتج</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="OrderDetails">
+    <tr *ngFor="let order of OrderDetails">
+      <td>
+        <button (click)="GoToEditPage(order.id)" class="btn-circle btn-success mr-1"><i class="fas fa-edit"></i></button>
+        <!-- <button (click)="deleteOrderDetails(order.id)" class="btn-circle btn-danger"><i class="fas fa-trash"></i></button> -->
+        <button (click)="openModal(order.id)" class="btn-circle btn-danger"><i class="fas fa-trash"></i></button>
+<!-- البوب أب (مودال) -->
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel"></h5>
+        <!-- زر إغلاق المودال -->
+        <button type="button" class="btn-close btn-circle btn-info" data-bs-dismiss="modal" aria-label="إغلاق">X</button>
+      </div>
+      <div class="modal-body">
+        هل تريد حذف المنتج بالتأكيد ؟
+      </div>
+      <div class="modal-footer">
+        <button *ngIf="selectedOrderId !== null" type="button" (click)="deleteOrderDetails(selectedOrderId!)" class="btn btn-danger">
+          حذف
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </td>
+      <td>{{ order.websitePrice }}</td>
+      <td>{{ order.sizeTB?.description }}</td>
+      <td>{{ order.item.pCode }}</td>
+      <td><img [src]="order.item.imgUrl" style="width: 70px; height: 100px;" alt="not found" /></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- البوب أب (مودال) -->
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">عنوان النافذة</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+      </div>
+      <div class="modal-body">
+        هذا هو محتوى البوب أب 📌
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+        <button type="button" class="btn btn-primary">حفظ التغييرات</button>
+      </div>
+    </div>
+  </div>
+</div>

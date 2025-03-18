@@ -1,32 +1,45 @@
 <h2 class="text-center text-dark p-2">جدول الوجبات</h2>
-<a *ngIf="isAdmin()" class="text-white p-2 fs-5 pe-3  me-2 rounded col-md-2 btn btn-primary"
+<a *ngIf="isAdmin()" class="text-white p-2 fs-5 pe-3  m-2 rounded col-md-2 btn btn-primary"
 [routerLink]="['AddUpdateShippingBatch', { params: param }]">
     إضافة وجبة جديدة
   </a>
 
 <div style="height: 60vh; overflow-y: auto;">
-    <table class="table table-hover text-center mt-4" style="border-radius: 10px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-        <thead style="background-color: #f3a808; color: white;">
-            <tr>
-                <th *ngIf="isAdmin()" style="width: 20%;">تعديلات</th>
-                <th>عدد الإيصالات</th>
-                <th>البيع بالعراقي</th>
-                <th>التكلفة بالدولار</th>
-                <th>تاريخ وصول الشحنة</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let ships of ShippingBatches; let i = index" class="align-middle" 
-                [class.table-primary]="i % 2 === 0" 
-                [class.table-light]="i % 2 !== 0">
-                <td *ngIf="isAdmin()">
+  <div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="dataTable_length"><label>Show <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="dataTable_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></label></div></div></div><div class="row"><div class="col-sm-12">
+              <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+              <thead>
+                <tr>
+                  <th *ngIf="isAdmin()" style="width: 20%;">تعديلات</th>
+                  <th>طباعة PDF</th>
+                  <th>عدد الإيصالات</th>
+                  <th>البيع بالعراقي</th>
+                  <th>التكلفة بالدولار</th>
+                  <th>تاريخ وصول الشحنة</th>
+              </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th *ngIf="isAdmin()" style="width: 20%;">تعديلات</th>
+                  <th>طباعة PDF</th>
+                  <th>عدد الإيصالات</th>
+                  <th>البيع بالعراقي</th>
+                  <th>التكلفة بالدولار</th>
+                  <th>تاريخ وصول الشحنة</th>
+              </tr>
+              </tfoot>
+                <tbody>
+                <tr *ngFor="let ships of ShippingBatches; let i = index" class="odd">
+                  <td *ngIf="isAdmin()">
                     <button [routerLink]="['AddUpdateShippingBatch', ships.shippingBatchId]" class="btn btn-sm btn-primary me-2">
                         <i class="fas fa-edit"></i>
                     </button>                
                     <!-- <button (click)="DeleteBatch(ships.shippingBatchId)" class="btn btn-sm btn-danger">
                         <i class="fas fa-trash"></i>
                     </button> -->
-                    <button class="btn btn-sm btn-danger" (click)="openPopup(ships.shippingBatchId)"><i class="fas fa-trash"></i></button>
+                    <button class="btn btn-sm btn-danger" (click)="DeleteBatch(ships.shippingBatchId)"><i class="fas fa-trash"></i></button>
                     <div class="overlay position-fixed w-100 h-100 top-0 start-0 bg-dark bg-opacity-50" *ngIf="showPopup" (click)="closePopup()"></div>
     <!-- إظهار البو بب -->
                     <div class="popup position-fixed top-50 start-50 translate-middle bg-white p-4 rounded shadow-lg" *ngIf="showPopup" style="max-width: 400px; z-index: 1050;">
@@ -40,50 +53,67 @@
     
                     <!-- نهاية البو بب -->
                 </td>
+                <td>
+                  <button class="btn btn-success" (click)="PrintPDF(ships.shippingBatchId)">Print <i class="fa fa-file-pdf"></i></button>
+                </td>
                 <td (click)="goToAddRecipt(ships.shippingBatchId)" class="fw-bold text-success">{{ ships.reciptsNu}}</td> 
                 <td (click)="goToAddRecipt(ships.shippingBatchId)" class="fw-bold text-success">
                   {{ ships.sellingIQ | number:'1.0-0' }}
                 </td>
                 
-
-
-
                 <td class="fw-bold text-success">
                     {{ ships.batchCostUS ? ships.batchCostUS + '$' : '' }}
                   </td>
                   
-                <td (click)="goToShippTransactions(ships.shippingBatchId)" class="fw-bold text-success">{{ ships.arrivelDate | date: 'yyyy-MM-dd' }}</td> 
-            </tr>
-        </tbody>
-    </table>
+                  <td (click)="goToShippTransactions(ships.shippingBatchId)" class="fw-bold text-success" style="cursor: pointer;">
+                    <a>{{ ships.arrivelDate | date: 'yyyy-MM-dd' }}</a>
+                </td>
+              </tr>
+                  </tbody>
+            </table></div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="dataTable_previous"><a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx="4" tabindex="0" class="page-link">4</a></li><li class="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx="5" tabindex="0" class="page-link">5</a></li><li class="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx="6" tabindex="0" class="page-link">6</a></li><li class="paginate_button page-item next" id="dataTable_next"><a href="#" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li></ul></div></div></div></div>
+        </div>
+    </div>
+</div>
 </div>
 
-<div dir="rtl" class="ps-5 ms-3 p-2 m-1 col-md-12">
-  <div dir="rtl" class="col-md-12 d-flex justify-content-between">
-    <div class="col-md-6 text-dark">
-      اجمالي البيع بالدينار العراقي {{totalSellIQ | number:'1.0-0' }}
+
+<div dir="rtl" class="card p-4 shadow-sm">
+  <div class="card-body">
+    <div dir="rtl" class="row mb-3">
+      <div class="col-md-6 text-dark d-flex justify-content-evenly">
+        <span>اجمالي البيع بالدينار العراقي: </span>
+        <span> .  {{totalSellIQ | number:'1.0-0' }} IQ</span>
+      </div>
+      <div class="col-md-6 text-dark d-flex justify-content-evenly">
+        <span>سعر الصرف: </span>
+        <span> .  {{exchangeRate | number:'1.0-0' }} </span>
+      </div>
     </div>
-    <div class="col-md-6 text-dark">
-      سعر الصرف {{exchangeRate | number:'1.0-0' }}
+
+    <div dir="rtl" class="row mb-3">
+      <div class="col-md-6 text-dark d-flex justify-content-evenly">
+        <span>اجمالي التكلفة بالدولار: </span>
+        <span> .  {{totalCost | number:'1.0-0' }} $</span>
+      </div>
+      <div class="col-md-6 text-dark d-flex justify-content-evenly">
+        <span>صافي الحساب بالدولار: </span>
+        <span> .  {{purAcc | number:'1.0-0' }} $</span>
+      </div>
     </div>
-  </div>
-  <div dir="rtl" class="col-md-12 d-flex justify-content-between">
-    <div class="col-md-6 text-dark">
-      اجمالي التكلفة بالدولار  {{totalCost | number:'1.0-0' }}
-    </div>
-    <div  class="col-md-6 text-dark">
-      صافي الحساب بالدولار  {{purAcc | number:'1.0-0' }}
-    </div>
-  </div>
-  <div dir="rtl" class="col-md-12 d-flex justify-content-between">
-    <div class="col-md-6 text-dark">
-      اجمالي البيع بالدولار  {{totalSellDollar | number:'1.0-0' }}
-    </div>
-    <div class="col-md-6 text-dark">
-      عدد الايصالات {{numOfRecipts | number:'1.0-0' }}
+
+    <div dir="rtl" class="row mb-3">
+      <div class="col-md-6 text-dark d-flex justify-content-evenly">
+        <span>اجمالي البيع بالدولار:  </span>
+        <span>  .  {{totalSellDollar | number:'1.0-0' }} $</span>
+      </div>
+      <div class="col-md-6 text-dark d-flex justify-content-evenly">
+        <span>عدد الايصالات: </span>
+        <span> .  {{numOfRecipts | number:'1.0-0' }}</span>
+      </div>
     </div>
   </div>
 </div>
+
 
 
 <!-- (click)="DeleteType(ship.shippingBatchId)" -->
@@ -95,3 +125,24 @@
       <button class="btn btn-primary" (click)="closePopup()">موافق</button>
     </div>
   </div>
+
+
+
+  <!-- /////////////// -->
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/src/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="/src/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/src/assets/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/src/assets/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="/src/assets/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/src/assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/src/assets/js/demo/datatables-demo.js"></script>

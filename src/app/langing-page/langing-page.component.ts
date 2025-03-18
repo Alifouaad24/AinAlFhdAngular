@@ -26,7 +26,7 @@ export class LangingPageComponent {
   env: string = ''
   activeButton = ''
   currentUser: any = null;
-
+  isSidebarOpen = false;
   
   getData(): void {
     this.http.getData("api/Reciept/GetLastFiveRecords").subscribe((r: Receipt[]) => {
@@ -56,9 +56,8 @@ export class LangingPageComponent {
     return this.roleService.hasRole('Admin');
   }
 
-  logout(): void {
-    this.roleService.logout();
-    this.router.navigate(['/login'])
+  logout() {
+    this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 
   divideNum(num: number | undefined): string {
@@ -68,6 +67,18 @@ export class LangingPageComponent {
     let magnitude = Math.pow(10, Math.floor(Math.log10(num) - 1));
     let final = Math.ceil(num / magnitude) * magnitude;
     return final.toLocaleString();
+  }
+
+
+
+  toggleSidebar() {
+      this.isSidebarOpen = !this.isSidebarOpen;
+      const sidebar = document.getElementById('accordionSidebar');
+      if (this.isSidebarOpen) {
+          sidebar?.classList.add('toggled');
+      } else {
+          sidebar?.classList.remove('toggled');
+      }
   }
 
 }

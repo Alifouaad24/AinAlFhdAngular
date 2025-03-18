@@ -1,0 +1,94 @@
+<div class="container">
+    <input type="text" placeholder="UPC ..." [(ngModel)]="upc">
+    <button (click)="GetPriceAndPhoto(upc)">بحث</button>
+    <div *ngIf="isLoading" class="loading-indicator m-1 p-2">
+        <i class="fas fa-spinner fa-spin"></i> 
+        <span>&nbsp;</span>
+        <span>جاري البحث</span>
+      </div> 
+</div>
+
+<div class="container">
+    <div class="row justify-content-center align-items-start pt-2 vh-100">
+        <div class="col-md-8">
+            <div class="card shadow-lg p-2 rounded">
+   
+                <div class="col-md-12">
+                    <div class="row col-md-12 justify-content-between">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">السعر</label>
+                            <input class="form-control" type="text" [ngModel]="price">
+                        </div>
+                    
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">الموديل</label>
+                            <input class="form-control" type="text" [ngModel]="model">
+                        </div>
+                    </div>
+                    <div class="row col-md-12 justify-content-between">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label fw-bold">SKU</label>
+                            <input class="form-control" type="text" [ngModel]="storeSku">
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label fw-bold">الشركة</label>
+                            <input class="form-control" type="text" [ngModel]="Brand">
+                        </div>
+                    
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">رقم الإنترنت</label>
+                            <input class="form-control" type="text" [ngModel]="internet">
+                        </div>
+
+                     </div>
+                     <div class="row col-md-12">
+                        <div class="col-md-10 mb-3">
+                            <label class="fw-bold">الملاحظات</label>
+                            <input class="form-control w-100" type="text" [ngModel]="Notes">
+                        </div>
+                     </div>
+                    <div class="row col-md-12 justify-content-between">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">
+                                 الفئة
+                            </label>
+                            <div class="input-group">
+                                <select class="form-control w-100" [(ngModel)]="CategoryId" (change)="onCategoryChange($event)">
+                                    <option *ngFor="let category of Categories" [value]="category.categoryId">{{ category.categoryName }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">
+                                 حالة المنتج
+                            </label>
+                            <div class="input-group">
+                                <select class="form-control w-100" [(ngModel)]="CondId" (change)="onCategoryChange($event)">
+                                    <option></option>
+                                    <option *ngFor="let condition of allCondetions" [value]="condition.conditionId">{{ condition.description }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 text m-3">
+                    <button class="btn btn-success w-25">
+                        حفظ
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+    
+        <div class="col-md-4 text-center">
+            <div class="card shadow-lg p-3 rounded">
+                <h5 class="text-center mb-3">صورة المنتج</h5>
+                <img [src]="imgUrl" class="img-fluid rounded shadow" alt="صورة">
+            </div>
+        </div>
+    </div>
+</div>
+
+

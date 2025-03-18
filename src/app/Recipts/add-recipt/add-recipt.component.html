@@ -206,17 +206,42 @@
   
         <div class="form-group mb-3 col-md-2">
           <label
-            for="sellingPrice"
+            for="sellingUSD"
             class="form-label text-dark text-start"
-            >$ المبيع</label
+            >$المبيع</label
           >
           <input
-            id="sellingPrice"
+            id="sellingUSD"
             formControlName="sellingUSD"
             class="form-control"
             readonly
+            style="width: 65px"
+
           />
         </div>
+        <div class="form-group mb-3 col-md-2" style="width: 100px; margin-right: 5px">
+          <label for="tota" class="form-label text-dark text-end">التعديل$</label>
+          <input
+            id="tota"
+            [(ngModel)]="EditDolar"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="recalculateTotal()"
+            class="form-control"
+            type="number"
+          />
+        </div>
+
+        <div class="form-group mb-3 col-md-2" style="width: 100px; margin-right: 5px">
+          <label for="totaq" class="form-label text-dark text-end">التعديلIQ</label>
+          <input
+            id="totaq"
+            [(ngModel)]="EditIIQQ"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="recalculateTotalDinar()"
+            class="form-control"
+          />
+        </div>
+        
   
         <div class="form-group mb-3 col-md-2">
           <label
@@ -230,6 +255,14 @@
             class="form-control"
             readonly
           />
+          <input
+          id="selliPrice"
+          [(ngModel)]="EditAiiiii"
+          [ngModelOptions]="{ standalone: true }"
+          class="form-control"
+          readonly
+          hidden
+        />
         </div>
   
         <div class="form-group mb-3 col-md-2"
@@ -237,7 +270,7 @@
           <label
             for="sellingDiscount"
             class="form-label text-dark text-end"
-            >التعديلات</label
+            >التعديلات IQ</label
           >
           <input
             id="sellingDiscount"
@@ -275,7 +308,7 @@
             [(ngModel)]="sellingCurrency"
             [ngModelOptions]="{ standalone: true }"
             class="form-control"
-            style="width: 60px;"
+            style="width: 55px;"
             readonly
           />
         </div>

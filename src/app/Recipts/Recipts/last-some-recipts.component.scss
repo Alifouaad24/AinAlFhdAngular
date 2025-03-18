@@ -60,3 +60,9 @@
 .sidebar.collapsed {
     transform: translateX(-100%);
 }
+
+/* توسيط النص داخل الأعمدة */
+.dataTable td, .dataTable th {
+    text-align: center;
+  }
+  

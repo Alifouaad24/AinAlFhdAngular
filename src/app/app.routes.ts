@@ -17,6 +17,9 @@ import { MainScreenForAirComponent } from './MainScreens/main-screen-for-air/mai
 import { MainScreenForseaComponent } from './MainScreens/main-screen-forsea/main-screen-forsea.component';
 import { MainScreenForDelevaryComponent } from './MainScreens/main-screen-for-delevary/main-screen-for-delevary.component';
 import { MainScreenForStoreComponent } from './MainScreens/main-screen-for-store/main-screen-for-store.component';
+import { AddItemToStoreComponent } from './Store/add-item-to-store/add-item-to-store.component';
+import { ShowOrdersDetailsComponent } from './Store/show-orders-details/show-orders-details.component';
+import { AddHomeDepotProductComponent } from './Store/add-home-depot-product/add-home-depot-product.component';
 
 export const routes: Routes = [
     {
@@ -38,6 +41,11 @@ export const routes: Routes = [
           { path: 'MainScreenForSea', component: MainScreenForseaComponent },
           { path: 'MainScreenForDelevary', component: MainScreenForDelevaryComponent },
           { path: 'MainScreenForStore', component: MainScreenForStoreComponent },
+          { path: 'AddItemToStore/:id', component: AddItemToStoreComponent },
+          { path: 'AddItemToStore', component: AddItemToStoreComponent },
+          { path: 'ShowItemsInStore', component: ShowOrdersDetailsComponent },
+          { path: 'AddHomeDepotProToStore', component: AddHomeDepotProductComponent },
+
           {
             path: "Customers",
             component: CustomersComponent

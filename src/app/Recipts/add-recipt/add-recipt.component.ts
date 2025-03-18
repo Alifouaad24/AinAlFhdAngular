@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ApiService } from '../../Services/api.service';
 import { tap } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-recipt',
@@ -15,7 +16,7 @@ import { tap } from 'rxjs';
 export class AddReciptComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private http: ApiService, private cd: ChangeDetectorRef,
-    private router: Router, private route: ActivatedRoute
+    private router: Router, private route: ActivatedRoute, private toastr: ToastrService
   ) {
     this.receiptForm = this.fb.group({
       RecieptId:[0],
@@ -37,6 +38,8 @@ export class AddReciptComponent implements OnInit {
   }
 
   costIIQ?: number
+  EditDolar: number = 0
+  EditIIQQ: number = 0
   isAdded: boolean = false
   recId: number | null = null;
   ssId!: number
@@ -64,6 +67,7 @@ export class AddReciptComponent implements OnInit {
   weightUp?: number
   showPopupAddedConfirm = false;
   popDesc?: string
+  EditAiiiii: number = 0
 
 
   openPopup2(message: string) {
@@ -150,14 +154,15 @@ export class AddReciptComponent implements OnInit {
       const discountToSaif = formValues.discount
       const total = weight * costPerUnit - discountToSaif;
       const exchangeRate = this.exchangeRate
+      const ed = this.EditDolar
       const totalInIQ = weight * costPerUnit * exchangeRate - discountToSaif;
       const costSelectOfSaif = this.costSelectOfSaif
       const PriceForSell = costSelectOfSaif * Math.ceil(weight) * exchangeRate;
-      const formattedPrice = PriceForSell.toLocaleString('en-US', { maximumFractionDigits: 3 });
-
-      this.weightUp =  Math.ceil(weight)
+      //const formattedPrice = PriceForSell.toLocaleString('en-US', { maximumFractionDigits: 3 });
+      this.weightUp =  this.testWeight(weight)
+      this.sellingPriceInDoular = costSelectOfSaif * this.testWeight(weight) + ed
+      this.EditAiiiii = this.roundWithSmallStep(PriceForSell) || 0
       this.costIIQ = totalInIQ
-      this.sellingPriceInDoular = costSelectOfSaif * Math.ceil(weight)
 
       if (this.receiptForm.get('cost')?.value !== total) {
         this.receiptForm.patchValue(
@@ -165,7 +170,7 @@ export class AddReciptComponent implements OnInit {
             sellingPrice: this.roundWithSmallStep(PriceForSell) || 0,//.toLocaleString(),
             totalPriceFromCust: this.roundWithSmallStep(PriceForSell) || 0,//.toLocaleString(),
             costIQ: totalInIQ,
-            sellingUSD: costSelectOfSaif * Math.ceil(weight),
+            sellingUSD: this.sellingPriceInDoular,
             sellingDiscount: this.receiptForm.get('totalPriceFromCust')?.value - this.receiptForm.get('sellingPrice')?.value
            },
           { emitEvent: false }
@@ -192,10 +197,10 @@ export class AddReciptComponent implements OnInit {
           { emitEvent: false }
         );
       }
-      if(this.receiptForm.get('sellingUSD')?.value !== this.receiptForm.get('totalPriceFromCust')?.value / this.exchangeRate){
+      if(this.receiptForm.get('sellingUSD')?.value !== costSelectOfSaif * this.weightUp){
         this.receiptForm.patchValue(
           { 
-            sellingUSD: (this.receiptForm.get('totalPriceFromCust')?.value / this.exchangeRate).toFixed(1)
+            sellingUSD: this.sellingPriceInDoular
            },
           { emitEvent: false }
         );
@@ -204,6 +209,36 @@ export class AddReciptComponent implements OnInit {
     });
   }
   
+  recalculateTotal() {
+
+    const currentSellingUSD = this.receiptForm.get('sellingUSD')?.value || 0;
+    const newSellingUSD = +currentSellingUSD + (+this.EditDolar);
+
+    this.receiptForm.patchValue({
+      sellingUSD: newSellingUSD
+    });
+  }
+
+  recalculateTotalDinar() {
+    const currentSellingPrice = this.EditAiiiii;
+    const newValue = +this.EditIIQQ; 
+
+        if (!isNaN(newValue)) {
+      const newSellingPrice = +currentSellingPrice + newValue;
+  
+      this.receiptForm.patchValue({
+        sellingPrice: newSellingPrice
+      });
+    } else {
+      this.receiptForm.patchValue({
+        sellingPrice: currentSellingPrice
+      });
+    }
+  }
+  
+  
+
+  
   onCostChange(event: Event): void {
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.receiptForm.patchValue({
@@ -211,13 +246,23 @@ export class AddReciptComponent implements OnInit {
     });
   }
 
+  testWeight(num: number) {
+    let fraction = parseFloat((num - Math.floor(num)).toFixed(2));
+
+    if (fraction >= 0.01 && fraction <= 0.09) {
+        return Math.floor(num); 
+    } else {
+        return Math.ceil(num);
+    }
+}
+
 
   roundWithSmallStep(value: number): number {
     // const magnitude = Math.pow(10, Math.floor(Math.log10(value) - 1));
     // return Math.ceil(value / magnitude) * magnitude;
 
     const magnitude = 1000; // التقريب لأقرب ألف
-    return Math.round(value / magnitude) * magnitude;
+    return Math.ceil(value / magnitude) * magnitude;
 }
 
 
@@ -225,7 +270,7 @@ export class AddReciptComponent implements OnInit {
     const selectedValue = (event.target as HTMLSelectElement).value;
     const weight = this.receiptForm.get('weight')?.value;
 
-    const final = +selectedValue * weight * this.exchangeRate
+    const final = +selectedValue * this.testWeight(weight) * this.exchangeRate
     this.receiptForm.patchValue({
       sellingPrice: final,
       totalPriceFromCust: final,
@@ -250,17 +295,20 @@ export class AddReciptComponent implements OnInit {
               //this.router.navigate(['/LangingPage/Recipts'], { queryParams: { updated: 'true' } });
               this.router.navigate(['/LangingPage/ShippingBatch']);
             } else {
-              alert('حدث خطأ أثناء تحديث السجل.');
+              this.toastr.error('حدث خطأ أثناء تحديث السجل.', '')
+
             }
           },
           (error) => {
             console.error('خطأ في الاتصال بالخادم:', error);
-            alert('حدث خطأ أثناء الاتصال بالخادم.');
+            this.toastr.error('حدث خطأ أثناء الاتصال بالخادم.', '')
+
           }
         );
         
       }else {
-        alert('يرجى التحقق من الحقول المطلوبة.');
+        this.toastr.error('يرجى التحقق من الحقول المطلوبة.', '')
+
       }
     }else{
       if (this.receiptForm.valid) {
@@ -268,12 +316,11 @@ export class AddReciptComponent implements OnInit {
           (response: any) => {
             if (response) {
               console.log(response)
-              this.openPopup2("تم حفظ الإيصال بنجاح")
-              this.isAdded = !this.isAdded
+              this.toastr.success('تم حفظ الإيصال بنجاح', '')
               setTimeout(() => {
                 this.isAdded = false; 
                 this.router.navigate(['/LangingPage/ShippingBatch']);
-              }, 4000);
+              }, 2000);
             } else {
               this.openPopup2(response.error)
             }
@@ -283,7 +330,7 @@ export class AddReciptComponent implements OnInit {
           }
         );
       } else {
-        alert('يرجى التحقق من الحقول المطلوبة.');
+        this.toastr.error('يرجى التحقق من الحقول المطلوبة.', '')
       }
     }
     

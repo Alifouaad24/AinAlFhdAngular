@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { PopupComponent } from '../../popup/popup.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RoleService } from '../../Auth/role.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-shipping-batch',
@@ -18,7 +19,7 @@ export class ShippingBatchComponent implements OnInit {
 
 
   constructor(private api: ApiService, private router: Router, private route: ActivatedRoute,
-    private dialog: MatDialog, private roleService: RoleService) {}
+    private dialog: MatDialog, private roleService: RoleService, private httpp: HttpClient) {}
   ShippingBatches: any [] = [];
   param: string =''
   showPopup = false;
@@ -37,10 +38,9 @@ export class ShippingBatchComponent implements OnInit {
 
   ngOnInit(): void {
     this.getExChg()
-    //this.GetAllShippingBatch();
+    this.GetAllShippingBatch();
     this.route.params.subscribe(params => {
       this.param = params['Shipping'];
-      console.log("params", this.param)
       this.GetAllShippingBatch();
     })
   }
@@ -76,23 +76,19 @@ export class ShippingBatchComponent implements OnInit {
 
   GetAllShippingBatch(): void {
 
-    this.numOfRecipts = 0
-    this.totalCost = 0
-    this.totalSellIQ = 0
-    this.totalSellDollar = 0
-    this.purAcc = 0
-
     this.api.getData('api/ShippingBatch').subscribe(res =>{
       this.ShippingBatches = res;
       console.log("this.ShippingBatches ", this.ShippingBatches);
-
+      this.numOfRecipts = 0
+      this.totalCost = 0
+      this.totalSellIQ = 0
+      this.totalSellDollar = 0
+      this.purAcc = 0
       this.ShippingBatches.map((ship) => {
         this.numOfRecipts += ship.reciptsNu
         this.totalCost += ship.batchCostUS
         this.totalSellIQ += ship.sellingIQ
     });
-
-    console.log("this.numOfRecipts", this.numOfRecipts)
 
     this.totalSellDollar = this.totalSellIQ / this.exchangeRate
     this.purAcc = this.totalSellDollar - this.totalCost
@@ -122,6 +118,42 @@ export class ShippingBatchComponent implements OnInit {
 
   goToShippTransactions(id: number){
     this.router.navigate(['LangingPage/Recipts'], {queryParams: { ShippIdToFilter: id }});
+  }
+
+
+  PrintPDF(id: Number): void {
+    const shipId = id;
+    let patch;
+    let url = `http://saifsfo-002-site19.atempurl.com/api/Reciept/GeneratePdf`;
+  
+    if (shipId !== null && shipId !== undefined) {
+      url += `/${shipId}`;
+    }
+  
+    this.httpp.get(url, { responseType: 'blob' }).subscribe(
+      (response) => {
+        if (response) {
+          const blob = new Blob([response], { type: 'application/pdf' });
+  
+          if (blob.type === 'application/pdf') {
+            const urlBlob = URL.createObjectURL(blob);
+  
+            const link = document.createElement('a');
+            link.href = urlBlob;
+            link.download = 'file.pdf';
+            
+            link.click();
+          } else {
+            console.error('الاستجابة ليست مستند PDF.');
+          }
+        } else {
+          console.error('لم يتم استلام البيانات من الخادم.');
+        }
+      },
+      (error) => {
+        console.error('حدث خطأ أثناء تحميل الـ PDF:', error);
+      }
+    );
   }
 
 }
