@@ -1,94 +1,184 @@
-<div class="container">
-    <input (keydown.enter)="GetPriceAndPhoto(upc)" type="text" placeholder="UPC ..." [(ngModel)]="upc">
-    <button (click)="GetPriceAndPhoto(upc)">بحث</button>
-    <div *ngIf="isLoading" class="loading-indicator m-1 p-2">
-        <i class="fas fa-spinner fa-spin"></i> 
-        <span>&nbsp;</span>
-        <span>جاري البحث</span>
-      </div> 
+<div class="p-2">  
+  <input style="width: 20px;" (change)="onSearchChange('Home')"  type="radio" id="Home" name="Search" width="20">
+  <label for="Home">Home Depot</label><br>
+  <input style="width: 20px;" (change)="onSearchChange('Public')" type="radio" id="Public" name="Search" width="20">
+  <label for="Public">Public</label>
 </div>
 
-<div class="container">
-    <div class="row justify-content-center align-items-start pt-2 vh-100">
-        <div class="col-md-8">
-            <div class="card shadow-lg p-2 rounded">
-   
-                <div class="col-md-12">
-                    <div class="row col-md-12 justify-content-between">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">السعر</label>
-                            <input class="form-control" type="text" [ngModel]="price">
-                        </div>
-                    
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">الموديل</label>
-                            <input class="form-control" type="text" [ngModel]="model">
-                        </div>
-                    </div>
-                    <div class="row col-md-12 justify-content-between">
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">SKU</label>
-                            <input class="form-control" type="text" [ngModel]="storeSku">
-                        </div>
 
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label fw-bold">الشركة</label>
-                            <input class="form-control" type="text" [ngModel]="Brand">
-                        </div>
-                    
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label fw-bold">رقم الإنترنت</label>
-                            <input class="form-control" type="text" [ngModel]="internet">
-                        </div>
-
-                     </div>
-                     <div class="row col-md-12">
-                        <div class="col-md-10 mb-3">
-                            <label class="fw-bold">الملاحظات</label>
-                            <input class="form-control w-100" type="text" [ngModel]="Notes">
-                        </div>
-                     </div>
-                    <div class="row col-md-12 justify-content-between">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">
-                                 الفئة
-                            </label>
-                            <div class="input-group">
-                                <select class="form-control w-100" [(ngModel)]="CategoryId" (change)="onCategoryChange($event)">
-                                    <option *ngFor="let category of Categories" [value]="category.categoryId">{{ category.categoryName }}</option>
-                                </select>
-                            </div>
-                        </div>
-                    
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">
-                                 حالة المنتج
-                            </label>
-                            <div class="input-group">
-                                <select class="form-control w-100" [(ngModel)]="CondId" (change)="onCategoryChange($event)">
-                                    <option></option>
-                                    <option *ngFor="let condition of allCondetions" [value]="condition.conditionId">{{ condition.description }}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-10 text m-3">
-                    <button class="btn btn-success w-25">
-                        حفظ
-                    </button>
-                </div>
-                
-            </div>
-        </div>
+<div *ngIf="showHome">
+    <div class="container">
+        <input (keydown.enter)="GetPriceAndPhoto(upc)" type="text" placeholder="UPC ..." [(ngModel)]="upc">
+        <button (click)="GetPriceAndPhoto(upc)">بحث</button>
+        <div *ngIf="isLoading" class="loading-indicator m-1 p-2">
+            <i class="fas fa-spinner fa-spin"></i> 
+            <span>&nbsp;</span>
+            <span>جاري البحث</span>
+          </div> 
+    </div>
     
-        <div class="col-md-4 text-center">
-            <div class="card shadow-lg p-3 rounded">
-                <h5 class="text-center mb-3">صورة المنتج</h5>
-                <img [src]="imgUrl" class="img-fluid rounded shadow" alt="صورة">
+    <div class="container">
+        <div class="row justify-content-center align-items-start pt-2 vh-100">
+            <div class="col-md-8">
+                <div class="card shadow-lg p-2 rounded">
+       
+                    <div class="col-md-12">
+                        <div class="row col-md-12 justify-content-between">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">السعر</label>
+                                <input class="form-control" type="text" [ngModel]="price">
+                            </div>
+                        
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">الموديل</label>
+                                <input class="form-control" type="text" [ngModel]="model">
+                            </div>
+                        </div>
+                        <div class="row col-md-12 justify-content-between">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold">SKU</label>
+                                <input class="form-control" type="text" [ngModel]="storeSku">
+                            </div>
+    
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold">الشركة</label>
+                                <input class="form-control" type="text" [ngModel]="Brand">
+                            </div>
+                        
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">رقم الإنترنت</label>
+                                <input class="form-control" type="text" [ngModel]="internet">
+                            </div>
+    
+                         </div>
+                         <div class="row col-md-12">
+                            <div class="col-md-10 mb-3">
+                                <label class="fw-bold">الملاحظات</label>
+                                <input class="form-control w-100" type="text" [ngModel]="Notes">
+                            </div>
+                         </div>
+                        <div class="row col-md-12 justify-content-between">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">
+                                     الفئة
+                                </label>
+                                <div class="input-group">
+                                    <select class="form-control w-100" [(ngModel)]="CategoryId" (change)="onCategoryChange($event)">
+                                        <option *ngFor="let category of Categories" [value]="category.categoryId">{{ category.categoryName }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">
+                                     حالة المنتج
+                                </label>
+                                <div class="input-group">
+                                    <select class="form-control w-100" [(ngModel)]="CondId" (change)="onCategoryChange($event)">
+                                        <option></option>
+                                        <option *ngFor="let condition of allCondetions" [value]="condition.conditionId">{{ condition.description }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-10 text m-3">
+                        <button class="btn btn-success w-25">
+                            حفظ
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+        
+            <div class="col-md-4 text-center">
+                <div class="card shadow-lg p-3 rounded">
+                    <h5 class="text-center mb-3">صورة المنتج</h5>
+                    <img [src]="imgUrl" class="img-fluid rounded shadow" alt="صورة">
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="p-2 pt-4 col-md-11 col-11 card" *ngIf="showPublic">
+    <div class="d-flex flex-row justify-content-center">
+        <input (keydown.enter)="SearchAboutUPC(UPCPublic)" class="form-control" [(ngModel)]="UPCPublic" placeholder="UPC ..." />
+        <button (click)="SearchAboutUPC(UPCPublic)" class="btn btn-success">Search</button>
+        <div *ngIf="isLoadingPublic" class="loading-indicator m-1 p-2">
+            <i class="fas fa-spinner fa-spin"></i> 
+            <span>&nbsp;</span>
+            <span>جاري البحث</span>
+          </div> 
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            <div class="col-md-10 m-2">
+                <strong>Title</strong>
+                <input style="width: 100%;" class="form-control" width="100" [(ngModel)]="title"/>
+            </div>
+        
+            <div class="col-md-10 m-2">
+                <strong>Description</strong>
+                <input style="width: 100%;" class="form-control" width="100" [(ngModel)]="description"/>
+            </div>
+        
+            <div class="row col-md-12 justify-content-start m-2">
+                <div class="col-md-5">
+                    <strong>Brand:</strong>
+                    <input class="form-control" [(ngModel)]="brand"/>
+                </div>
+                    <div class="col-md-5">
+                    <strong>Model:</strong>
+                    <input class="form-control" [(ngModel)]="modelPublic"/>
+                </div>
+            </div>
+        
+            <div class="row col-md-12 justify-content-start m-2">
+                <div class="col-md-5">
+                    <strong>Color:</strong>
+                    <input class="form-control" [(ngModel)]="color"/>
+                </div>
+                <div class="col-md-5">
+                    <strong>Category:</strong>
+                    <input class="form-control" [(ngModel)]="category"/>
+                </div>    
+            </div>
+        
+            <div class="row col-md-12 justify-content-start m-2">
+                <div class="col-md-5">
+                    <strong>Lowest Price:</strong>
+                    <input class="form-control" [(ngModel)]="lowest_recorded_price"/>
+                </div> 
+                <div class="col-md-5">
+                    <strong>Highest Price:</strong>
+                    <input class="form-control" [(ngModel)]="highest_recorded_price"/>
+                </div> 
+            </div>
+            <h3>Offers:</h3>
+        <ul>
+            <li *ngFor="let offer of Offers">
+               <a [href]="offer.link" target="_blank">{{ offer.merchant }} - {{ offer.price }} CAD</a>
+            </li>
+        </ul>
+        </div>
+    
+        <div class="col-md-4 d-flex flex-column align-items-center">
+            <h3>Images:</h3>
+            <div *ngFor="let img of Images" class="mb-2">
+                <img [src]="img" alt="Product Image" class="img-fluid rounded border" width="150">
+            </div>
+        </div>
+    </div>
+    <hr />
+
+    <div class="m-1 text-center col-md-12">
+        <button class="btn btn-success col-3">
+            حفظ
+        </button>
+    </div>
+</div>
+
 
 

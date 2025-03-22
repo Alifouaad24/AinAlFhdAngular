@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../Services/api.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { Product } from '../../Models/Product';
+import { Offer } from '../../Models/Offer';
 
 @Component({
   selector: 'app-add-home-depot-product',
@@ -26,8 +29,26 @@ export class AddHomeDepotProductComponent implements OnInit {
   allCondetions: any = []
   Categories: any = []
   CondetionId?: number
-  
-  constructor(private http: ApiService) {}
+  showPublic: boolean = false
+  showHome: boolean = false
+  ///////////////////////////////////////
+  UPCPublic: string = ''
+  title?: string
+  description?: string
+  brand?: string
+  modelPublic?: string
+  color?: string
+  category?: string
+  lowest_recorded_price?: number
+  highest_recorded_price?: number
+  images?: []
+
+  isLoadingPublic: boolean = false
+  products: Product [] = []
+  Images: string [] = []
+  Offers: Offer [] = []
+  /////////////////////////////////////////
+  constructor(private http: ApiService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.GetAllConditions()
@@ -44,7 +65,7 @@ export class AddHomeDepotProductComponent implements OnInit {
         this.price = response.price,
         this.Brand = response.brand,
         this.model = response.model,
-        this.storeSku = response.sKU,
+        this.storeSku = response.sku,
         this.internet = response.internet
 
         this.isLoading = !this.isLoading
@@ -52,6 +73,19 @@ export class AddHomeDepotProductComponent implements OnInit {
       })
     }
   }
+
+  onSearchChange(value: string) {
+
+    if(value == "Home"){
+      this.showPublic = false
+      this.showHome = true
+    }
+    else if(value == "Public"){
+      this.showPublic = true
+      this.showHome = false
+    }
+  }
+  
 
   GetAllConditions(): void{
     this.http.getData('api/ItemCondetions').subscribe((result: any) =>{
@@ -93,5 +127,48 @@ SaveItemInDB(): void{
   })
 
 }
+
+SearchAboutUPC(upc: string): void {
+  if (!upc) {
+    this.toastr.error('الرجاء إدخال UPC صالح');
+    return;
+  }
+
+  this.isLoadingPublic = true;
+
+  this.http.getData(`api/HomeDepot/lookup?upc=${upc}`).subscribe({
+    next: (Response: any) => {
+      if (!Response.items || !Array.isArray(Response.items) || Response.items.length === 0) {
+        this.toastr.warning('لم يتم العثور على منتجات لهذا UPC');
+        this.isLoadingPublic = false;
+        return;
+      }
+      this.products = Response.items.map((el: any) => Product.fromJson(el));
+      if (this.products.length > 0) {
+        const firstProduct = this.products[0];
+
+        this.brand = firstProduct.brand;
+        this.category = firstProduct.category;
+        this.lowest_recorded_price = firstProduct.lowest_recorded_price;
+        this.highest_recorded_price = firstProduct.highest_recorded_price;
+        this.color = firstProduct.color;
+        this.modelPublic = firstProduct.model;
+        this.description = firstProduct.description;
+        this.title = firstProduct.title;
+        this.Images = firstProduct.images;
+        this.Offers = firstProduct.offers;
+      }
+
+      this.isLoadingPublic = false;
+    },
+    error: (error) => {
+      this.isLoadingPublic = false;
+      this.toastr.error('حدث خطأ أثناء البحث عن المنتج');
+      console.error('Error fetching product data:', error);
+    }
+  });
+}
+
+
 
 }
