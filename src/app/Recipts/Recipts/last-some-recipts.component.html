@@ -9,6 +9,24 @@
   <button class="btn btn-success" (click)="PrintPDF()">Print <i class="fa fa-file-pdf"></i></button>
 </div>
 
+<div class="row justify-content-end align-items-center g-3 p-2">
+  <div class="col-1 align-items-center justify-content-center">
+    <button (click)="PrintPDFByDate()" class="btn btn-secondary w-100">طباعة</button>
+  </div>
+  <div class="col-1 align-items-center justify-content-center">
+    <button (click)="SrerchByDate()" class="btn btn-primary w-100">بحث</button>
+  </div>
+  <div class="col-2"> الى تاريخ
+    <input class="form-control" type="date" [(ngModel)]="endDate" />
+  </div>
+  <div class="col-2"> من تاريخ
+    <input class="form-control" type="date" [(ngModel)]="startDate" />
+  </div>
+
+</div>
+
+
+
 <div class="card shadow mb-4">
     <div class="card-body">
         <div  class="table-responsive">

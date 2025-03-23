@@ -1,18 +1,18 @@
-import { AfterViewInit, Component, inject, NgZone } from '@angular/core';
+import { AfterViewInit, Component, inject, NgZone, ChangeDetectorRef } from '@angular/core';
 import { ApiService } from '../../Services/api.service';
 import { Receipt } from '../../Models/Recipt';
 import { ActivatedRoute, NavigationEnd, Route, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { tap } from 'rxjs';
 import { RoleService } from '../../Auth/role.service';
 import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 declare var $: any;
 
 
 @Component({
   selector: 'app-last-some-recipts',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, CommonModule],
+  imports: [RouterLink, RouterOutlet, CommonModule, FormsModule],
   templateUrl: './last-some-recipts.component.html',
   styleUrl: './last-some-recipts.component.scss'
   
@@ -21,6 +21,8 @@ export class ReciptsComponent   {
 
 
 recipts: Receipt[] = [];
+startDate: string = new Date().toISOString().split('T')[0];
+endDate: string = new Date().toISOString().split('T')[0];
 
 totalCost: number = 0;
 totalLines: number = 0;
@@ -43,7 +45,7 @@ currentUser: string = ""
   roleService = inject(RoleService);
   constructor(
     private route: ActivatedRoute,
-    private router: Router, private zone: NgZone,  ) {
+    private router: Router, private zone: NgZone, private cdr: ChangeDetectorRef  ) {
 
       this.getData(); 
   }
@@ -86,7 +88,7 @@ currentUser: string = ""
             title: 'العمليات', 
             render: (data: any, type: any, row: { recieptId: any; }) => {
               return `
-                <button class="btn btn-danger m-1" (click)="DeleteRecipt(${row.recieptId})">
+                <button class="btn btn-danger m-1" id="deleteBtn${row.recieptId}" (click)="DeleteRecipt(${row.recieptId})">
                   <i class="fas fa-trash"></i>
                 </button>
                 <button class="btn btn-warning m-1" id="editBtn${row.recieptId}">
@@ -205,14 +207,15 @@ currentUser: string = ""
 
     this.http.getData("api/Reciept").subscribe((r: Receipt[]) => {
       this.recipts = r;
-      this.recipts = this.recipts
-    .filter(el => el.shippingBatchId == id) 
-    .sort((a, b) => {
-      const dateA = a.recieptDate ? new Date(a.recieptDate) : new Date(0);
-      const dateB = b.recieptDate ? new Date(b.recieptDate) : new Date(0);
-      return dateA.getTime() - dateB.getTime(); 
-      
-    });
+
+      const newFilter = this.recipts
+        .filter(el => el.shippingBatchId == id) 
+        .sort((a, b) => {
+          const dateA = a.recieptDate ? new Date(a.recieptDate) : new Date(0);
+          const dateB = b.recieptDate ? new Date(b.recieptDate) : new Date(0);
+          return dateA.getTime() - dateB.getTime(); 
+          
+        });
   
     this.totalProfit = 0;
     this.totalCost = 0;
@@ -244,9 +247,8 @@ currentUser: string = ""
     this.pureAcc = this.totalSellUSD - this.totalCost;
 
     if ($.fn.dataTable.isDataTable('#dataTable')) {
-      $('#dataTable').DataTable().clear().rows.add(this.recipts).draw();
+      $('#dataTable').DataTable().clear().rows.add(newFilter).draw();
     } else {
-      this.initializeDataTable();
     }
     })
   }
@@ -255,10 +257,17 @@ currentUser: string = ""
   DeleteRecipt(rId: number | undefined): void {
     this.http.deleteData(`api/Reciept/${rId}`).subscribe(
       (response: any) => {
-        if(response){
-          this.recipts = this.recipts.filter(rec => rec.recieptId != rId)
+        if(response){}
+      },(error =>{
+       this.zone.run(() => {
+        const afterDelete = this.recipts.filter(rec => rec.recieptId !== rId); // حذف الوصل من المصفوفة
+        if ($.fn.dataTable.isDataTable('#dataTable')) {
+          let table = $('#dataTable').DataTable(afterDelete);
+          table.clear().rows.add(this.recipts).draw(); // تحديث الجدول بعد الحذف
         }
-      },
+        this.cdr.detectChanges();
+      });
+      })
     );
   }
 
@@ -269,9 +278,89 @@ currentUser: string = ""
   
     if (shipId !== null && shipId !== undefined) {
       url += `/${shipId}`;
-
-
     }
+  
+    this.httpp.get(url, { responseType: 'blob' }).subscribe(
+      (response) => {
+        if (response) {
+          const blob = new Blob([response], { type: 'application/pdf' });
+  
+          if (blob.type === 'application/pdf') {
+            const urlBlob = URL.createObjectURL(blob);
+  
+            const link = document.createElement('a');
+            link.href = urlBlob;
+            link.download = 'file.pdf';
+            
+            link.click();
+          } else {
+            console.error('الاستجابة ليست مستند PDF.');
+          }
+        } else {
+          console.error('لم يتم استلام البيانات من الخادم.');
+        }
+      },
+      (error) => {
+        console.error('حدث خطأ أثناء تحميل الـ PDF:', error);
+      }
+    );
+  }
+
+  SrerchByDate(): void{
+
+    const sdate = new Date(this.startDate); 
+    const s = (sdate.getMonth() + 1) + '-' + sdate.getDate() + '-' + sdate.getFullYear();
+    const edate = new Date(this.endDate); 
+    const e = (edate.getMonth() + 1) + '-' + edate.getDate() + '-' + edate.getFullYear();
+    console.log(s)
+    console.log(e)
+
+    this.http.getData(`api/Reciept/GetBetweenPeriodDate/${s}/${e}`).subscribe((response: Receipt[]) => {
+      console.log(response)
+
+      const filterByDate = response
+      this.totalProfit = 0;
+      this.totalCost = 0;
+      this.totalLines = 0;
+      this.totalWeight = 0;
+      this.totalSellUSD = 0;
+      this.totalLines = 0;
+      this.totalCostIQ = 0;
+      this.profitsInIQ = 0;
+      this.profitsInUSD = 0;
+      this.oneKGProfitInUSD = 0;
+      this.oneKGProfitInIQ = 0;
+  
+      filterByDate.map(el =>{
+        this.totalProfit +=  el.totalPriceFromCust!;
+        this.totalCost +=  el.cost!;
+        this.totalLines++;
+        this.totalWeight += el.weight!;
+        //this.totalSellUSD += el.sellingUSD!;
+        //this.totalCostIQ += el.costIQ!;
+      });
+  
+      this.totalCostIQ = this.totalCost * this.exChangeRate;
+      this.totalSellUSD = this.totalProfit / this.exChangeRate;
+      this.profitsInIQ = this.totalProfit - this.totalCostIQ;
+      this.profitsInUSD = this.totalSellUSD - this.totalCost;
+      this.oneKGProfitInUSD = this.profitsInUSD / this.totalWeight
+      this.oneKGProfitInIQ = this.profitsInIQ / this.totalWeight
+      this.pureAcc = this.totalSellUSD - this.totalCost;
+
+      if ($.fn.dataTable.isDataTable('#dataTable')) {
+        $('#dataTable').DataTable().clear().rows.add(filterByDate).draw();
+      } 
+    })
+  }
+
+  PrintPDFByDate(): void {
+    const sdate = new Date(this.startDate); 
+    const s = (sdate.getMonth() + 1) + '-' + sdate.getDate() + '-' + sdate.getFullYear();
+    const edate = new Date(this.endDate); 
+    const e = (edate.getMonth() + 1) + '-' + edate.getDate() + '-' + edate.getFullYear();
+
+    let url = `http://saifsfo-002-site19.atempurl.com/api/Reciept/GeneratePdfByDate/${s}/${e}`;
   
     this.httpp.get(url, { responseType: 'blob' }).subscribe(
       (response) => {
