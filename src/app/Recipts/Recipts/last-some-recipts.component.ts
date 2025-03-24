@@ -21,9 +21,8 @@ export class ReciptsComponent   {
 
 
 recipts: Receipt[] = [];
-startDate: string = new Date().toISOString().split('T')[0];
-endDate: string = new Date().toISOString().split('T')[0];
-
+startDate: string = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+endDate: string = new Date().toLocaleDateString('en-CA');
 totalCost: number = 0;
 totalLines: number = 0;
 totalProfit: number = 0
@@ -99,7 +98,7 @@ currentUser: string = ""
             className: 'text-center',
             visible: this.isAdmin()
           },
-          { data: 'recieptDate', title: 'تاريخ الوصل', render: (data: string | number | Date) => new Date(data).toLocaleDateString('ar-IQ', { year: 'numeric', month: '2-digit', day: '2-digit' }), className: 'text-center',},
+          { data: 'recieptDate', title: 'تاريخ الوصل', render: (data: string | number | Date) => new Date(data).toLocaleDateString('en-US', { year: 'numeric', day: '2-digit', month: '2-digit' }), className: 'text-center',},
           { data: 'totalPriceFromCust', title: 'المبيع', render: (data: number | undefined) => this.divideNum(data) + ' IQ' , className: 'text-center',},
           { data: 'cost', title: 'التكلفة', render: (data: number) => data ? data.toFixed(1) + ' $' : '' , className: 'text-center',},
           { data: 'weight', title: 'الوزن', render: (data: string) => data ? data + ' Kg' : '' , className: 'text-center',},
@@ -216,6 +215,8 @@ currentUser: string = ""
           return dateA.getTime() - dateB.getTime(); 
           
         });
+
+        this.recipts = []
   
     this.totalProfit = 0;
     this.totalCost = 0;
@@ -229,7 +230,7 @@ currentUser: string = ""
     this.oneKGProfitInUSD = 0;
     this.oneKGProfitInIQ = 0;
 
-    this.recipts.map(el =>{
+    newFilter.map(el =>{
       this.totalProfit +=  el.totalPriceFromCust!;
       this.totalCost +=  el.cost!;
       this.totalLines++;
@@ -308,10 +309,15 @@ currentUser: string = ""
 
   SrerchByDate(): void{
 
-    const sdate = new Date(this.startDate); 
+    const [year, month, day] = this.startDate.split('-').map(Number); 
+    const sdate = new Date(year, month - 1, day); 
     const s = (sdate.getMonth() + 1) + '-' + sdate.getDate() + '-' + sdate.getFullYear();
-    const edate = new Date(this.endDate); 
+
+
+    const [year1, month1, day1] = this.endDate.split('-').map(Number); 
+    const edate = new Date(year1, month1 - 1, day1); 
     const e = (edate.getMonth() + 1) + '-' + edate.getDate() + '-' + edate.getFullYear();
+
     console.log(s)
     console.log(e)
 
@@ -319,6 +325,14 @@ currentUser: string = ""
       console.log(response)
 
       const filterByDate = response
+
+      filterByDate.sort((a, b) => {
+          const dateA = a.recieptDate ? new Date(a.recieptDate) : new Date(0);
+          const dateB = b.recieptDate ? new Date(b.recieptDate) : new Date(0);
+          return dateA.getTime() - dateB.getTime(); 
+          
+        });
+
       this.totalProfit = 0;
       this.totalCost = 0;
       this.totalLines = 0;
@@ -355,9 +369,13 @@ currentUser: string = ""
   }
 
   PrintPDFByDate(): void {
-    const sdate = new Date(this.startDate); 
+    const [year, month, day] = this.startDate.split('-').map(Number); 
+    const sdate = new Date(year, month - 1, day); 
     const s = (sdate.getMonth() + 1) + '-' + sdate.getDate() + '-' + sdate.getFullYear();
-    const edate = new Date(this.endDate); 
+
+
+    const [year1, month1, day1] = this.endDate.split('-').map(Number); 
+    const edate = new Date(year1, month1 - 1, day1); 
     const e = (edate.getMonth() + 1) + '-' + edate.getDate() + '-' + edate.getFullYear();
 
     let url = `http://saifsfo-002-site19.atempurl.com/api/Reciept/GeneratePdfByDate/${s}/${e}`;
