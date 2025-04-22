@@ -1,20 +1,28 @@
 <div class="p-2">  
-  <input style="width: 20px;" (change)="onSearchChange('Home')"  type="radio" id="Home" name="Search" width="20">
+<!--   <input style="width: 20px;" (change)="onSearchChange('Home')"  type="radio" id="Home" name="Search" width="20">
   <label for="Home">Home Depot</label><br>
   <input style="width: 20px;" (change)="onSearchChange('Public')" type="radio" id="Public" name="Search" width="20">
-  <label for="Public">Public</label>
+  <label for="Public">Public</label> -->
+
+<div class="container">
+    <input (keydown.enter)="GetPriceAndPhoto(upc)" type="text" placeholder="UPC ..." [(ngModel)]="upc">
+    <button (click)="GetPriceAndPhoto(upc)">بحث</button>
+    <div *ngIf="isLoading" class="loading-indicator m-1 p-2">
+        <i class="fas fa-spinner fa-spin"></i> 
+        <span>&nbsp;</span>
+        <span>جاري البحث</span>
+      </div> 
+</div>
 </div>
 
+<div *ngIf="showError" class="text-center p-5" style="color: rgb(252, 0, 0); font-weight: bold; font-size: large;">
+    الرمز المدخل غير صالح
+</div>
 
 <div *ngIf="showHome">
-    <div class="container">
-        <input (keydown.enter)="GetPriceAndPhoto(upc)" type="text" placeholder="UPC ..." [(ngModel)]="upc">
-        <button (click)="GetPriceAndPhoto(upc)">بحث</button>
-        <div *ngIf="isLoading" class="loading-indicator m-1 p-2">
-            <i class="fas fa-spinner fa-spin"></i> 
-            <span>&nbsp;</span>
-            <span>جاري البحث</span>
-          </div> 
+    <div class="col-md-6 mb-3 p-1 pl-5 pt-2 d-flex justify-content-start">
+        <label class="form-label fw-bold" style="color: rgb(252, 0, 0); font-weight: bold; font-size: large;">Data Source:&nbsp;</label>
+        <p style="background-color: rgb(202, 200, 198); border-radius: 5px; padding: 5px;">{{ source }}</p>
     </div>
     
     <div class="container">
@@ -52,7 +60,20 @@
     
                          </div>
                          <div class="row col-md-12">
-                            <div class="col-md-10 mb-3">
+                            <div class="col-md-12 mb-3">
+                                <label class="fw-bold">اسم المنتج</label>
+                                <input class="form-control w-100" type="text" [ngModel]="title">
+                            </div>
+                         </div>
+                         <div class="row col-md-12">
+                            <div class="col-md-12 mb-3">
+                                <label class="fw-bold">وصف المنتج</label>
+                                <!-- <textarea class="form-control w-100" type="text" [ngModel]="description2"></textarea> -->
+                                <div *ngFor="let desc in description2">{{ desc }}</div>
+                            </div>
+                         </div>
+                         <div class="row col-md-12">
+                            <div class="col-md-12 mb-3">
                                 <label class="fw-bold">الملاحظات</label>
                                 <input class="form-control w-100" type="text" [ngModel]="Notes">
                             </div>
@@ -101,7 +122,7 @@
     </div>
 </div>
 
-<div class="p-2 pt-4 col-md-11 col-11 card" *ngIf="showPublic">
+<!-- <div class="p-2 pt-4 col-md-11 col-11 card" *ngIf="showPublic">
     <div class="d-flex flex-row justify-content-center">
         <input (keydown.enter)="SearchAboutUPC(UPCPublic)" class="form-control" [(ngModel)]="UPCPublic" placeholder="UPC ..." />
         <button (click)="SearchAboutUPC(UPCPublic)" class="btn btn-success">Search</button>
@@ -178,7 +199,7 @@
             حفظ
         </button>
     </div>
-</div>
+</div> -->
 
 
 

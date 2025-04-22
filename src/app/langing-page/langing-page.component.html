@@ -391,7 +391,7 @@
                       </div>
                   </div>
               </li>
-              <div *ngIf="IsAdmin()">
+            <div *ngIf="IsAdmin()">
               <!-- Nav Item - Utilities Collapse Menu -->
               <li class="nav-item">
                   <a class="nav-link collapsed" routerLink="/LangingPage/MainScreenForMain" data-toggle="collapse" data-target="#collapseUtilities"
@@ -404,8 +404,31 @@
                       <div class="bg-white py-2 collapse-inner rounded">
                           <h6 class="collapse-header">قسم المخزن</h6>
                           <a class="collapse-item" routerLink="/LangingPage/AddItemToStore" >إضافة منتج إلى المخزن</a>
-                          <a class="collapse-item" routerLink="/LangingPage/AddHomeDepotProToStore" >إضافة منتج هوم ديبوت</a>
+                          <a class="collapse-item" routerLink="/LangingPage/AddHomeDepotProToStore" > هوم ديبوت</a>
                           <a class="collapse-item" routerLink="/LangingPage/ShowItemsInStore" >عرض منتجات المخزن</a>
+
+                      </div>
+                  </div>
+              </li>
+  
+              <!-- Divider -->
+              <hr class="sidebar-divider">
+            </div>
+
+            <div *ngIf="IsAdmin()">
+              <!-- Nav Item - Utilities Collapse Menu -->
+              <li class="nav-item">
+                  <a class="nav-link collapsed" routerLink="/LangingPage/MainScreenForMain" data-toggle="collapse" data-target="#collapseServices"
+                      aria-expanded="true" aria-controls="collapseServices">
+                      <i class="fas fa-fw fa-store"></i>
+                      <span>الخدمات</span>
+                  </a>
+                  <div id="collapseServices" class="collapse" aria-labelledby="headingUtilities"
+                      data-parent="#accordionSidebar">
+                      <div class="bg-white py-2 collapse-inner rounded">
+                          <h6 class="collapse-header">قسم الخدمات</h6>
+                          <a class="collapse-item" routerLink="/LangingPage/AddAmendent" >إضافة خدمة</a>
+                          <a class="collapse-item" routerLink="/LangingPage/EditServiceForCustomer" >تعديل خدمة لعميل</a>
 
                       </div>
                   </div>

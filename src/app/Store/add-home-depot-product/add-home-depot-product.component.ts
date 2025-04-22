@@ -31,10 +31,12 @@ export class AddHomeDepotProductComponent implements OnInit {
   CondetionId?: number
   showPublic: boolean = false
   showHome: boolean = false
+  showError: boolean = false
   ///////////////////////////////////////
   UPCPublic: string = ''
   title?: string
   description?: string
+  description2?: string
   brand?: string
   modelPublic?: string
   color?: string
@@ -42,7 +44,7 @@ export class AddHomeDepotProductComponent implements OnInit {
   lowest_recorded_price?: number
   highest_recorded_price?: number
   images?: []
-
+  source?: string
   isLoadingPublic: boolean = false
   products: Product [] = []
   Images: string [] = []
@@ -51,6 +53,8 @@ export class AddHomeDepotProductComponent implements OnInit {
   constructor(private http: ApiService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
+    this.showHome = false
+
     this.GetAllConditions()
     this.GetCategories()
   }
@@ -59,6 +63,7 @@ export class AddHomeDepotProductComponent implements OnInit {
     console.log(upc)
 
     if(upc !== null && upc !== ""){
+      this.showError = false
       this.isLoading = !this.isLoading
       this.http.postData(`api/HomeDepot/${upc}`, null).subscribe((response: any) =>{
         this.imgUrl = response.images[0];
@@ -67,10 +72,24 @@ export class AddHomeDepotProductComponent implements OnInit {
         this.model = response.model,
         this.storeSku = response.sku,
         this.internet = response.internet
+        this.source = response.source
+        this.title = response.title
+        this.description2 = response.desc
 
         this.isLoading = !this.isLoading
         console.log(response)
-      })
+
+        this.showHome = true
+        this.showError = false
+
+      }
+      ,(error) =>{
+        this.isLoading = !this.isLoading
+        this.showError = true
+        this.showHome = false
+
+      }
+    )
     }
   }
 

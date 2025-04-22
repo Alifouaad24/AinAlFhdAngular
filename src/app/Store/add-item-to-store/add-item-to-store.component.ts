@@ -64,7 +64,7 @@ export class AddItemToStoreComponent implements OnInit {
   ErrorGit: boolean = false
   validfinalUrl: boolean = false
   FieldFirstGet: boolean = false
-
+  html?: string
   SearchInFinalUrl(): void {
     if(this.finalUrl == null || this.finalUrl == ""){
       this.validfinalUrl = !this.validfinalUrl
@@ -176,31 +176,57 @@ export class AddItemToStoreComponent implements OnInit {
     else{
       this.imgUrl = "";
       if (this.sku?.length !== 0) {
-        this.isLoading = true;
-        this.api.getData(`api/ItemAPI/${this.sku}`).subscribe(
-          (response) => {
-            this.imgUrl = response.image;
-            this.WebsitePrice = response.price
-            this.isLoading = false;
-          },
-          (error) => {
-            const errorText = error.error?.text || error.error;
-            console.log("Error text:", errorText);
-            this.imgUrl = errorText;
-            this.WebsitePrice = 0
-            this.isLoading = false;
-            this.ErrorGit = !this.ErrorGit
-            setTimeout(() =>{
-          this.ErrorGit = !this.ErrorGit
-          this.FieldFirstGet = true;
-        }, 3000)
+        //this.isLoading = true;
+        // this.api.getData(`api/ItemAPI/${this.sku}`).subscribe(
+        //   (response) => {
+        //     this.imgUrl = response.image;
+        //     this.WebsitePrice = response.price
+        //     this.isLoading = false;
+        //   },
+        //   (error) => {
+        //     const errorText = error.error?.text || error.error;
+        //     console.log("Error text:", errorText);
+        //     this.imgUrl = errorText;
+        //     this.WebsitePrice = 0
+        //     this.isLoading = false;
+        //     this.ErrorGit = !this.ErrorGit
+        //     setTimeout(() =>{
+        //   this.ErrorGit = !this.ErrorGit
+        //   this.FieldFirstGet = true;
+        // }, 3000)
 
 
-          }
-        );
+        //   }
+        // );
+
+
       }
     }
   }
+
+  GetInfoLocaly(): void {
+    if (this.html != null && this.html !== "") {
+      const blob = new Blob([this.html], { type: 'text/plain' });
+      const file = new File([blob], 'content.txt', { type: 'text/plain' });
+  
+      const formData = new FormData();
+      formData.append('htmlFile', file);
+  
+      this.http.postData('api/SheIn', formData)
+        .subscribe({
+          next: res => {
+            console.log('تم الإرسال بنجاح!', res);
+            this.imgUrl = res.img,
+            this.WebsitePrice = res.price,
+            this.sku = res.sku
+          },
+          error: err => {
+            console.error('فشل الإرسال', err);
+          }
+        });
+    }
+  }
+  
   
   onSizeChange(event: any): void{
     this.SizeId = event.target.value;

@@ -20,6 +20,8 @@ import { MainScreenForStoreComponent } from './MainScreens/main-screen-for-store
 import { AddItemToStoreComponent } from './Store/add-item-to-store/add-item-to-store.component';
 import { ShowOrdersDetailsComponent } from './Store/show-orders-details/show-orders-details.component';
 import { AddHomeDepotProductComponent } from './Store/add-home-depot-product/add-home-depot-product.component';
+import { AmendmentComponent } from './amendment/amendment.component';
+import { AddAmendentComponent } from './add-amendent/add-amendent.component';
 
 export const routes: Routes = [
     {
@@ -45,6 +47,8 @@ export const routes: Routes = [
           { path: 'AddItemToStore', component: AddItemToStoreComponent },
           { path: 'ShowItemsInStore', component: ShowOrdersDetailsComponent },
           { path: 'AddHomeDepotProToStore', component: AddHomeDepotProductComponent },
+          { path: 'EditServiceForCustomer', component: AmendmentComponent },
+          { path: 'AddAmendent', component: AddAmendentComponent },
 
           {
             path: "Customers",

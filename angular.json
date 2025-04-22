@@ -32,6 +32,7 @@
             ],
             "styles": [
               "node_modules/ngx-toastr/toastr.css",
+              "node_modules/sweetalert2/src/sweetalert2.scss",
               "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss",
               "src/assets/vendor/fontawesome-free/css/all.min.css",

@@ -53,14 +53,15 @@ currentUser: string = ""
     this.getData();
     this.getExChg();
     this.route.queryParams.subscribe(params => {
-      if (params['updated'] === 'true') {
-        this.getData();
-      }
-  
       if (params['ShippIdToFilter']) {
         this.shipIdToFilter = +params['ShippIdToFilter']; 
         this.filterRecipts(this.shipIdToFilter);
       }
+      else if (params['updated'] === 'true') {
+        this.getData();
+      }
+  
+
     });
   
 
@@ -344,8 +345,9 @@ currentUser: string = ""
       this.profitsInUSD = 0;
       this.oneKGProfitInUSD = 0;
       this.oneKGProfitInIQ = 0;
+      this.pureAcc = 0
   
-      filterByDate.map(el =>{
+      filterByDate.forEach(el =>{
         this.totalProfit +=  el.totalPriceFromCust!;
         this.totalCost +=  el.cost!;
         this.totalLines++;

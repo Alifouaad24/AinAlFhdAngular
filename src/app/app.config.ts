@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { provideToastr, ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations'; // ضروري لتشغيل التوستر
 import { Animation } from 'jquery';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),

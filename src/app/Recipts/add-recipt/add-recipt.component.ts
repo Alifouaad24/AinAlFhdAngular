@@ -5,6 +5,8 @@ import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/route
 import { ApiService } from '../../Services/api.service';
 import { tap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+
 
 @Component({
   selector: 'app-add-recipt',
@@ -16,8 +18,7 @@ import { ToastrService } from 'ngx-toastr';
 export class AddReciptComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private http: ApiService, private cd: ChangeDetectorRef,
-    private router: Router, private route: ActivatedRoute, private toastr: ToastrService
-  ) {
+    private router: Router, private route: ActivatedRoute, private toastr: ToastrService) {
     this.receiptForm = this.fb.group({
       RecieptId:[0],
       weight: [0, Validators.required],
@@ -67,9 +68,10 @@ export class AddReciptComponent implements OnInit {
   weightUp?: number
   showPopupAddedConfirm = false;
   popDesc?: string
-  EditAiiiii: number = 0
-
-
+  EditAiiiii?: number
+  totalPriceFromCust2: number = 0
+  ConstCost?: number
+  
   openPopup2(message: string) {
     this.showPopupAddedConfirm = true;
     this.popDesc = message;
@@ -117,6 +119,10 @@ export class AddReciptComponent implements OnInit {
         sellingUSD: res.sellingUSD,
         shippingBatchId: res.shippingBatchId || 0,
       }, { emitEvent: false });
+
+      this.EditAiiiii = this.receiptForm.get('sellingPrice')?.value;
+      this.totalPriceFromCust2 = this.receiptForm.get('totalPriceFromCust')?.value;
+      this.ConstCost = this.receiptForm.get('cost')?.value;
      });
    }
 
@@ -152,7 +158,13 @@ export class AddReciptComponent implements OnInit {
       const weight = formValues.weight || 0;
       const costPerUnit = this.selectedCostSaif || 0;
       const discountToSaif = formValues.discount
-      const total = weight * costPerUnit - discountToSaif;
+      let total = 0
+      if(this.ConstCost == null){
+        total = weight * costPerUnit - discountToSaif;
+      }else{
+        total = this.ConstCost
+      }
+      
       const exchangeRate = this.exchangeRate
       const ed = this.EditDolar
       const totalInIQ = weight * costPerUnit * exchangeRate - discountToSaif;
@@ -161,8 +173,10 @@ export class AddReciptComponent implements OnInit {
       //const formattedPrice = PriceForSell.toLocaleString('en-US', { maximumFractionDigits: 3 });
       this.weightUp =  this.testWeight(weight)
       this.sellingPriceInDoular = costSelectOfSaif * this.testWeight(weight) + ed
-      this.EditAiiiii = this.roundWithSmallStep(PriceForSell) || 0
       this.costIIQ = totalInIQ
+
+      console.log("Selling IQ ngfor: ", this.EditAiiiii);
+      console.log("PriceForSell IQ ngfor: ", PriceForSell);
 
       if (this.receiptForm.get('cost')?.value !== total) {
         this.receiptForm.patchValue(
@@ -177,10 +191,13 @@ export class AddReciptComponent implements OnInit {
         );
       }
 
-      if (this.receiptForm.get('totalPriceFromCust')?.value !== PriceForSell) {
+     if (this.receiptForm.get('totalPriceFromCust')?.value !== PriceForSell) {
         this.receiptForm.patchValue(
-          { sellingDiscount: this.receiptForm.get('totalPriceFromCust')?.value - 
-              this.receiptForm.get('sellingPrice')?.value
+          { 
+            //cost: this.ConstCost,
+            sellingDiscount: this.receiptForm.get('totalPriceFromCust')?.value - 
+              this.receiptForm.get('sellingPrice')?.value,
+            
            },
           { emitEvent: false }
         );
@@ -207,6 +224,7 @@ export class AddReciptComponent implements OnInit {
         
       }
     });
+
   }
   
   recalculateTotal() {
@@ -223,25 +241,26 @@ export class AddReciptComponent implements OnInit {
   }
 
   recalculateTotalDinar() {
-    const currentSellingPrice = this.EditAiiiii;
+    const currentSellingPrice = this.EditAiiiii || 0;
     const newValue = +this.EditIIQQ; 
-    const newSellingPrice = currentSellingPrice + newValue;
+    const newSellingPrice = +currentSellingPrice + newValue;
 
     const sellingUSD = newSellingPrice / this.exchangeRate;
 
-    console.log("Selling USD Before Patch:", sellingUSD);
+    console.log("Selling IQ Before Patch:", currentSellingPrice);
 
     if (!isNaN(newValue)) {
     const newSellingPrice = +currentSellingPrice + newValue;
 
     this.receiptForm.patchValue({
-      ellingPrice: newSellingPrice,
-      sellingUSD: Math.ceil(+newSellingPrice / this.exchangeRate)
+      sellingPrice: newSellingPrice,
+      sellingUSD: Math.ceil(+newSellingPrice / this.exchangeRate),
+      totalPriceFromCust: newValue + this.totalPriceFromCust2
     }, { emitEvent: false });
     } else {
       this.receiptForm.patchValue({
         sellingPrice: currentSellingPrice
-      });
+      }, { emitEvent: false });
     }
   }
   
@@ -323,7 +342,11 @@ export class AddReciptComponent implements OnInit {
       if (this.receiptForm.valid) {
         this.http.postData('api/Reciept', this.receiptForm.value).subscribe(
           (response: any) => {
-            if (response) {
+            if(response && response.msg.inclodes("العميل يحتاج الى دمج الطلب")){
+              this.toastr.info('العميل يحتاج لدمج الطلب', '')
+              Swal.fire('العميل يحتاج لدمج الطلب');
+            }
+            else if (response) {
               console.log(response)
               this.toastr.success('تم حفظ الإيصال بنجاح', '')
               setTimeout(() => {
