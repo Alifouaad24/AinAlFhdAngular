@@ -22,6 +22,7 @@ import { ShowOrdersDetailsComponent } from './Store/show-orders-details/show-ord
 import { AddHomeDepotProductComponent } from './Store/add-home-depot-product/add-home-depot-product.component';
 import { AmendmentComponent } from './amendment/amendment.component';
 import { AddAmendentComponent } from './add-amendent/add-amendent.component';
+import { ShowAmendentLogComponent } from './show-amendent-log/show-amendent-log.component';
 
 export const routes: Routes = [
     {
@@ -48,7 +49,10 @@ export const routes: Routes = [
           { path: 'ShowItemsInStore', component: ShowOrdersDetailsComponent },
           { path: 'AddHomeDepotProToStore', component: AddHomeDepotProductComponent },
           { path: 'EditServiceForCustomer', component: AmendmentComponent },
+          { path: 'EditServiceForCustomer/:id', component: AmendmentComponent },
           { path: 'AddAmendent', component: AddAmendentComponent },
+          { path: 'ShowAmendentsLog', component: ShowAmendentLogComponent },
+
 
           {
             path: "Customers",

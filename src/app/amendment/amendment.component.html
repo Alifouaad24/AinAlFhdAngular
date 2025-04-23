@@ -70,8 +70,11 @@
       </div>
     </div>
 
-    <div class="col-md-12 mt-3 text-center">
+    <div *ngIf="!IsUpdate" class="col-md-12 mt-3 text-center">
       <button (click)="SaveAmendment()" class="btn btn-primary px-5">حفظ</button>
+    </div>
+    <div *ngIf="IsUpdate" class="col-md-12 mt-3 text-center">
+      <button (click)="EditLog(LogId)" class="btn btn-primary px-5">تعديل</button>
     </div>
   </div>
 </div>

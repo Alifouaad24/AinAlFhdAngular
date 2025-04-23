@@ -23,6 +23,14 @@ export class AmendmentComponent implements OnInit {
   ngOnInit(): void {
     this.GetAllAmendments()
     this.GetAllServices()
+    this.route.queryParams.subscribe(params => {
+      const id = +params['id'];
+      if (id) {
+        this.IsUpdate = true;
+        this.LogId = id;
+        this.GetLogById(id);
+      }
+    });
   }
 
   filteredSuggestions: string[] = [];
@@ -35,11 +43,13 @@ export class AmendmentComponent implements OnInit {
   Amendments?: any
   CustomerId?: number
   CustomerName?: string
-  AmendmentId: Number = 0
-  CustomerIdId: Number = 0
+  AmendmentId: number = 0
+  CustomerIdId: number = 0
   InsertDate = new Date();
   IsCompleted?: boolean = false
-  ServiceId: Number = 0
+  ServiceId: number = 0
+  LogId: number = 0
+  IsUpdate: boolean = false
 
   GetAllAmendments(): void{
     this.http.getData('api/Amendments').subscribe((res) => {
@@ -129,5 +139,31 @@ export class AmendmentComponent implements OnInit {
     this.CustomerIdId = customer.id
 
     this.filteredSuggestions = [];
+  }
+
+  EditLog(id: number): void {
+    var PayLoad = {
+      'Amendment_LogId': this.LogId,
+      'AmendmentId': this.AmendmentId,
+      'CustomerIdId': this.CustomerIdId,
+      'InsertDate': this.InsertDate,
+      'IsCompleted': this.IsCompleted,
+      'ServiceId': this.ServiceId,
+    }
+    this.http.putData(`api/AmendmentLogs/${id}`, PayLoad).subscribe((res) => {
+      console.log(res)
+    })
+  }
+
+  GetLogById(id: number): void{
+    this.http.getData(`api/AmendmentLogs/${id}`).subscribe((res) => {
+      console.log(res)
+      this.LogId = res.amendment_LogId
+      this.ServiceId = res.serviceId
+      this.CustomerId = res.customerIdId
+      this.IsCompleted = res.isCompleted
+      this.CustomerName = res.customer.custName
+      this.AmendmentId = res.amendmentId
+    })
   }
 }
