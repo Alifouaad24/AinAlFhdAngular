@@ -21,17 +21,26 @@ export class AmendmentComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.GetAllAmendments()
-    this.GetAllServices()
-    this.route.queryParams.subscribe(params => {
-      const id = +params['id'];
-      if (id) {
+    this.GetAllAmendments();
+    this.GetAllServices();
+      this.route.paramMap.subscribe(params => {
+      const idParam = params.get('id');
+      if (idParam) {
         this.IsUpdate = true;
-        this.LogId = id;
-        this.GetLogById(id);
+        this.LogId = +idParam;
+        this.GetLogById(this.LogId);
+      } else {
+        this.route.queryParams.subscribe(queryParams => {
+          const idUser = queryParams['idUser'];
+          if (idUser != null) {
+            this.CustomerId = idUser;
+            this.GetCustomerById(this.CustomerId)
+          }
+        });
       }
     });
   }
+  
 
   filteredSuggestions: string[] = [];
   filteredSuggestion: string = '';
@@ -41,7 +50,7 @@ export class AmendmentComponent implements OnInit {
   searchTerm = '';
   Services?: any
   Amendments?: any
-  CustomerId?: number
+  CustomerId: number = 0
   CustomerName?: string
   AmendmentId: number = 0
   CustomerIdId: number = 0
@@ -58,11 +67,16 @@ export class AmendmentComponent implements OnInit {
 
   }
 
+  GetCustomerById(id: number): void {
+    this.http.getData(`api/Customers/GetById/${id}`).subscribe((res) => {
+      this.CustomerName = res.custName;
+    });
+  }
+  
+
   GetAllServices(): void{
     this.http.getData('api/ShippingTypes').subscribe((res) => {
       this.Services = res
-
-
     })
   }
 

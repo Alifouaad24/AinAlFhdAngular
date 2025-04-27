@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../Services/api.service';
 import { ToastrService } from 'ngx-toastr';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-add-amendent',
@@ -11,12 +12,13 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './add-amendent.component.html',
   styleUrl: './add-amendent.component.scss'
 })
-export class AddAmendentComponent {
+export class AddAmendentComponent implements OnInit{
 
-  /**
-   *
-   */
-  constructor(private http: ApiService, private toastr: ToastrService) {}
+  constructor(private http: ApiService, private toastr: ToastrService, private route: ActivatedRoute) {}
+  ngOnInit(): void {
+
+  
+  }
 
   Description?: string
 

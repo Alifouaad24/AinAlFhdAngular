@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../Services/api.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 
 @Component({
   selector: 'app-show-amendent-log',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink, RouterOutlet],
   templateUrl: './show-amendent-log.component.html',
   styleUrl: './show-amendent-log.component.scss'
 })

@@ -23,6 +23,7 @@ import { AddHomeDepotProductComponent } from './Store/add-home-depot-product/add
 import { AmendmentComponent } from './amendment/amendment.component';
 import { AddAmendentComponent } from './add-amendent/add-amendent.component';
 import { ShowAmendentLogComponent } from './show-amendent-log/show-amendent-log.component';
+import { AriShippingCustomersComponent } from './customers/ari-shipping-customers/ari-shipping-customers.component';
 
 export const routes: Routes = [
     {
@@ -52,7 +53,7 @@ export const routes: Routes = [
           { path: 'EditServiceForCustomer/:id', component: AmendmentComponent },
           { path: 'AddAmendent', component: AddAmendentComponent },
           { path: 'ShowAmendentsLog', component: ShowAmendentLogComponent },
-
+          { path: 'ShowAirShippingCustomers', component: AriShippingCustomersComponent },
 
           {
             path: "Customers",

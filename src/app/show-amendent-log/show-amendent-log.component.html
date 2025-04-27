@@ -15,9 +15,9 @@
             <tbody>
                 <tr *ngFor="let log of Logs">
                     <td>
-                        <button (click)="EditLog(log.amendment_LogId)" class="btn btn-sm btn-warning me-1">
+                        <a class="btn btn-sm btn-info" [routerLink]="['/LandingPage/EditServiceForCustomer', log.amendment_LogId]">
                             <i class="bi bi-pencil-square"></i>
-                        </button>
+                        </a>
                         <button (click)="DeleteLog(log.amendment_LogId)" class="btn btn-sm btn-danger">
                             <i class="bi bi-trash"></i>
                         </button>

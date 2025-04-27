@@ -1,0 +1,38 @@
+<h3 class="text-center p-2 text-light bg-info">عملاء الشحن الجوي</h3>
+<div class="row justify-content-center mt-5">
+  <div class="col-md-10">
+    <input dir="rtl" type="text" class="form-control" (input)="FilterTablie($event)" placeholder="ابحث عن اسم أو رقم الجوال..." />
+  </div>
+</div>
+
+
+<div class="p-4 bg-gray-50 min-h-screen">
+    <div class="w-full bg-white shadow-md rounded-lg p-4">
+          <div class="overflow-x-auto">
+        <table class="col-md-12 text-sm text-left text-gray-700">
+          <thead class="bg-gray-200 text-gray-700 uppercase">
+            <tr>
+              <th scope="col" class="px-6 text-center py-3">عمليات</th>
+              <th scope="col" class="px-6 text-center py-3">رقم الجوال</th>
+              <th scope="col" class="px-6 text-center py-3">اسم العميل</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of Customers" class="border-b hover:bg-gray-100">
+              <td class="px-6 py-4 text-center">
+                <a class="btn btn-info" [routerLink]="['/LangingPage/EditServiceForCustomer']" [queryParams]="{ idUser: user.id }">تعديل خدمة</a>
+              </td>
+              <td class="px-6 py-4 text-center">{{ user.custMob }}</td>
+              <td class="px-6 py-4 text-center">{{ user.custName }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+    </div>
+  
+  </div>
+  
+  
+  
+  
