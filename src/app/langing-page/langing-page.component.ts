@@ -20,7 +20,17 @@ export class LangingPageComponent {
   router = inject(Router);
 
   //constructor(private roleService: RoleService) {}
-
+  // getUserRole(): string | null {
+  //   const token = localStorage.getItem('token'); // أو من أي مكان حافظ فيه التوكن
+  //   if (!token) return null;
+  
+  //   const payload = token.split('.')[1];  // ناخذ الجزء الثاني من التوكن
+  //   const decodedPayload = atob(payload); // نفك تشفير Base64
+  //   const tokenData = JSON.parse(decodedPayload); // نحول JSON
+  
+  //   return tokenData['role'] || null;  // نرجع قيمة role
+  // }
+  
   recipts: Receipt[] = [];
   selectSideBar: string ='';
   env: string = ''

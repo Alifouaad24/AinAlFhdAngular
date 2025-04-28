@@ -15,7 +15,9 @@ import { ToastrService, ToastNoAnimation } from 'ngx-toastr';
 })
 export class LogInComponent implements OnInit {
 
-  constructor(private router: Router, private api: ApiService, private roleService: RoleService, private toastr: ToastrService) {}
+  constructor(private router: Router, private api: ApiService,
+     private roleService: RoleService, private http: ApiService,
+      private toastr: ToastrService) {}
   ngOnInit(): void {
     history.pushState(null, '', location.href);
     window.onpopstate = () => {
@@ -36,7 +38,29 @@ export class LogInComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log("onSubmit")
+
+    // var payLoad = {
+    //   'email': this.email,
+    //   'password': this.password
+    // }
+
+    // this.http.postData('api/Account/LogIn', payLoad).subscribe((response) => {
+    //   localStorage.setItem('token', response.token)
+    //   this.toastr.success("اهلا بكم في موقع عين الفهد", "تم تسجيل الدخول بنجاح",
+    //     { progressAnimation: 'increasing',
+    //       progressBar: true
+
+    //      })
+    //   this.router.navigate(['/LangingPage/MainScreenForMain']);
+    // },(error) =>{
+    //   this.toastr.error("يرجى التحقق من البريد الإلكتروني او كلمة المرو", "فشل تسجيل الدخول",
+    //     { 
+    //       progressBar: true,
+    //       timeOut: 2000
+
+    //      })  
+    // })
+
     if (this.email === 'Saif@saif.com' && this.password === '123456' ||
        this.email === 'yousif@ainalfahad.com' && this.password === 'Yousif@2025')  {
       this.roleService.login(this.email);
@@ -52,7 +76,7 @@ export class LogInComponent implements OnInit {
         { 
           progressBar: true,
           timeOut: 2000
-
-         })    }
+        })
+    }
   }
 }

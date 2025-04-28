@@ -24,6 +24,7 @@ import { AmendmentComponent } from './amendment/amendment.component';
 import { AddAmendentComponent } from './add-amendent/add-amendent.component';
 import { ShowAmendentLogComponent } from './show-amendent-log/show-amendent-log.component';
 import { AriShippingCustomersComponent } from './customers/ari-shipping-customers/ari-shipping-customers.component';
+import { RegisterComponent } from './Account/register/register.component';
 
 export const routes: Routes = [
     {
@@ -86,6 +87,8 @@ export const routes: Routes = [
         ],
     },
     { path: 'login', component: LogInComponent }, 
+    { path: 'register', component: RegisterComponent }, 
+
     { path: '', redirectTo: 'login', pathMatch: 'full' }, 
     { path: '**', redirectTo: 'login' },
 ];

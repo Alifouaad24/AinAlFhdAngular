@@ -1,0 +1,57 @@
+<div class="register-container">
+    <form (submit)="onSubmit()" class="register-form">
+      <h2>إنشاء حساب جديد</h2>
+  
+      <div class="form-group">
+        <label for="username">الاسم الاول</label>
+        <input type="text" id="username" [(ngModel)]="firstrname" name="firstrname" required>
+      </div>
+
+      <div class="form-group">
+        <label for="username">اسم العائلة</label>
+        <input type="text" id="username" [(ngModel)]="lastname" name="lastname" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="email">البريد الإلكتروني</label>
+        <input type="email" id="email" [(ngModel)]="email" name="email" required>
+      </div>
+  
+      <div class="form-group" style="position: relative;">
+        <label for="password">كلمة المرور</label>
+      
+        <input [type]="showPassword ? 'text' : 'password'" 
+               id="password" 
+               [(ngModel)]="password" 
+               name="password" 
+               required 
+               style="padding-right: 2.5rem; width: 100%;">
+      
+        <button type="button" 
+                (click)="showPassword = !showPassword" 
+                style="
+                  position: absolute;
+                  text-align: end;
+                  top: 70%;
+                  right: 0px;
+                  width: 50px;
+                  transform: translateY(-50%);
+                  background: transparent;
+                  border: none;
+                  padding: 0;
+                  margin: 0;
+                  cursor: pointer;
+                  color: #555; /* لون العين أغمق */
+                  font-size: 1.2rem; /* تكبير الأيقونة */
+                ">
+          <i class="m-2" [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+        </button>
+      </div>
+      <button type="submit">تسجيل</button>
+      <div class="d-flex justify-content-start">
+        <a class="small m-2 col-md-12 text-center" routerLink="/login">لديك حساب؟ تسجيل الدخول</a>
+      </div>
+    </form>
+  </div>
+
+  
