@@ -35,6 +35,11 @@
                 <label class="form-check-label text-secondary fw-bold" for="available">منتج عام</label>
             </div>
 
+          <div [ngClass]="{'visiblity': !showDropDowns}" class="mt-3">
+            <label class="text-secondary fw-bold">UPC</label>
+            <input [(ngModel)]="UPC" class="form-control" type="text">
+          </div>
+
           <div [ngClass]="{'visiblity': !showDropDowns}" class="form-group mt-3">
               <label class="fw-bold text-secondary">📂 الفئة</label>
               <select [(ngModel)]="categoryId" class="form-control border-primary shadow-sm" (change)="onCategoryChange($event)">

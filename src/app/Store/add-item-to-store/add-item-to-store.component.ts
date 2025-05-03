@@ -65,6 +65,9 @@ export class AddItemToStoreComponent implements OnInit {
   validfinalUrl: boolean = false
   FieldFirstGet: boolean = false
   html?: string
+  UPC?: string
+  ItemId?: number
+
   SearchInFinalUrl(): void {
     if(this.finalUrl == null || this.finalUrl == ""){
       this.validfinalUrl = !this.validfinalUrl
@@ -198,8 +201,19 @@ export class AddItemToStoreComponent implements OnInit {
 
         //   }
         // );
-
-
+        this.isLoading = true;
+        this.http.getData(`api/OrderDetails/GetOrderDetailsByLastFourDigits/${this.sku}`).subscribe((response) =>{
+          console.log(response)
+          this.imgUrl = response[0].item?.imgUrl;
+          this.WebsitePrice = response[0].price
+          this.categoryId = response[0].categoryId
+          this.SizeId = response[0].size
+          this.WebsitePrice = response[0].websitePrice
+          this.UPC = response[0].item?.upc;
+          this.categoryId = response[0].categoryId
+          this.ItemId = response[0].item?.id;
+          this.isLoading = false;
+        })
       }
     }
   }
@@ -236,17 +250,15 @@ export class AddItemToStoreComponent implements OnInit {
 
     var CategoryId = this.subCategory !=null ? this.subCategory : this.categoryId
     var PayLoad = {
-      'sku': this.sku,
-      'imgUrl': this.imgUrl,
-      'makeId': 1,
+      'upc': this.UPC,
       'categoryId': CategoryId,
-      'size': this.SizeId,
-      'websitePrice': this.WebsitePrice,
-      'merchantId': this.MerchantId
+      'sizeId': this.SizeId,
+      'merchantId': this.MerchantId,
+      'price': this.WebsitePrice,
     }
 
-    if(this.route.snapshot.paramMap.get('id') != null){
-      this.api.putData(`api/OrderDetails/${this.route.snapshot.paramMap.get('id')}`, PayLoad).subscribe(result =>{
+    if(this.ItemId != null){
+      this.api.putData(`api/ItemAPI/${this.ItemId}`, PayLoad).subscribe(result =>{
         console.log(result)
         this.router.navigate(['LangingPage/ShowItemsInStore'], { queryParams: { updated: 'true' }})
       })

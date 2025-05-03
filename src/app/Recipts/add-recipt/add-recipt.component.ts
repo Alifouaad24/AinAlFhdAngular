@@ -342,7 +342,7 @@ export class AddReciptComponent implements OnInit {
       if (this.receiptForm.valid) {
         this.http.postData('api/Reciept', this.receiptForm.value).subscribe(
           (response: any) => {
-            if(response && response.msg.inclodes("العميل يحتاج الى دمج الطلب")){
+            if(response && response.msg && response.msg.includes("العميل يحتاج الى دمج الطلب")){
               this.toastr.info('العميل يحتاج لدمج الطلب', '')
               Swal.fire('العميل يحتاج لدمج الطلب');
             }
@@ -352,7 +352,7 @@ export class AddReciptComponent implements OnInit {
               setTimeout(() => {
                 this.isAdded = false; 
                 this.router.navigate(['/LangingPage/ShippingBatch']);
-              }, 2000);
+              }, 1000);
             } else {
               this.openPopup2(response.error)
             }

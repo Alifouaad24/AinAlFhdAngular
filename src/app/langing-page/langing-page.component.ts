@@ -4,6 +4,7 @@ import { Router, RouteReuseStrategy, RouterLink, RouterModule, RouterOutlet } fr
 import { ApiService } from '../Services/api.service';
 import { Receipt } from '../Models/Recipt';
 import { RoleService } from '../Auth/role.service';
+import { DecodeTokenService } from '../Services/decode-token.service';
 
 @Component({
   selector: 'app-langing-page',
@@ -18,6 +19,7 @@ export class LangingPageComponent {
   http = inject(ApiService);
   roleService = inject(RoleService);
   router = inject(Router);
+  decodeToken = inject(DecodeTokenService)
 
   //constructor(private roleService: RoleService) {}
   // getUserRole(): string | null {
@@ -30,7 +32,15 @@ export class LangingPageComponent {
   
   //   return tokenData['role'] || null;  // نرجع قيمة role
   // }
-  
+
+  /**
+   *
+   */
+  constructor() {
+    this.isAdmin = this.decodeToken.isInRole('Admin');
+  }
+
+  isAdmin: boolean = false
   recipts: Receipt[] = [];
   selectSideBar: string ='';
   env: string = ''
