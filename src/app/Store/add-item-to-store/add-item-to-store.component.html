@@ -3,12 +3,44 @@
       <div class="col-lg-8 col-12 order-2 order-lg-1">
           <h4 class="mb-4 text-primary fw-bold text-center">🛒 إضافة منتج جديد</h4>
 
-          <div class="form-group d-flex flex-column align-items-center text-center p-3 shadow-lg rounded bg-light">
+          <div class="border border-1 p-1 rounded">
+            <div>
+              <input id="ByAllSku" type="radio" checked value="AllSKU" name="SearhBySku" (change)="ChangeView($event)"/>
+              <label for="ByAllSku">
+                &nbsp; Search by SKU
+              </label>
+            </div>
+            <div>
+              <input id="Bylast4digits" type="radio" value="Last4digits" name="SearhBySku" (change)="ChangeView($event)"/>
+              <label for="Bylast4digits">
+                &nbsp; Search by last 4 digits
+              </label>
+            </div>
+          </div>
+<!-- ////////////////////////////////////////////////////////////////////////////////////// -->
+  <div *ngIf="LastFourDigits" class="form-group d-flex flex-column align-items-center text-center p-3 shadow-lg rounded bg-light">
+    <label *ngIf="!FieldFirstGet" class="mb-2 fw-bold fs-5 text-primary">Last 4 digits</label>
+    <div class="input-group w-100">
+        <input type="text" [(ngModel)]="sku" class="form-control border-primary shadow-sm" placeholder="أدخل اخر اربع ارقام">
+        <button class="btn btn-info text-white ml-2 fw-bold shadow-sm" (click)="searchAboutItem()">🔍 بحث</button>
+    </div>
+    <div *ngIf="isLoading" class="loading-indicator m-1 p-2">
+      <i class="fas fa-spinner fa-spin"></i> 
+      <span>&nbsp;</span>
+      <span>جاري البحث</span>
+    </div> 
+    <div *ngIf="ErrorGit" class="loading-indicator m-1 p-2">
+      <span>&nbsp;</span>
+      <span class="text-danger fs-3 bg-light p-2">تعذر جلب البيانات</span>
+    </div> 
+</div>
+<!-- //////////////////////////////////////////////////////////////////////////////////////////////// -->
+          <div *ngIf="!LastFourDigits" class="form-group d-flex flex-column align-items-center text-center p-3 shadow-lg rounded bg-light">
               <label *ngIf="!FieldFirstGet" class="mb-2 fw-bold fs-5 text-primary">📌 SKU</label>
               <label *ngIf="FieldFirstGet" class="mb-2 fw-bold fs-5 text-primary">الرابط النهائي</label>
               <div class="input-group w-100">
                   <input type="text" [(ngModel)]="sku" class="form-control border-primary shadow-sm" placeholder="أدخل SKU">
-                  <button class="btn btn-info text-white ml-2 fw-bold shadow-sm" (click)="searchAboutItem()">🔍 بحث</button>
+                  <button class="btn btn-info text-white ml-2 fw-bold shadow-sm" (click)="searchAboutItemBySKU()">🔍 بحث</button>
                   <button class="btn btn-primary ml-1"  (click)="goToExternalLink()">اذهب إلى الرابط</button>
               </div>
               <div *ngIf="isLoading" class="loading-indicator m-1 p-2">
@@ -20,20 +52,24 @@
                 <span>&nbsp;</span>
                 <span class="text-danger fs-3 bg-light p-2">تعذر جلب صورة وسعر المنتج</span>
               </div> 
-              <div *ngIf="FieldFirstGet" class="input-group w-100 mt-1">
+              <!-- <div *ngIf="FieldFirstGet" class="input-group w-100 mt-1">
                 <input type="text" [(ngModel)]="finalUrl" class="form-control border-primary shadow-sm" placeholder="أدخل الرابط النهائي">
                 <button class="btn btn-info text-white ml-2 fw-bold shadow-sm" (click)="SearchInFinalUrl()">بحث</button>
-
-            </div>
+            </div> -->
               <div *ngIf="!validSku" class="loading-indicator m-1 p-2">
                 <span> يرجى ادخال رقم منتج صالح</span>
               </div>         
-            </div>
+          </div>
 
-            <div class="form-check mt-3">
+
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+          <div class="form-check mt-3">
                 <input (change)="ShowDropss($event)" class="form-check-input" type="checkbox" id="available">
                 <label class="form-check-label text-secondary fw-bold" for="available">منتج عام</label>
-            </div>
+          </div>
 
           <div [ngClass]="{'visiblity': !showDropDowns}" class="mt-3">
             <label class="text-secondary fw-bold">UPC</label>
@@ -98,9 +134,8 @@
         <div class="col-lg-11 col-12 order-1 order-lg-3 d-flex flex-column align-items-center justify-content-center mt-4 mt-lg-0">
             <div class="shadow-lg rounded border p-3 bg-white text-center w-100" style="max-width: 400px;">
                 <img [src]="imgUrl" alt="صورة المنتج" class="img-fluid rounded shadow mb-3" style="width: 100%; max-height: 500px;">
-                <textarea class="form-control mt-1" [(ngModel)]="html" ></textarea>
-                <button class="btn btn-primary w-100  mt-1"  (click)="GetInfoLocaly()">استخراج البيانات</button>
-
+                <textarea *ngIf="!LastFourDigits" class="form-control mt-1" [(ngModel)]="html" ></textarea>
+                <button *ngIf="!LastFourDigits" class="btn btn-primary w-100  mt-1"  (click)="GetInfoLocaly()">استخراج البيانات</button>
             </div>
         </div>
         

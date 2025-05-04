@@ -67,6 +67,7 @@ export class AddItemToStoreComponent implements OnInit {
   html?: string
   UPC?: string
   ItemId?: number
+  LastFourDigits: boolean = false
 
   SearchInFinalUrl(): void {
     if(this.finalUrl == null || this.finalUrl == ""){
@@ -126,6 +127,20 @@ export class AddItemToStoreComponent implements OnInit {
 
   }
 
+  ChangeView(event: Event) {
+    const selectedValue = (event.target as HTMLInputElement).value;
+    console.log('Selected value:', selectedValue);
+  
+    if (selectedValue === 'AllSKU') {
+      this.LastFourDigits = false
+
+    } else if (selectedValue === 'Last4digits') {
+      this.LastFourDigits = true
+
+    }
+  }
+  
+
   GatSizesAll(): void{
       this.api.getData(`api/SizesAPI`).subscribe((result) => {
         this.size = result
@@ -178,29 +193,8 @@ export class AddItemToStoreComponent implements OnInit {
     }
     else{
       this.imgUrl = "";
-      if (this.sku?.length !== 0) {
-        //this.isLoading = true;
-        // this.api.getData(`api/ItemAPI/${this.sku}`).subscribe(
-        //   (response) => {
-        //     this.imgUrl = response.image;
-        //     this.WebsitePrice = response.price
-        //     this.isLoading = false;
-        //   },
-        //   (error) => {
-        //     const errorText = error.error?.text || error.error;
-        //     console.log("Error text:", errorText);
-        //     this.imgUrl = errorText;
-        //     this.WebsitePrice = 0
-        //     this.isLoading = false;
-        //     this.ErrorGit = !this.ErrorGit
-        //     setTimeout(() =>{
-        //   this.ErrorGit = !this.ErrorGit
-        //   this.FieldFirstGet = true;
-        // }, 3000)
+      if (this.sku?.length !== 0 && this.sku?.length == 4) {
 
-
-        //   }
-        // );
         this.isLoading = true;
         this.http.getData(`api/OrderDetails/GetOrderDetailsByLastFourDigits/${this.sku}`).subscribe((response) =>{
           console.log(response)
@@ -216,6 +210,31 @@ export class AddItemToStoreComponent implements OnInit {
         })
       }
     }
+  }
+
+  searchAboutItemBySKU(): void {
+    this.isLoading = true;
+    this.api.getData(`api/ItemAPI/${this.sku}`).subscribe(
+      (response) => {
+        this.imgUrl = response.image;
+        this.WebsitePrice = response.price
+        this.isLoading = false;
+      },
+      (error) => {
+        const errorText = error.error?.text || error.error;
+        console.log("Error text:", errorText);
+        this.imgUrl = errorText;
+        this.WebsitePrice = 0
+        this.isLoading = false;
+        this.ErrorGit = !this.ErrorGit
+        setTimeout(() =>{
+      this.ErrorGit = !this.ErrorGit
+      this.FieldFirstGet = true;
+    }, 3000)
+
+
+      }
+    );
   }
 
   GetInfoLocaly(): void {
@@ -270,3 +289,6 @@ export class AddItemToStoreComponent implements OnInit {
     }
   }
 }
+
+
+        
