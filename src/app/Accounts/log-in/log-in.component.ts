@@ -62,6 +62,8 @@ export class LogInComponent implements OnInit {
     // })
 
     if (this.email === 'Saif@saif.com' && this.password === '123456' ||
+      this.email === 'Tara@AinAlfah.com' && this.password === '123456' ||
+      this.email === 'Karrar@AinAlfah.com' && this.password === '123456' ||
        this.email === 'yousif@ainalfahad.com' && this.password === 'Yousif@2025')  {
       this.roleService.login(this.email);
       this.toastr.success("اهلا بكم في موقع عين الفهد", "تم تسجيل الدخول بنجاح",
