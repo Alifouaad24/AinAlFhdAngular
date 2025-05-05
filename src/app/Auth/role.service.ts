@@ -7,8 +7,8 @@ export class RoleService {
 
   private users: any[] = [
     { email: 'Saif@saif.com', role: 'Admin' },
-    { email: 'Tara@AinAlfah.com', role: 'Admin' },
-    { email: 'Karrar@AinAlfah.com', role: 'Admin' },
+    { email: 'Tara@AinAlfahd.com', role: 'Admin' },
+    { email: 'Karrar@AinAlfahd.com', role: 'Admin' },
     { email: 'yousif@ainalfahad.com', role: 'User' }
   ];
 
