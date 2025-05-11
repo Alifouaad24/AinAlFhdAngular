@@ -13,7 +13,7 @@ export class RoleService {
   ];
 
   private currentUser: any = null;
-  constructor() { }
+  constructor() {}
 
   login(email: string): boolean {
     const user = this.users.find(u => u.email === email);

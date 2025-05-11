@@ -1,0 +1,38 @@
+<div class="container mt-4">
+  <h3 class="mb-4 text-center">قائمة المدراء</h3>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">جارٍ التحميل...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && admins.length === 0" class="alert alert-info text-center">
+    لا يوجد مدراء حاليا.
+  </div>
+
+  <div *ngIf="admins.length > 0" class="table-responsive">
+    <table class="table table-bordered table-hover text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>عمليات</th>
+          <th>البريد الإلكتروني</th>
+          <th>اسم المستخدم</th>
+          <th>#</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let admin of admins; index as i">
+          <td>
+            <button (click)="DeleteUser(admin.id)" class="btn btn-danger">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+          <td>{{ admin.email }}</td>
+          <td>{{ admin.userName }}</td>
+          <td>{{ i + 1 }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

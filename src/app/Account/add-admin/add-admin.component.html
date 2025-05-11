@@ -1,0 +1,31 @@
+<!-- admin-add.component.html -->
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow rounded-3">
+        <div class="card-body">
+          <h4 class="card-title mb-4 text-center">إضافة أدمن جديد</h4>
+          <form (ngSubmit)="onSubmit()" #adminForm="ngForm">
+            <div class="mb-3">
+              <label for="firstName" class="form-label">الاسم الأول</label>
+              <input type="text" id="firstName" name="firstName" class="form-control" required [(ngModel)]="admin.firstName">
+            </div>
+            <div class="mb-3">
+              <label for="lastName" class="form-label">اسم العائلة</label>
+              <input type="text" id="lastName" name="lastName" class="form-control" required [(ngModel)]="admin.lastName">
+            </div>
+           <div class="mb-3">
+              <label for="lastName" class="form-label">البريد الالكتروني</label>
+              <input type="text" id="email" name="email" class="form-control" required [(ngModel)]="admin.email">
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">كلمة المرور</label>
+              <input type="password" id="password" name="password" class="form-control" required [(ngModel)]="admin.password">
+            </div>
+            <button type="submit" class="btn btn-primary w-100" [disabled]="!adminForm.form.valid">إضافة</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

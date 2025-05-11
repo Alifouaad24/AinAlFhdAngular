@@ -25,6 +25,8 @@ import { AddAmendentComponent } from './add-amendent/add-amendent.component';
 import { ShowAmendentLogComponent } from './show-amendent-log/show-amendent-log.component';
 import { AriShippingCustomersComponent } from './customers/ari-shipping-customers/ari-shipping-customers.component';
 import { RegisterComponent } from './Account/register/register.component';
+import { AddAdminComponent } from './Account/add-admin/add-admin.component';
+import { ShowAdminsComponent } from './Account/show-admins/show-admins.component';
 
 export const routes: Routes = [
     {
@@ -55,6 +57,10 @@ export const routes: Routes = [
           { path: 'AddAmendent', component: AddAmendentComponent },
           { path: 'ShowAmendentsLog', component: ShowAmendentLogComponent },
           { path: 'ShowAirShippingCustomers', component: AriShippingCustomersComponent },
+          { path: 'AddAdmin', component: AddAdminComponent },
+          { path: 'ShowAdmins', component: ShowAdminsComponent },
+
+
 
           {
             path: "Customers",

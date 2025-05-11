@@ -16,6 +16,10 @@
         <label for="email">البريد الإلكتروني</label>
         <input type="email" id="email" [(ngModel)]="email" name="email" required>
       </div>
+      <div class="d-flex justify-content-start gap-2">
+        <input type="checkbox" id="asAdmin" [(ngModel)]="asAdmin" name="asAdmin">
+        <label for="asAdmin">تسجيل ك ادمن</label>
+      </div>
   
       <div class="form-group" style="position: relative;">
         <label for="password">كلمة المرور</label>

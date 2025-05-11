@@ -18,6 +18,7 @@ export class RegisterComponent {
   email: string = '';
   password: string = '';
   showPassword: boolean = false;
+  asAdmin: boolean = false
 
 
   constructor(private http: ApiService, private toastr: ToastrService) {}
@@ -29,23 +30,42 @@ export class RegisterComponent {
       'email': this.email,
       'password': this.password
     };
-    console.log('بيانات التسجيل:', payLoad);
-    // this.http.postData('api/Account/Register', payLoad).subscribe((response) => {
-    //   localStorage.setItem('token', response.token)
-    //   this.toastr.success("اهلا بكم في موقع عين الفهد", "تم تسجيل الدخول بنجاح",
-    //     { progressAnimation: 'increasing',
-    //       progressBar: true
+    
+    if(!this.asAdmin){
+      this.http.postData('api/Account/Register', payLoad).subscribe((response) => {
+        localStorage.setItem('token', response.token)
+        this.toastr.success("اهلا بكم في موقع عين الفهد", "تم تسجيل الدخول بنجاح",
+          { progressAnimation: 'increasing',
+            progressBar: true
 
-    //      })
-    //   window.location.href = '/LangingPage/MainScreenForMain'
-    // },(error) => {
+           })
+        window.location.href = '/LangingPage/MainScreenForMain'
+      },(error) => {
 
-    //   this.toastr.error("يرجى ادحال بيانات صالحة", "فشل التسجيل ",
-    //     { 
-    //       progressBar: true,
-    //       timeOut: 2000
-    //      })
-    // })
+        this.toastr.error("يرجى ادحال بيانات صالحة", "فشل التسجيل ",
+          { 
+            progressBar: true,
+            timeOut: 2000
+           })
+      })
+    }else{
+      this.http.postData('api/Account/RegisterAdmin', payLoad).subscribe((response) => {
+        localStorage.setItem('token', response.token)
+        this.toastr.success("اهلا بكم في موقع عين الفهد", "تم تسجيل الدخول بنجاح",
+          { progressAnimation: 'increasing',
+            progressBar: true
 
+           })
+        window.location.href = '/LangingPage/MainScreenForMain'
+      },(error) => {
+
+        this.toastr.error("يرجى ادحال بيانات صالحة", "فشل التسجيل ",
+          { 
+            progressBar: true,
+            timeOut: 2000
+           })
+      })
+    }
+    
   }
 }
