@@ -29,9 +29,7 @@ export class LangingPageComponent {
     const payload = token.split('.')[1];
     const decodedPayload = atob(payload);
     const tokenData = JSON.parse(decodedPayload); 
-    console.log(tokenData['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'])
     return tokenData['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || null;
-    //unique_name
   }
 
   GetCurrentUser(): void{

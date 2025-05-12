@@ -45,8 +45,17 @@ export class ShippingBatchComponent implements OnInit {
     })
   }
 
-  isAdmin(): boolean {
-    return this.roleService.hasRole('Admin');
+    getUserRole(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    const payload = token.split('.')[1];
+    const decodedPayload = atob(payload);
+    const tokenData = JSON.parse(decodedPayload); 
+    return tokenData['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || null;
+  }
+
+  IsAdmin(): boolean {
+    return this.getUserRole() === "Admin";
   }
 
   openPopup(id: number) {
@@ -111,7 +120,7 @@ export class ShippingBatchComponent implements OnInit {
 
   goToAddRecipt(id: number): void{
 
-    if(this.isAdmin()){
+    if(this.IsAdmin()){
       this.router.navigate(['LangingPage/ShippingBatch/AddRecipt'], { queryParams: { ShippId: id } });
     }
   }
