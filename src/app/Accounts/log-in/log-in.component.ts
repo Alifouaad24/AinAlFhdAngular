@@ -39,46 +39,47 @@ export class LogInComponent implements OnInit {
 
   onSubmit() {
 
-    // var payLoad = {
-    //   'email': this.email,
-    //   'password': this.password
-    // }
+    var payLoad = {
+      'email': this.email,
+      'password': this.password
+    }
 
-    // this.http.postData('api/Account/LogIn', payLoad).subscribe((response) => {
-    //   localStorage.setItem('token', response.token)
-    //   this.toastr.success("اهلا بكم في موقع عين الفهد", "تم تسجيل الدخول بنجاح",
-    //     { progressAnimation: 'increasing',
-    //       progressBar: true
-
-    //      })
-    //   this.router.navigate(['/LangingPage/MainScreenForMain']);
-    // },(error) =>{
-    //   this.toastr.error("يرجى التحقق من البريد الإلكتروني او كلمة المرو", "فشل تسجيل الدخول",
-    //     { 
-    //       progressBar: true,
-    //       timeOut: 2000
-
-    //      })  
-    // })
-
-    if (this.email === 'Saif@saif.com' && this.password === '123456' ||
-      this.email === 'Tara@AinAlfahd.com' && this.password === '123456' ||
-      this.email === 'Karrar@AinAlfahd.com' && this.password === '123456' ||
-       this.email === 'yousif@ainalfahad.com' && this.password === 'Yousif@2025')  {
-      this.roleService.login(this.email);
+    this.http.postData('api/Account/LogIn', payLoad).subscribe((response) => {
+      localStorage.setItem('token', response.token)
+      console.log(response)
       this.toastr.success("اهلا بكم في موقع عين الفهد", "تم تسجيل الدخول بنجاح",
         { progressAnimation: 'increasing',
           progressBar: true
 
          })
       this.router.navigate(['/LangingPage/MainScreenForMain']);
-
-    } else {
+    },(error) =>{
       this.toastr.error("يرجى التحقق من البريد الإلكتروني او كلمة المرو", "فشل تسجيل الدخول",
         { 
           progressBar: true,
           timeOut: 2000
-        })
-    }
+
+         })  
+    })
+
+    // if (this.email === 'Saif@saif.com' && this.password === '123456' ||
+    //   this.email === 'Tara@AinAlfahd.com' && this.password === '123456' ||
+    //   this.email === 'Karrar@AinAlfahd.com' && this.password === '123456' ||
+    //    this.email === 'yousif@ainalfahad.com' && this.password === 'Yousif@2025')  {
+    //   this.roleService.login(this.email);
+    //   this.toastr.success("اهلا بكم في موقع عين الفهد", "تم تسجيل الدخول بنجاح",
+    //     { progressAnimation: 'increasing',
+    //       progressBar: true
+
+    //      })
+    //   this.router.navigate(['/LangingPage/MainScreenForMain']);
+
+    // } else {
+    //   this.toastr.error("يرجى التحقق من البريد الإلكتروني او كلمة المرو", "فشل تسجيل الدخول",
+    //     { 
+    //       progressBar: true,
+    //       timeOut: 2000
+    //     })
+    // }
   }
 }

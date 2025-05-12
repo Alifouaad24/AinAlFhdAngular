@@ -31,7 +31,6 @@ export class RegisterComponent {
       'password': this.password
     };
     
-    if(!this.asAdmin){
       this.http.postData('api/Account/Register', payLoad).subscribe((response) => {
         localStorage.setItem('token', response.token)
         this.toastr.success("اهلا بكم في موقع عين الفهد", "تم تسجيل الدخول بنجاح",
@@ -42,30 +41,11 @@ export class RegisterComponent {
         window.location.href = '/LangingPage/MainScreenForMain'
       },(error) => {
 
-        this.toastr.error("يرجى ادحال بيانات صالحة", "فشل التسجيل ",
+        this.toastr.error("البريد الالكتروني موجود مسبقا", "فشل التسجيل ",
           { 
             progressBar: true,
             timeOut: 2000
            })
-      })
-    }else{
-      this.http.postData('api/Account/RegisterAdmin', payLoad).subscribe((response) => {
-        localStorage.setItem('token', response.token)
-        this.toastr.success("اهلا بكم في موقع عين الفهد", "تم تسجيل الدخول بنجاح",
-          { progressAnimation: 'increasing',
-            progressBar: true
-
-           })
-        window.location.href = '/LangingPage/MainScreenForMain'
-      },(error) => {
-
-        this.toastr.error("يرجى ادحال بيانات صالحة", "فشل التسجيل ",
-          { 
-            progressBar: true,
-            timeOut: 2000
-           })
-      })
-    }
-    
+      })    
   }
 }

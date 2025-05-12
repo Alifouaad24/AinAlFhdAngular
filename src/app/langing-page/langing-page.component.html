@@ -367,7 +367,7 @@
               </div>
   
               <!-- Nav Item - Pages Collapse Menu -->
-              <li class="nav-item">
+              <li *ngIf="IsAdmin()" class="nav-item">
                   <a class="nav-link collapsed" routerLink="/LangingPage/MainScreenForMain" data-toggle="collapse" data-target="#collapseUsers"
                       aria-expanded="true" aria-controls="collapseUsers">
                       <i class="fas fa-fw fa-users"></i>
@@ -427,7 +427,7 @@
                       </div>
                   </div>
               </li>
-            <div *ngIf="IsAdmin">
+            <div *ngIf="IsAdmin()">
               <!-- Nav Item - Utilities Collapse Menu -->
               <li class="nav-item">
                   <a class="nav-link collapsed" routerLink="/LangingPage/MainScreenForMain" data-toggle="collapse" data-target="#collapseUtilities"
@@ -451,7 +451,7 @@
               <hr class="sidebar-divider">
             </div>
 
-            <div *ngIf="IsAdmin">
+            <div *ngIf="IsAdmin()">
               <!-- Nav Item - Utilities Collapse Menu -->
               <li class="nav-item">
                   <a class="nav-link collapsed" routerLink="/LangingPage/MainScreenForMain" data-toggle="collapse" data-target="#collapseServices"
@@ -589,7 +589,7 @@
                           <li class="nav-item dropdown no-arrow">
                               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ currentUser.email }}</span>
+                                  <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ currentUser.userName.replace('-', ' ') }}</span>
                                   <img class="img-profile rounded-circle"
                                       src="assets/images/userImg.png">
                               </a>

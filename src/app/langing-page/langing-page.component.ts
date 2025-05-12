@@ -21,23 +21,28 @@ export class LangingPageComponent {
   router = inject(Router);
   decodeToken = inject(DecodeTokenService)
 
-  //constructor(private roleService: RoleService) {}
-  // getUserRole(): string | null {
-  //   const token = localStorage.getItem('token'); // أو من أي مكان حافظ فيه التوكن
-  //   if (!token) return null;
-  
-  //   const payload = token.split('.')[1];  // ناخذ الجزء الثاني من التوكن
-  //   const decodedPayload = atob(payload); // نفك تشفير Base64
-  //   const tokenData = JSON.parse(decodedPayload); // نحول JSON
-  
-  //   return tokenData['role'] || null;  // نرجع قيمة role
-  // }
+  constructor() {}
 
-  /**
-   *
-   */
-  constructor() {
-    this.isAdmin = this.decodeToken.isInRole('Admin');
+  getUserRole(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    const payload = token.split('.')[1];
+    const decodedPayload = atob(payload);
+    const tokenData = JSON.parse(decodedPayload); 
+    console.log(tokenData['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'])
+    return tokenData['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || null;
+    //unique_name
+  }
+
+  GetCurrentUser(): void{
+    const token = localStorage.getItem('token');
+    const payload = token!.split('.')[1];
+    const decodedPayload = atob(payload);
+    const tokenData = JSON.parse(decodedPayload); 
+    var userName = tokenData['unique_name'];
+    this.http.getData(`api/Account/${userName}`).subscribe((r: Receipt[]) => {
+      this.currentUser = r;
+    })
   }
 
   isAdmin: boolean = false
@@ -61,22 +66,20 @@ export class LangingPageComponent {
   }
 
   ngOnInit(): void {
-
     this.getData();
     this.http.getData("api/Enviroment").subscribe(res => {
       this.env = res.db_env;
     })
-    
-    this.currentUser = this.roleService.getCurrentUser()
-
-    this.selectSideBar = this.IsAdmin() ?  "MainScreen" : ""
+    this.GetCurrentUser()
+    var x = this.IsAdmin();
   }
 
   IsAdmin(): boolean {
-    return this.roleService.hasRole('Admin');
+    return this.getUserRole() === "Admin";
   }
 
   logout() {
+    localStorage.removeItem('token')
     this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 
