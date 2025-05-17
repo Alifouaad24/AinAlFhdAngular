@@ -16,6 +16,7 @@
       <thead class="table-dark">
         <tr>
           <th>عمليات</th>
+          <th>الصلاحية</th>
           <th>البريد الإلكتروني</th>
           <th>اسم المستخدم</th>
           <th>#</th>
@@ -28,6 +29,7 @@
               <i class="fa fa-trash"></i>
             </button>
           </td>
+          <td>{{ admin.role }}</td>
           <td>{{ admin.email }}</td>
           <td>{{ admin.userName }}</td>
           <td>{{ i + 1 }}</td>

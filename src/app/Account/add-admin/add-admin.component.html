@@ -1,29 +1,75 @@
-<!-- admin-add.component.html -->
-<div class="container mt-5">
+<div dir="rtl" class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
       <div class="card shadow rounded-3">
         <div class="card-body">
-          <h4 class="card-title mb-4 text-center">إضافة أدمن جديد</h4>
-          <form (ngSubmit)="onSubmit()" #adminForm="ngForm">
+          <h4 class="card-title mb-4 text-center">إضافة مستخدم جديد</h4>
+
+          <form (ngSubmit)="onSubmit()" #adminForm="ngForm" novalidate>
+            <div class="mb-3 row">
+              <label for="firstName" class="col-sm-4 col-form-label text-end">الاسم الأول</label>
+              <div class="col-sm-8">
+                <input type="text" id="firstName" name="firstName" class="form-control"
+                       required [(ngModel)]="admin.firstName" #firstName="ngModel">
+                <div *ngIf="submitted && firstName.invalid" class="text-danger mt-1">
+                  الاسم الأول مطلوب
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label for="lastName" class="col-sm-4 col-form-label text-end">اسم العائلة</label>
+              <div class="col-sm-8">
+                <input type="text" id="lastName" name="lastName" class="form-control"
+                       required [(ngModel)]="admin.lastName" #lastName="ngModel">
+                <div *ngIf="submitted && lastName.invalid" class="text-danger mt-1">
+                  اسم العائلة مطلوب
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label for="email" class="col-sm-4 col-form-label text-end">البريد الإلكتروني</label>
+              <div class="col-sm-8">
+                <input type="text" id="email" name="email" class="form-control"
+                       required [(ngModel)]="admin.email" #email="ngModel">
+                <div *ngIf="submitted && email.invalid" class="text-danger mt-1">
+                  البريد الإلكتروني مطلوب
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label for="password" class="col-sm-4 col-form-label text-end">كلمة المرور</label>
+              <div class="col-sm-8">
+                <input type="password" id="password" name="password" class="form-control"
+                       required [(ngModel)]="admin.password" #password="ngModel">
+                <div *ngIf="submitted && password.invalid" class="text-danger mt-1">
+                  كلمة المرور مطلوبة
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label for="role" class="col-sm-4 col-form-label text-end">الصلاحية</label>
+              <div class="col-sm-8">
+                <select id="role" name="role" class="form-control"
+                        required [(ngModel)]="admin.role" #role="ngModel">
+                  <option *ngFor="let role of roles" [value]="role.name">{{ role.name }}</option>
+                </select>
+                <div *ngIf="submitted && role.invalid" class="text-danger mt-1">
+                  الصلاحية مطلوبة
+                </div>
+              </div>
+            </div>
+
             <div class="mb-3">
-              <label for="firstName" class="form-label">الاسم الأول</label>
-              <input type="text" id="firstName" name="firstName" class="form-control" required [(ngModel)]="admin.firstName">
+              <button type="submit" class="btn btn-primary w-100" [disabled]="!adminForm.form.valid">
+                إضافة
+              </button>
             </div>
-            <div class="mb-3">
-              <label for="lastName" class="form-label">اسم العائلة</label>
-              <input type="text" id="lastName" name="lastName" class="form-control" required [(ngModel)]="admin.lastName">
-            </div>
-           <div class="mb-3">
-              <label for="lastName" class="form-label">البريد الالكتروني</label>
-              <input type="text" id="email" name="email" class="form-control" required [(ngModel)]="admin.email">
-            </div>
-            <div class="mb-3">
-              <label for="password" class="form-label">كلمة المرور</label>
-              <input type="password" id="password" name="password" class="form-control" required [(ngModel)]="admin.password">
-            </div>
-            <button type="submit" class="btn btn-primary w-100" [disabled]="!adminForm.form.valid">إضافة</button>
           </form>
+
         </div>
       </div>
     </div>

@@ -382,9 +382,9 @@
                                عرض قائمة المدراء<span>&ThinSpace;</span>
                               </a>
                             </li>
-                            <li> <a class="collapse-item"
+                            <li *ngIf="IsSuper_Admin()"> <a class="collapse-item"
                               routerLinkActive="active" routerLink="AddAdmin">
-                              إضافة مدير جديد<span>&ThinSpace;</span>
+                              إضافة مستخدم جديد<span>&ThinSpace;</span>
                                 </a>
                             </li>
                       </div>

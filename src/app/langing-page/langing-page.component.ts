@@ -73,6 +73,10 @@ export class LangingPageComponent {
   }
 
   IsAdmin(): boolean {
+    return this.getUserRole() === "Admin" || this.getUserRole() === "Sub_Admin";
+  }
+
+  IsSuper_Admin(): boolean {
     return this.getUserRole() === "Admin";
   }
 

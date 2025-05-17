@@ -54,6 +54,8 @@ export class LogInComponent implements OnInit {
          })
       this.router.navigate(['/LangingPage/MainScreenForMain']);
     },(error) =>{
+            console.log(error.error)
+
       this.toastr.error("يرجى التحقق من البريد الإلكتروني او كلمة المرو", "فشل تسجيل الدخول",
         { 
           progressBar: true,
