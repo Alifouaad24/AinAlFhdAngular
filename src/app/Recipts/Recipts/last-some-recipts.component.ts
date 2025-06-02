@@ -126,10 +126,17 @@ currentUser: string = ""
       });
     }
   }
-  
+    getUserRole(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    const payload = token.split('.')[1];
+    const decodedPayload = atob(payload);
+    const tokenData = JSON.parse(decodedPayload); 
+    return tokenData['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || null;
+  }
 
   isAdmin(): boolean {
-    return this.roleService.hasRole('Admin');
+    return this.getUserRole() === "Admin" || this.getUserRole() === "Sub_Admin";
   }
 
 
@@ -272,6 +279,8 @@ currentUser: string = ""
       })
     );
   }
+
+  
 
   PrintPDF(): void {
     const shipId = this.shipIdToFilter;

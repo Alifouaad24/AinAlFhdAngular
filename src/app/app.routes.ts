@@ -27,6 +27,7 @@ import { AriShippingCustomersComponent } from './customers/ari-shipping-customer
 import { RegisterComponent } from './Account/register/register.component';
 import { AddAdminComponent } from './Account/add-admin/add-admin.component';
 import { ShowAdminsComponent } from './Account/show-admins/show-admins.component';
+import { FixSheInCodesComponent } from './Store/fix-she-in-codes/fix-she-in-codes.component';
 
 export const routes: Routes = [
     {
@@ -59,6 +60,7 @@ export const routes: Routes = [
           { path: 'ShowAirShippingCustomers', component: AriShippingCustomersComponent },
           { path: 'AddAdmin', component: AddAdminComponent },
           { path: 'ShowAdmins', component: ShowAdminsComponent },
+          { path: 'fixsheincodes', component: FixSheInCodesComponent },
 
 
 
