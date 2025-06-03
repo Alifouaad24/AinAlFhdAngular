@@ -66,7 +66,9 @@ export class AddHomeDepotProductComponent implements OnInit {
       this.showError = false
       this.isLoading = !this.isLoading
       this.http.postData(`api/HomeDepot/${upc}`, null).subscribe((response: any) =>{
-        this.imgUrl = response.images[0];
+        console.log(response)
+
+        this.imgUrl = response.images[0] ?? "";
         this.price = response.price,
         this.Brand = response.brand,
         this.model = response.model,
@@ -120,15 +122,16 @@ export class AddHomeDepotProductComponent implements OnInit {
   }
   
 
-  onCategoryChange(event: any): void{
-    this.CategoryId = (event.target!.value!);
+onCategoryChange(event: any): void{
+    this.CategoryId = parseInt(event.target!.value!);
  }
 
  onCondetionChange(event: any): void{
-  this.CondetionId = (event.target!.value!);
+  this.CondetionId = parseInt(event.target!.value!);
 }
 
 SaveItemInDB(): void{
+
   var payLoad = {
     "brand": this.Brand,
     "sku": this.storeSku,
@@ -138,11 +141,19 @@ SaveItemInDB(): void{
     "internet": this.internet,
     "notes": this.Notes,
     "categoryId": this.CategoryId,
-    "itemCondetionId": this.CondetionId
+    "itemCondetionId": this.CondetionId,
+    "engName": this.title
   }
+
+    console.log(payLoad)
+
 
   this.http.postData(`api/HomeDepot`, payLoad).subscribe(res =>{
     console.log(res)
+    this.toastr.success('تم حفظ المنتج بنجاح')
+    window.location.reload
+  },(er) => {
+     this.toastr.error('حدث خطأ اثناء ادخال المنتج يرجى المحاولة مجددا')
   })
 
 }

@@ -3,6 +3,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { ApiService } from '../../Services/api.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-fix-she-in-codes',
@@ -13,10 +14,12 @@ import { FormsModule } from '@angular/forms';
 })
 export class FixSheInCodesComponent {
 
-  constructor(private http: ApiService) {}
+  constructor(private http: ApiService, private toastr: ToastrService) {}
   today?: string;
   orders?: any
   isLoading = false;
+  SearchByOrderNo: boolean = false
+  orderNum?: number
 
   ngOnInit() {
     const today = new Date();
@@ -46,7 +49,14 @@ export class FixSheInCodesComponent {
         order.item.pCode = response.pcCode
         order.item.oldCode = response.olldCode
         newCodeInput.value = '';
+      },(error) => {
+        this.toastr.error('حدث خطأ اثناء التعديل يرجى المحاولة مجددا')
       })
     }
+  }
+
+  ShowDialog(event: any) {
+    var value = event.taeget.value
+    
   }
 }

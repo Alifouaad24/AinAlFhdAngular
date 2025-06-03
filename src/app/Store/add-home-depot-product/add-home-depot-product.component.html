@@ -75,7 +75,7 @@
                          <div class="row col-md-12">
                             <div class="col-md-12 mb-3">
                                 <label class="fw-bold">الملاحظات</label>
-                                <input class="form-control w-100" type="text" [ngModel]="Notes">
+                                <input class="form-control w-100" type="text" [(ngModel)]="Notes">
                             </div>
                          </div>
                         <div class="row col-md-12 justify-content-between">
@@ -95,8 +95,7 @@
                                      حالة المنتج
                                 </label>
                                 <div class="input-group">
-                                    <select class="form-control w-100" [(ngModel)]="CondId" (change)="onCategoryChange($event)">
-                                        <option></option>
+                                    <select class="form-control w-100" [(ngModel)]="CondId" (change)="onCondetionChange($event)">
                                         <option *ngFor="let condition of allCondetions" [value]="condition.conditionId">{{ condition.description }}</option>
                                     </select>
                                 </div>
@@ -104,7 +103,7 @@
                         </div>
                     </div>
                     <div class="col-md-10 text m-3">
-                        <button class="btn btn-success w-25">
+                        <button (click)="SaveItemInDB()" class="btn btn-success w-25">
                             حفظ
                         </button>
                     </div>

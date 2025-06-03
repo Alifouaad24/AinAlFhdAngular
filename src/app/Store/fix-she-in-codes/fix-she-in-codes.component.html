@@ -1,7 +1,30 @@
-<div class="d-flex flex-column align-items-center mb-4">
+<div class="d-flex flex-column justify-content-center align-items-start border border-2 p-2 mb-3">
+  <div>
+    <input type="radio" name="search" value="byDate" (change)="ShowDialog($event)"/> &nbsp;
+    <label>البحث بتاريخ</label>
+  </div>
+    <div>
+      <input type="radio" name="search" value="byNum" (change)="ShowDialog($event)"/>&nbsp;
+    <label>البحث بواسطة رقم طلب</label>
+  </div>
+</div>
+
+
+<div *ngIf="!SearchByOrderNo" class="d-flex flex-column align-items-center mb-4">
     <h3 class="mb-4">أختر التاريخ للبحث</h3>
     <div class="d-flex flex-column align-items-center">
         <input class="form-control mb-4" type="text" [(ngModel)]="today">
+        <button (click)="search()" class="btn- btn-warning rounded p-2">بحث</button>
+        <div *ngIf="isLoading" class="mt-3 text-center">
+        <div class="spinner-border text-primary" role="status"></div>
+        <div class="mt-2 fw-bold">جارٍ البحث...</div>
+  </div>
+    </div>
+</div>
+<div *ngIf="SearchByOrderNo" class="d-flex flex-column align-items-center mb-4">
+    <h3 class="mb-4">ادخل رقم الطلب</h3>
+    <div class="d-flex flex-column align-items-center">
+        <input class="form-control mb-4" type="text" [(ngModel)]="orderNum">
         <button (click)="search()" class="btn- btn-warning rounded p-2">بحث</button>
         <div *ngIf="isLoading" class="mt-3 text-center">
         <div class="spinner-border text-primary" role="status"></div>
