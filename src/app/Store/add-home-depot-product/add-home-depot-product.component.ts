@@ -46,6 +46,7 @@ export class AddHomeDepotProductComponent implements OnInit {
   images?: []
   source?: string
   isLoadingPublic: boolean = false
+  showErrorForMe: boolean = false
   products: Product [] = []
   Images: string [] = []
   Offers: Offer [] = []
@@ -61,29 +62,35 @@ export class AddHomeDepotProductComponent implements OnInit {
 
   GetPriceAndPhoto(upc: string | undefined): void{
     console.log(upc)
-
+    this.showErrorForMe = false
     if(upc !== null && upc !== ""){
       this.showError = false
       this.isLoading = !this.isLoading
       this.http.postData(`api/HomeDepot/${upc}`, null).subscribe((response: any) =>{
         console.log(response)
+        if(response != null){
+          this.imgUrl = response.images && response.images[0] != null ? response.images[0] : "";
+          this.price = response.price,
+          this.Brand = response.brand,
+          this.model = response.model,
+          this.storeSku = response.sku,
+          this.internet = response.internet
+          this.source = response.source
+          this.title = response.title
+          this.description2 = response.desc
 
-        this.imgUrl = response.images[0] ?? "";
-        this.price = response.price,
-        this.Brand = response.brand,
-        this.model = response.model,
-        this.storeSku = response.sku,
-        this.internet = response.internet
-        this.source = response.source
-        this.title = response.title
-        this.description2 = response.desc
+          this.isLoading = !this.isLoading
+          console.log(response)
 
-        this.isLoading = !this.isLoading
-        console.log(response)
+          this.showHome = true
+          this.showError = false
+        }
+        else{
+          this.isLoading = !this.isLoading
+          this.showErrorForMe = true
+        }
 
-        this.showHome = true
-        this.showError = false
-
+      
       }
       ,(error) =>{
         this.isLoading = !this.isLoading
@@ -185,7 +192,7 @@ SearchAboutUPC(upc: string): void {
         this.modelPublic = firstProduct.model;
         this.description = firstProduct.description;
         this.title = firstProduct.title;
-        this.Images = firstProduct.images;
+        this.Images = firstProduct.images || [];
         this.Offers = firstProduct.offers;
       }
 

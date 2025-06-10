@@ -18,6 +18,10 @@
 <div *ngIf="showError" class="text-center p-5" style="color: rgb(252, 0, 0); font-weight: bold; font-size: large;">
     الرمز المدخل غير صالح
 </div>
+<div *ngIf="showErrorForMe" class="text-center p-5" style="color: rgb(252, 0, 0); font-weight: bold; font-size: large;">
+    الرد من السيرفر فارغ
+    ربما تم تغيير خصائص الموقع
+</div>
 
 <div *ngIf="showHome">
     <div class="col-md-6 mb-3 p-1 pl-5 pt-2 d-flex justify-content-start">
@@ -114,7 +118,7 @@
             <div class="col-md-4 text-center">
                 <div class="card shadow-lg p-3 rounded">
                     <h5 class="text-center mb-3">صورة المنتج</h5>
-                    <img [src]="imgUrl" class="img-fluid rounded shadow" alt="صورة">
+                    <img *ngIf="imgUrl" [src]="imgUrl" class="img-fluid rounded shadow" alt="صورة">
                 </div>
             </div>
         </div>
