@@ -25,9 +25,13 @@ export class AddHomeDepotProductComponent implements OnInit {
   internet?: string
   Notes?: string
   CondId?: number
+  platformId?: number
+  SysyemId?: number
   CategoryId?: number
   allCondetions: any = []
   Categories: any = []
+  Systems: any = []
+  Platforms: any = []
   CondetionId?: number
   showPublic: boolean = false
   showHome: boolean = false
@@ -58,6 +62,20 @@ export class AddHomeDepotProductComponent implements OnInit {
 
     this.GetAllConditions()
     this.GetCategories()
+    this.GetAllSystems()
+    this.GetAllPlatforms()
+  }
+
+  GetAllSystems() {
+    this.http.getData("api/System").subscribe((result) => {
+      this.Systems = result;
+    });
+  }
+
+  GetAllPlatforms() {
+    this.http.getData("api/Platforms").subscribe((result) => {
+      this.Platforms = result;
+    });
   }
 
   GetPriceAndPhoto(upc: string | undefined): void{
@@ -133,9 +151,19 @@ onCategoryChange(event: any): void{
     this.CategoryId = parseInt(event.target!.value!);
  }
 
+ onplatformChange(event: any): void{
+  this.platformId = parseInt(event.target!.value!);
+}
+
  onCondetionChange(event: any): void{
   this.CondetionId = parseInt(event.target!.value!);
 }
+
+onSystemChange(event: any): void{
+  this.SysyemId = parseInt(event.target!.value!);
+}
+
+
 
 SaveItemInDB(): void{
 
@@ -149,7 +177,9 @@ SaveItemInDB(): void{
     "notes": this.Notes,
     "categoryId": this.CategoryId,
     "itemCondetionId": this.CondetionId,
-    "engName": this.title
+    "engName": this.title,
+    "platformId": this.platformId,
+    "systemId": this.SysyemId
   }
 
     console.log(payLoad)
@@ -165,46 +195,46 @@ SaveItemInDB(): void{
 
 }
 
-SearchAboutUPC(upc: string): void {
-  if (!upc) {
-    this.toastr.error('الرجاء إدخال UPC صالح');
-    return;
-  }
+// SearchAboutUPC(upc: string): void {
+//   if (!upc) {
+//     this.toastr.error('الرجاء إدخال UPC صالح');
+//     return;
+//   }
 
-  this.isLoadingPublic = true;
+//   this.isLoadingPublic = true;
 
-  this.http.getData(`api/HomeDepot/lookup?upc=${upc}`).subscribe({
-    next: (Response: any) => {
-      if (!Response.items || !Array.isArray(Response.items) || Response.items.length === 0) {
-        this.toastr.warning('لم يتم العثور على منتجات لهذا UPC');
-        this.isLoadingPublic = false;
-        return;
-      }
-      this.products = Response.items.map((el: any) => Product.fromJson(el));
-      if (this.products.length > 0) {
-        const firstProduct = this.products[0];
+//   this.http.getData(`api/HomeDepot/lookup?upc=${upc}`).subscribe({
+//     next: (Response: any) => {
+//       if (!Response.items || !Array.isArray(Response.items) || Response.items.length === 0) {
+//         this.toastr.warning('لم يتم العثور على منتجات لهذا UPC');
+//         this.isLoadingPublic = false;
+//         return;
+//       }
+//       this.products = Response.items.map((el: any) => Product.fromJson(el));
+//       if (this.products.length > 0) {
+//         const firstProduct = this.products[0];
 
-        this.brand = firstProduct.brand;
-        this.category = firstProduct.category;
-        this.lowest_recorded_price = firstProduct.lowest_recorded_price;
-        this.highest_recorded_price = firstProduct.highest_recorded_price;
-        this.color = firstProduct.color;
-        this.modelPublic = firstProduct.model;
-        this.description = firstProduct.description;
-        this.title = firstProduct.title;
-        this.Images = firstProduct.images || [];
-        this.Offers = firstProduct.offers;
-      }
+//         this.brand = firstProduct.brand;
+//         this.category = firstProduct.category;
+//         this.lowest_recorded_price = firstProduct.lowest_recorded_price;
+//         this.highest_recorded_price = firstProduct.highest_recorded_price;
+//         this.color = firstProduct.color;
+//         this.modelPublic = firstProduct.model;
+//         this.description = firstProduct.description;
+//         this.title = firstProduct.title;
+//         this.Images = firstProduct.images || [];
+//         this.Offers = firstProduct.offers;
+//       }
 
-      this.isLoadingPublic = false;
-    },
-    error: (error) => {
-      this.isLoadingPublic = false;
-      this.toastr.error('حدث خطأ أثناء البحث عن المنتج');
-      console.error('Error fetching product data:', error);
-    }
-  });
-}
+//       this.isLoadingPublic = false;
+//     },
+//     error: (error) => {
+//       this.isLoadingPublic = false;
+//       this.toastr.error('حدث خطأ أثناء البحث عن المنتج');
+//       console.error('Error fetching product data:', error);
+//     }
+//   });
+// }
 
 
 
