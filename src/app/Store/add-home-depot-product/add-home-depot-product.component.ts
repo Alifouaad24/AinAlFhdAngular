@@ -179,7 +179,9 @@ SaveItemInDB(): void{
     "itemCondetionId": this.CondetionId,
     "engName": this.title,
     "platformId": this.platformId,
-    "systemId": this.SysyemId
+    "systemId": this.SysyemId,
+    "uPC": this.upc
+
   }
 
     console.log(payLoad)
