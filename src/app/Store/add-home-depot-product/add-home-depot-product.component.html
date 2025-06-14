@@ -11,7 +11,7 @@
         <i class="fas fa-spinner fa-spin"></i> 
         <span>&nbsp;</span>
         <span>جاري البحث</span>
-      </div> 
+    </div> 
 </div>
 </div>
 
@@ -141,9 +141,46 @@
         
             <div class="col-md-4 text-center">
                 <div class="card shadow-lg p-3 rounded">
-                    <h5 class="text-center mb-3">صورة المنتج</h5>
-                    <img *ngIf="imgUrl" [src]="imgUrl" class="img-fluid rounded shadow" alt="صورة">
-                </div>
+ <h5 class="text-center mb-3">صور المنتج</h5>
+    <div *ngIf="isLoadingForImg" class="loading-indicator m-1 p-2">
+        <i class="fas fa-spinner fa-spin"></i> 
+    </div>
+
+<div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div 
+      class="carousel-item" 
+      *ngFor="let img of imgUrl; let i = index" 
+      [class.active]="i === 0"
+    >
+      <img [src]="image" class="img-fluid rounded shadow d-block w-100" alt="صورة">
+    </div>
+  </div>
+
+  <button 
+    (click)="ChangePhoto(+1)"
+    class="carousel-control-prev no-bg" 
+    type="button" 
+    data-bs-target="#productCarousel" 
+    data-bs-slide="prev"
+    style="background-color: transparent;">
+    <span style="background-color: black;" class="carousel-control-prev-icon"></span>
+  </button>
+
+  <!-- زر التالي -->
+  <button 
+    (click)="ChangePhoto(-1)"
+    class="carousel-control-next no-bg" 
+    type="button" 
+    data-bs-target="#productCarousel" 
+    data-bs-slide="next"
+    style="background-color: transparent;"
+  >
+    <span style="background-color: black;" class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+
             </div>
         </div>
     </div>

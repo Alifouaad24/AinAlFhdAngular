@@ -16,7 +16,7 @@ import { Offer } from '../../Models/Offer';
 export class AddHomeDepotProductComponent implements OnInit {
 
   upc?: string
-  imgUrl?: string
+  imgUrl: string[] = []
   price?: number
   isLoading: boolean = false
   model?: string
@@ -42,6 +42,7 @@ export class AddHomeDepotProductComponent implements OnInit {
   description?: string
   description2?: string
   brand?: string
+  image: string = ""
   modelPublic?: string
   color?: string
   category?: string
@@ -54,6 +55,7 @@ export class AddHomeDepotProductComponent implements OnInit {
   products: Product [] = []
   Images: string [] = []
   Offers: Offer [] = []
+  index: number = 0
   /////////////////////////////////////////
   constructor(private http: ApiService, private toastr: ToastrService) {}
 
@@ -87,7 +89,7 @@ export class AddHomeDepotProductComponent implements OnInit {
       this.http.postData(`api/HomeDepot/${upc}`, null).subscribe((response: any) =>{
         console.log(response)
         if(response != null){
-          this.imgUrl = response.images && response.images[0] != null ? response.images[0] : "";
+          this.imgUrl = response.images && response.images != null ? response.images : [];
           this.price = response.price,
           this.Brand = response.brand,
           this.model = response.model,
@@ -98,6 +100,7 @@ export class AddHomeDepotProductComponent implements OnInit {
           this.description2 = response.desc
 
           this.isLoading = !this.isLoading
+          this.image = response.images && response.images != null ? response.images[0] : "";
           console.log(response)
 
           this.showHome = true
@@ -117,6 +120,30 @@ export class AddHomeDepotProductComponent implements OnInit {
 
       }
     )
+    }
+  }
+
+  currentIndex = 0
+  isLoadingForImg: boolean = false
+
+  ChangePhoto(i: number) {
+
+    this.isLoadingForImg = true
+    this.currentIndex += i
+    console.log("currentIndex: " + this.currentIndex)
+    console.log("imgUrllength: " + this.imgUrl.length)
+
+    if(this.imgUrl.length > this.currentIndex && this.currentIndex > -1){
+      this.index = this.currentIndex
+      console.log("index: " + this.index)
+
+      this.image = this.imgUrl[this.index]
+      this.isLoadingForImg = false
+    }
+    else{
+      this.isLoadingForImg = false
+      window.alert("Out of range")
+
     }
   }
 
@@ -196,6 +223,7 @@ SaveItemInDB(): void{
   })
 
 }
+
 
 // SearchAboutUPC(upc: string): void {
 //   if (!upc) {
