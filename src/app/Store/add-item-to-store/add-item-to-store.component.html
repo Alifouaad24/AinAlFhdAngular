@@ -133,12 +133,21 @@
       <div class="col-lg-4 order-lg-2 d-flex flex-column align-items-center">
         <div class="col-lg-11 col-12 order-1 order-lg-3 d-flex flex-column align-items-center justify-content-center mt-4 mt-lg-0">
             <div class="shadow-lg rounded border p-3 bg-white text-center w-100" style="max-width: 400px;">
-                <img [src]="imgUrl" alt="صورة المنتج" class="img-fluid rounded shadow mb-3" style="width: 100%; max-height: 500px;">
+                <img (click)="openModal()" [src]="imgUrl" alt="صورة المنتج" class="img-fluid rounded shadow mb-3" style="width: 100%; max-height: 500px;">
+                <p *ngIf="LastFourDigits">Quantity: {{ Count }}</p>
                 <textarea *ngIf="!LastFourDigits" class="form-control mt-1" [(ngModel)]="html" ></textarea>
                 <button *ngIf="!LastFourDigits" class="btn btn-primary w-100  mt-1"  (click)="GetInfoLocaly()">استخراج البيانات</button>
             </div>
         </div>
         
     </div>
+  </div>
+</div>
+
+
+<div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <span class="close-button" (click)="closeModal()">&times;</span>
+    <img [src]="imgUrl" class="modal-image" />
   </div>
 </div>

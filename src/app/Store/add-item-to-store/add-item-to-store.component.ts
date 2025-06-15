@@ -45,7 +45,7 @@ export class AddItemToStoreComponent implements OnInit {
 
     })
   }
-
+  Count?: Number | null;
   Categories?: any [] = []
   Merchants?: any [] = []
   subCategory?: any = []
@@ -198,14 +198,16 @@ export class AddItemToStoreComponent implements OnInit {
         this.isLoading = true;
         this.http.getData(`api/OrderDetails/GetOrderDetailsByLastFourDigits/${this.sku}`).subscribe((response) =>{
           console.log(response)
-          this.imgUrl = response[0].item?.imgUrl;
-          this.WebsitePrice = response[0].price
-          this.categoryId = response[0].categoryId
-          this.SizeId = response[0].size
-          this.WebsitePrice = response[0].websitePrice
-          this.UPC = response[0].item?.upc;
-          this.categoryId = response[0].categoryId
-          this.ItemId = response[0].item?.id;
+          this.imgUrl = response.orderDetails[0].item?.imgUrl;
+          this.WebsitePrice = response.orderDetails[0].price
+          this.categoryId = response.orderDetails[0].categoryId
+          this.SizeId = response.orderDetails[0].size
+          this.WebsitePrice = response.orderDetails[0].websitePrice
+          this.UPC = response.orderDetails[0].item?.upc;
+          this.categoryId = response.orderDetails[0].categoryId
+          this.ItemId = response.orderDetails[0].item?.id;
+
+          this.Count = response.count
           this.isLoading = false;
         })
       }
@@ -287,6 +289,16 @@ export class AddItemToStoreComponent implements OnInit {
         console.log(result)
       })
     }
+  }
+
+  isModalOpen = false;
+
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
   }
 }
 
