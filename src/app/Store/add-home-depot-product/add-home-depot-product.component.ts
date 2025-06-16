@@ -126,26 +126,21 @@ export class AddHomeDepotProductComponent implements OnInit {
   currentIndex = 0
   isLoadingForImg: boolean = false
 
-  ChangePhoto(i: number) {
+ChangePhoto(i: number) {
+  this.isLoadingForImg = true;
 
-    this.isLoadingForImg = true
-    this.currentIndex += i
-    console.log("currentIndex: " + this.currentIndex)
-    console.log("imgUrllength: " + this.imgUrl.length)
-
-    if(this.imgUrl.length > this.currentIndex && this.currentIndex > -1){
-      this.index = this.currentIndex
-      console.log("index: " + this.index)
-
-      this.image = this.imgUrl[this.index]
-      this.isLoadingForImg = false
-    }
-    else{
-      this.isLoadingForImg = false
-      window.alert("Out of range")
-
-    }
+  this.currentIndex += i;
+  if (this.currentIndex >= this.imgUrl.length) {
+    this.currentIndex = 0; // رجوع للبداية
+  } else if (this.currentIndex < 0) {
+    this.currentIndex = this.imgUrl.length - 1; // الذهاب للنهاية
   }
+  
+  this.index = this.currentIndex;
+  this.image = this.imgUrl[this.index];
+  this.isLoadingForImg = false;
+}
+
 
   onSearchChange(value: string) {
 
@@ -199,14 +194,14 @@ SaveItemInDB(): void{
     "sku": this.storeSku,
     "model": this.model,
     "price": this.price,
-    "imgUrl": this.imgUrl,
+    "imgUrl": this.imgUrl[0],
+    "allImages": this.imgUrl,
     "internet": this.internet,
     "notes": this.Notes,
     "categoryId": this.CategoryId,
     "itemCondetionId": this.CondetionId,
     "engName": this.title,
     "platformId": this.platformId,
-    "systemId": this.SysyemId,
     "uPC": this.upc
 
   }

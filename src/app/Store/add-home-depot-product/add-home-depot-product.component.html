@@ -38,7 +38,10 @@
                         <div class="row col-md-12 justify-content-between">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">السعر</label>
-                                <input class="form-control" type="text" [ngModel]="price">
+                                <div class="d-flex justify-content-start">
+                                    <input type="text" class="form-control pe-4 text-end" [(ngModel)]="price">
+                                    <span class="translate-middle-y m-2 text-muted">$</span>
+                                </div>
                             </div>
                         
                             <div class="col-md-6 mb-3">
@@ -114,17 +117,6 @@
                                 <div class="input-group">
                                     <select class="form-control w-100" [(ngModel)]="platformId" (change)="onplatformChange($event)">
                                         <option *ngFor="let p of Platforms" [value]="p.platform_id">{{ p.desciption }}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">
-                                    النظام
-                                </label>
-                                <div class="input-group">
-                                    <select class="form-control w-100" [(ngModel)]="SysyemId" (change)="onSystemChange($event)">
-                                        <option *ngFor="let sy of Systems" [value]="sy.id">{{ sy.name }}</option>
                                     </select>
                                 </div>
                             </div>
