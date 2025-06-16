@@ -272,7 +272,8 @@ export class AddItemToStoreComponent implements OnInit {
     var CategoryId = this.subCategory !=null ? this.subCategory : this.categoryId
     var PayLoad = {
       'upc': this.UPC,
-      'categoryId': CategoryId,
+      'categoryId': this.categoryId,
+      'subCategoryId': this.subCategoryId,
       'sizeId': this.SizeId,
       'merchantId': this.MerchantId,
       'price': this.WebsitePrice,

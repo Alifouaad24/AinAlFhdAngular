@@ -1,48 +1,55 @@
 <div class="d-flex justify-content-center col-md-12">
-    <h2 *ngIf="updated" class="text-white text-center mb-1 fw-bold col-md-11">تم التعديل بنجاح</h2>
+    <h2 *ngIf="updated" class="text-dark text-center mb-1 fw-bold col-md-11">تم التعديل بنجاح</h2>
 </div>
 <div class="d-flex justify-content-start col-md-12">
     <button class="btn btn-primary mb-3 col-md-1" (click)="toggleVisibility()"><i class="fas fa-plus"></i></button>
 </div>
 
-<div class="container p-4 mb-3 " *ngIf="isVisible">
+<div *ngIf="isVisible" class="container p-4 m-3" style="direction: rtl; text-align: right;">
     <form [formGroup]="customerForm" *ngIf="customerForm" (ngSubmit)="AddCustomer()">
         <div class="row g-3">
+             <div class="col-md-6">
+            <label class="text-dark">اسم العميل</label>
+            <input type="text" class="form-control" formControlName="custName">
+        </div>
             <div class="col-md-6">
-                <label class="text-light">رقم هاتف العميل</label>
+                <label class="text-dark">رقم هاتف العميل</label>
                 <input type="text" class="form-control" formControlName="custMob" minlength="11" maxlength="11">
                 <div *ngIf="customerForm.get('custMob')?.invalid && customerForm.get('custMob')?.touched" class="text-danger">
                      رقم الهاتف مطلوب ويجب أن يحتوي على أرقام فقط ب 11 خانة ويجب ايضا ان يبدأ بالنمط العراقي.
-                  </div>
+                </div>
             </div>
-        <div class="col-md-6">
-            <label class="text-light">اسم العميل</label>
-            <input type="text" class="form-control" formControlName="custName">
-        </div>
+       
 
         <div class="col-md-6">
-            <label class="text-light"> مدينة العميل</label>
-            <select class="form-select" formControlName="custCity">
+            <label class="text-dark"> مدينة العميل</label>
+            <select class="form-control" formControlName="custCity">
                 <option *ngFor="let city of cities" [value]="city.id">{{ city.description }}</option>
             </select>
         </div>
         <div class="col-md-6">
-            <label class="text-light"> منطقة العميل</label>
-            <select class="form-select" formControlName="custArea">
+            <label class="text-dark"> منطقة العميل</label>
+            <select class="form-control" formControlName="custArea">
                 <option *ngFor="let area of areas" [value]="area.id">{{ area.description }}</option>
             </select>
         </div>
-        <div class="col-12">
-            <label class="text-light">نقطة علام</label>
+        <div class="col-6">
+            <label class="text-dark">نقطة علام</label>
             <input type="text" class="form-control" formControlName="custLandMark">
         </div>
-        <div class="col-md-12 d-flex justify-content-center">
+        <div class="col-6">
+            <label class="text-dark">اسم التاجر</label>
+            <select class="form-control" formControlName="merchantId">
+                <option *ngFor="let Merchant of Merchants" [value]="Merchant.id">{{ Merchant.merchantName }}</option>
+            </select>     
+           </div>
+        <div class="col-md-12 d-flex justify-content-center m-2">
             <button type="submit" class="btn btn-primary col-md-2 text-center" 
                 [disabled]="customerForm.invalid">إضافة</button>
         </div>
         </div>
     </form>
-  </div>
+</div>
   
 
 
@@ -67,6 +74,7 @@
             <tr class="text-center">
                 <th>تعديل</th>
                 <th>نقطة العلام</th>
+                <th>اسم التاجر</th>
                 <th>المنطقة</th>
                 <th>المدينة</th>
                 <th>رقم جوال العميل</th>
@@ -83,13 +91,21 @@
                 <td class="text-center">
                     <input type="text" class="form-control" [(ngModel)]="customer.custLandmark">
                 </td>
+
                 <td class="text-center">
-                    <select class="form-select" [(ngModel)]="customer.custArea">
+                    <select class="form-control" [(ngModel)]="customer.merchantId">
+                        <option *ngFor="let Merchant of Merchants" [value]="Merchant.id">{{ Merchant.merchantName }}</option>
+                    </select>
+                </td>
+
+
+                <td class="text-center">
+                    <select class="form-control" [(ngModel)]="customer.custArea">
                         <option *ngFor="let area of areas" [value]="area.id">{{ area.description }}</option>
                     </select>
                 </td>
                 <td class="text-center">
-                    <select class="form-select" (change)="cityChanged($event)" [(ngModel)]="customer.custCity">
+                    <select class="form-control" (change)="cityChanged($event)" [(ngModel)]="customer.custCity">
                         <option *ngFor="let city of cities" [value]="city.id">{{ city.description }}</option>
                     </select>
                 </td>

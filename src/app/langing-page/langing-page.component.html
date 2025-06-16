@@ -381,10 +381,20 @@
                               routerLinkActive="active" routerLink="ShowAdmins">
                                عرض قائمة المدراء<span>&ThinSpace;</span>
                               </a>
-                            </li>
+                            </li> 
                             <li *ngIf="IsSuper_Admin()"> <a class="collapse-item"
                               routerLinkActive="active" routerLink="AddAdmin">
                               إضافة مستخدم جديد<span>&ThinSpace;</span>
+                                </a>
+                            </li>
+                            <li *ngIf="IsSuper_Admin()"> <a class="collapse-item"
+                              routerLinkActive="active" routerLink="SearchCustomer">
+                                اضافة او بحث عن عميل<span>&ThinSpace;</span>
+                                </a>
+                            </li>
+                            <li *ngIf="IsSuper_Admin()"> <a class="collapse-item"
+                              routerLinkActive="active" routerLink="AddServiceForCustomer">
+                                اضافة خدمة لعميل<span>&ThinSpace;</span>
                                 </a>
                             </li>
                       </div>

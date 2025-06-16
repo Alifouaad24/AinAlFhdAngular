@@ -19,6 +19,7 @@ export class CustomerSearchComponent implements OnInit {
   cities: City []= [];
   res: any[] = [];
   res1: any[] = [];
+  Merchants: any[] = [];
   searchTerm: string = '';
   filteredSuggestions: string[] = [];
   filteredSuggestion: string = '';
@@ -48,7 +49,13 @@ export class CustomerSearchComponent implements OnInit {
       this.allAreas = response
     });
 
+    this.api.getData("api/MerchantAPI").subscribe(response =>{
+      console.log("MerchantAPI", response)
+      this.Merchants = response
+    });
+
     this.customerForm = this.fb.group({
+      merchantId: [''],
       custName: ['', [Validators.required]],
       custMob: ['', [Validators.required, Validators.pattern(/^(079|078|077)[0-9]{8}$/),
          Validators.minLength(11), Validators.maxLength(11)]],
@@ -66,7 +73,6 @@ export class CustomerSearchComponent implements OnInit {
       area.cityId == cityIdValue
     )
   }
-
 
   toggleVisibility(): void {
     this.isVisible = !this.isVisible; 
@@ -126,7 +132,8 @@ export class CustomerSearchComponent implements OnInit {
       'custCity': customer.custCity,
       'custLandmark': customer.custLandmark,
       'custName': customer.custName,
-      'custNum': customer.custMob
+      'custNum': customer.custMob,
+      'merchantId': customer.merchantId
     }
     console.log(payLoad,this.custId )
     this.api.putData(`api/Customers/${customer.id}`, payLoad).subscribe(res =>{})
