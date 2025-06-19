@@ -28,6 +28,7 @@ import { RegisterComponent } from './Account/register/register.component';
 import { AddAdminComponent } from './Account/add-admin/add-admin.component';
 import { ShowAdminsComponent } from './Account/show-admins/show-admins.component';
 import { FixSheInCodesComponent } from './Store/fix-she-in-codes/fix-she-in-codes.component';
+import { TomSupplyItemsComponent } from './Store/tom-supply-items/tom-supply-items.component';
 
 export const routes: Routes = [
     {
@@ -61,10 +62,11 @@ export const routes: Routes = [
           { path: 'AddAdmin', component: AddAdminComponent },
           { path: 'ShowAdmins', component: ShowAdminsComponent },
           { path: 'fixsheincodes', component: FixSheInCodesComponent },
+          { path: 'TomSupply', component: TomSupplyItemsComponent },
 
 
 
-          {
+        {
             path: "Customers",
             component: CustomersComponent
         },

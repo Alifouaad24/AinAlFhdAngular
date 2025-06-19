@@ -102,6 +102,15 @@
           <label for="cost" class="form-label text-dark text-end">الكلفة IO</label>
           <input id="cost" formControlName="costIQ" class="form-control" readonly />
         </div>
+
+<div hidden class="form-group mb-3 col-md-2" style="width: 120px;">
+  <input
+    [(ngModel)]="realCurrIQ"
+    [ngModelOptions]="{ standalone: true }"
+    class="form-control"
+    (ngModelChange)="onRealIQChange()"
+  />
+</div>
   
         <div class="form-group mb-3 col-md-2"
         style="width: 80px;">
@@ -127,7 +136,28 @@
             readonly
           />
         </div>
-      </div>
+
+<div class="form-group mb-3 col-md-2" style="width: 120px;">
+  <label class="form-label text-dark text-end">التكلفة الفعليةIQ</label>
+  <input
+    [(ngModel)]="realIQ"
+    [ngModelOptions]="{ standalone: true }"
+    class="form-control"
+    (ngModelChange)="onRealIQChange()"
+  />
+</div>
+
+<div class="form-group mb-3 col-md-2" style="width: 120px;">
+  <label class="form-label text-dark text-end">التكلفة الفعلية$</label>
+  <input
+    [(ngModel)]="realDo"
+    [ngModelOptions]="{ standalone: true }"
+    class="form-control"
+    (ngModelChange)="onRealDoChange()"
+  />
+</div>
+</div>
+
   
       <div class="form-group mb-3 col-md-12"></div>
       <div class="row">

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/route
 import { ApiService } from '../../Services/api.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-item-to-store',
@@ -13,7 +14,9 @@ import { CommonModule } from '@angular/common';
 })
 export class AddItemToStoreComponent implements OnInit {
 
-  constructor(private http: ApiService, private route: ActivatedRoute, private router: Router) {}
+  constructor(private http: ApiService, private route: ActivatedRoute, private router: Router,
+    private toastr: ToastrService
+  ) {}
 
   api = inject(ApiService)
   Id?: number
@@ -59,6 +62,7 @@ export class AddItemToStoreComponent implements OnInit {
   subCategoryId?:  | undefined | null;
   SizeId?:  | undefined | null;
   isLoading: boolean = false;
+  isFaild: boolean = false;
   showDropDowns: boolean = true
   validSku: boolean = true
   ErrorGit: boolean = false
@@ -66,8 +70,10 @@ export class AddItemToStoreComponent implements OnInit {
   FieldFirstGet: boolean = false
   html?: string
   UPC?: string
+  SK?: string
   ItemId?: number
   LastFourDigits: boolean = false
+  SheInUrl: string = "https://ar.shein.com/pdsearch/"
 
   SearchInFinalUrl(): void {
     if(this.finalUrl == null || this.finalUrl == ""){
@@ -115,6 +121,15 @@ export class AddItemToStoreComponent implements OnInit {
     console.log("subCategory: ", this.subCategory)
   }
 
+  GoToSheIn() {
+    if (this.SK != null) {
+      window.open(`https://ar.shein.com/pdsearch/${this.SK}`, '_blank');
+    }
+    else{
+      this.toastr.error('الرمز غير صالح')
+    }
+  }
+
   GatSizes(id: number): void{
     console.log("id: ", id)
     if(id > 0){
@@ -130,7 +145,7 @@ export class AddItemToStoreComponent implements OnInit {
   ChangeView(event: Event) {
     const selectedValue = (event.target as HTMLInputElement).value;
     console.log('Selected value:', selectedValue);
-  
+    this.sku = ""
     if (selectedValue === 'AllSKU') {
       this.LastFourDigits = false
 
@@ -196,6 +211,8 @@ export class AddItemToStoreComponent implements OnInit {
       if (this.sku?.length !== 0 && this.sku?.length == 4) {
 
         this.isLoading = true;
+        this.ErrorGit = false;
+
         this.http.getData(`api/OrderDetails/GetOrderDetailsByLastFourDigits/${this.sku}`).subscribe((response) =>{
           console.log(response)
           this.imgUrl = response.orderDetails[0].item?.imgUrl;
@@ -206,9 +223,17 @@ export class AddItemToStoreComponent implements OnInit {
           this.UPC = response.orderDetails[0].item?.upc;
           this.categoryId = response.orderDetails[0].categoryId
           this.ItemId = response.orderDetails[0].item?.id;
+          this.SK = response.orderDetails[0].item?.sku;
 
           this.Count = response.count
           this.isLoading = false;
+        },(er) => {
+           this.isLoading = false;
+           this.ErrorGit = true
+           setTimeout(() => {
+             this.ErrorGit = false
+           }, 2000);
+
         })
       }
     }

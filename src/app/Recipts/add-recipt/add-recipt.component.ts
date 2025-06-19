@@ -119,12 +119,40 @@ export class AddReciptComponent implements OnInit {
         sellingUSD: res.sellingUSD,
         shippingBatchId: res.shippingBatchId || 0,
       }, { emitEvent: false });
-
       this.EditAiiiii = this.receiptForm.get('sellingPrice')?.value;
       this.totalPriceFromCust2 = this.receiptForm.get('totalPriceFromCust')?.value;
       this.ConstCost = this.receiptForm.get('cost')?.value;
+      this.realCurrIQ = this.receiptForm.get('costIQ')?.value;
      });
-   }
+  }
+
+  realDo: number = 0
+  realIQ: number = 0
+  originalCostIQ: number = 0;
+  realCurrIQ: number = 0
+
+onRealIQChange() {
+  const enteredIQ = this.realIQ || 0;
+
+  const discount = this.realCurrIQ - enteredIQ;
+  const costUSD = enteredIQ / this.exchangeRate;
+
+  this.receiptForm.get('discount')?.patchValue(discount, { emitEvent: false });
+  this.receiptForm.get('costIQ')?.patchValue(enteredIQ, { emitEvent: false });
+  this.receiptForm.get('cost')?.patchValue(costUSD.toFixed(2), { emitEvent: false });
+
+  this.realDo = parseFloat(costUSD.toFixed(2));
+}
+
+
+onRealDoChange() {
+  const discount = ((this.ConstCost ?? 0) -  this.realDo) * this.exchangeRate;
+
+  this.receiptForm.get('discount')?.patchValue(discount, { emitEvent: false });
+  this.receiptForm.get('costIQ')?.patchValue(this.realDo * this.exchangeRate, { emitEvent: false });
+  this.receiptForm.get('cost')?.patchValue(this.realDo, { emitEvent: false });
+
+}
 
   getBatches(): void {
     this.http.getData("api/ShippingBatch").subscribe(res => {
@@ -140,7 +168,6 @@ export class AddReciptComponent implements OnInit {
        
       });
 
-      console.log("this.receiptForm:  ",this.receiptForm.value)
   
       //this.receiptForm.patchValue({shippingBatchId: this.shippingBatchs[0]!.shippingBatchId})
     })
@@ -174,10 +201,6 @@ export class AddReciptComponent implements OnInit {
       this.weightUp =  this.testWeight(weight)
       this.sellingPriceInDoular = costSelectOfSaif * this.testWeight(weight) + ed
       this.costIIQ = totalInIQ
-
-      console.log("Selling IQ ngfor: ", this.EditAiiiii);
-      console.log("PriceForSell IQ ngfor: ", PriceForSell);
-
       if (this.receiptForm.get('cost')?.value !== total) {
         this.receiptForm.patchValue(
           { cost: total, 
@@ -244,11 +267,7 @@ export class AddReciptComponent implements OnInit {
     const currentSellingPrice = this.EditAiiiii || 0;
     const newValue = +this.EditIIQQ; 
     const newSellingPrice = +currentSellingPrice + newValue;
-
     const sellingUSD = newSellingPrice / this.exchangeRate;
-
-    console.log("Selling IQ Before Patch:", currentSellingPrice);
-
     if (!isNaN(newValue)) {
     const newSellingPrice = +currentSellingPrice + newValue;
 

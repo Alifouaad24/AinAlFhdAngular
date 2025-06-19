@@ -23,6 +23,8 @@
     <div class="input-group w-100">
         <input type="text" [(ngModel)]="sku" class="form-control border-primary shadow-sm" placeholder="أدخل اخر اربع ارقام">
         <button class="btn btn-info text-white ml-2 fw-bold shadow-sm" (click)="searchAboutItem()">🔍 بحث</button>
+        <button class="btn btn-info text-white ml-2 fw-bold shadow-sm" (click)="GoToSheIn()">SheIn اذهب الى</button>
+
     </div>
     <div *ngIf="isLoading" class="loading-indicator m-1 p-2">
       <i class="fas fa-spinner fa-spin"></i> 

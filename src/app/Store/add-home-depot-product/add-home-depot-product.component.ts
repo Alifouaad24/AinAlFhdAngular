@@ -205,10 +205,6 @@ SaveItemInDB(): void{
     "uPC": this.upc
 
   }
-
-    console.log(payLoad)
-
-
   this.http.postData(`api/HomeDepot`, payLoad).subscribe(res =>{
     console.log(res)
     this.toastr.success('تم حفظ المنتج بنجاح')

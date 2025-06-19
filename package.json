@@ -24,6 +24,7 @@
     "@sweetalert2/ngx-sweetalert2": "^13.0.0",
     "bootstrap-icons": "^1.11.3",
     "esbuild": "^0.24.0",
+    "jsbarcode": "^3.12.1",
     "jwt-decode": "^4.0.0",
     "ngx-infinite-scroll": "^17.0.1",
     "ngx-toastr": "^19.0.0",
