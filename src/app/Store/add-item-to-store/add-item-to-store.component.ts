@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-add-item-to-store',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, FormsModule, CommonModule ],
+  imports: [RouterLink, RouterOutlet, FormsModule, CommonModule],
   templateUrl: './add-item-to-store.component.html',
   styleUrl: './add-item-to-store.component.scss'
 })
@@ -16,7 +16,7 @@ export class AddItemToStoreComponent implements OnInit {
 
   constructor(private http: ApiService, private route: ActivatedRoute, private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   api = inject(ApiService)
   Id?: number
@@ -29,18 +29,18 @@ export class AddItemToStoreComponent implements OnInit {
     }
   }
 
-  GetOrderDetailsById(id: number): void{
+  GetOrderDetailsById(id: number): void {
     this.http.getData(`api/OrderDetails/${id}`).subscribe((response: any) => {
       console.log(response)
       this.GatSizesAll();
-      if(response.item.categoryId != null){
-        if(response.item.category.mainCategoryId != null){
+      if (response.item.categoryId != null) {
+        if (response.item.category.mainCategoryId != null) {
           this.subCategoryId = response.item.categoryId;
-        }else{
+        } else {
           this.categoryId = response.item.categoryId;
         }
       }
-      
+
       this.imgUrl = response.item.imgUrl;
       this.SizeId = response.size;
       this.WebsitePrice = response.websitePrice;
@@ -49,8 +49,8 @@ export class AddItemToStoreComponent implements OnInit {
     })
   }
   Count?: Number | null;
-  Categories?: any [] = []
-  Merchants?: any [] = []
+  Categories?: any[] = []
+  Merchants?: any[] = []
   subCategory?: any = []
   size?: any = []
   imgUrl?: string
@@ -58,9 +58,9 @@ export class AddItemToStoreComponent implements OnInit {
   finalUrl?: string
   MerchantId?: Number | null;
   WebsitePrice?: Number
-  categoryId?:  | undefined | null;
-  subCategoryId?:  | undefined | null;
-  SizeId?:  | undefined | null;
+  categoryId?: | undefined | null;
+  subCategoryId?: | undefined | null;
+  SizeId?: | undefined | null;
   isLoading: boolean = false;
   isFaild: boolean = false;
   showDropDowns: boolean = true
@@ -74,15 +74,17 @@ export class AddItemToStoreComponent implements OnInit {
   ItemId?: number
   LastFourDigits: boolean = false
   SheInUrl: string = "https://ar.shein.com/pdsearch/"
+  Qty?: number
+  MakeId?: number
 
   SearchInFinalUrl(): void {
-    if(this.finalUrl == null || this.finalUrl == ""){
+    if (this.finalUrl == null || this.finalUrl == "") {
       this.validfinalUrl = !this.validfinalUrl
-      setTimeout(() =>{
+      setTimeout(() => {
         this.validSku = !this.validSku
       }, 2000)
     }
-    else{
+    else {
       this.imgUrl = "";
       if (this.sku?.length !== 0) {
         this.isLoading = true;
@@ -98,25 +100,25 @@ export class AddItemToStoreComponent implements OnInit {
             this.imgUrl = errorText;
             this.WebsitePrice = 0
             this.isLoading = false;
-            
+
             this.ErrorGit = !this.ErrorGit
-            setTimeout(() =>{
-          this.ErrorGit = !this.ErrorGit
-        }, 3000)
+            setTimeout(() => {
+              this.ErrorGit = !this.ErrorGit
+            }, 3000)
           }
         );
       }
     }
   }
 
-  GatCategories(): void{
+  GatCategories(): void {
     this.api.getData("api/CategoriesAPI").subscribe((result) => {
       this.Categories = result
       console.log("Categories: ", this.Categories)
     })
   }
 
-  GatSubCategories(id: number): void{
+  GatSubCategories(id: number): void {
     this.subCategory = this.Categories?.filter((category: any) => category.mainCategoryId == id)
     console.log("subCategory: ", this.subCategory)
   }
@@ -125,18 +127,18 @@ export class AddItemToStoreComponent implements OnInit {
     if (this.SK != null) {
       window.open(`https://ar.shein.com/pdsearch/${this.SK}`, '_blank');
     }
-    else{
+    else {
       this.toastr.error('الرمز غير صالح')
     }
   }
 
-  GatSizes(id: number): void{
+  GatSizes(id: number): void {
     console.log("id: ", id)
-    if(id > 0){
+    if (id > 0) {
       this.api.getData(`api/SizesAPI/${id}`).subscribe((result) => {
         this.size = result
       })
-    }else{
+    } else {
       this.size = []
     }
 
@@ -154,25 +156,25 @@ export class AddItemToStoreComponent implements OnInit {
 
     }
   }
-  
 
-  GatSizesAll(): void{
-      this.api.getData(`api/SizesAPI`).subscribe((result) => {
-        this.size = result
-      })
+
+  GatSizesAll(): void {
+    this.api.getData(`api/SizesAPI`).subscribe((result) => {
+      this.size = result
+    })
   }
 
   ShowDropss(event: Event): void {
     this.showDropDowns = !(event.target as HTMLInputElement).checked;
 
-    if(this.showDropDowns == false){
+    if (this.showDropDowns == false) {
       this.categoryId = null
       this.SizeId = null
       this.subCategoryId = null
       this.MerchantId = null
     }
   }
-  
+
   goToExternalLink() {
     if (this.sku != null) {
 
@@ -180,16 +182,22 @@ export class AddItemToStoreComponent implements OnInit {
     }
   }
 
-  GetAllMerchants(): void{
+  GetAllMerchants(): void {
     this.api.getData(`api/MerchantAPI`).subscribe((response: any) => {
       this.Merchants = response
+      console.log(this.Merchants)
     })
   }
 
-  onMerchantChange(event: any): void{
-     this.MerchantId = (event.target!.value!);
+  onMerchantChange(event: any): void {
+    this.MerchantId = (event.target!.value!);
+    console.log(this.MerchantId)
   }
-  
+
+  onSubCategoryChange(event: any) {
+    console.log("SubCategoryId:", this.subCategoryId);
+  }
+
 
   onCategoryChange(event: any) {
     const selectedCategoryId = event.target.value;
@@ -200,20 +208,20 @@ export class AddItemToStoreComponent implements OnInit {
   }
 
   searchAboutItem(): void {
-    if(this.sku == null || this.sku == ""){
+    if (this.sku == null || this.sku == "") {
       this.validSku = !this.validSku
-      setTimeout(() =>{
+      setTimeout(() => {
         this.validSku = !this.validSku
       }, 2000)
     }
-    else{
+    else {
       this.imgUrl = "";
       if (this.sku?.length !== 0 && this.sku?.length == 4) {
 
         this.isLoading = true;
         this.ErrorGit = false;
 
-        this.http.getData(`api/OrderDetails/GetOrderDetailsByLastFourDigits/${this.sku}`).subscribe((response) =>{
+        this.http.getData(`api/OrderDetails/GetOrderDetailsByLastFourDigits/${this.sku}`).subscribe((response) => {
           console.log(response)
           this.imgUrl = response.orderDetails[0].item?.imgUrl;
           this.WebsitePrice = response.orderDetails[0].price
@@ -227,12 +235,12 @@ export class AddItemToStoreComponent implements OnInit {
 
           this.Count = response.count
           this.isLoading = false;
-        },(er) => {
-           this.isLoading = false;
-           this.ErrorGit = true
-           setTimeout(() => {
-             this.ErrorGit = false
-           }, 2000);
+        }, (er) => {
+          this.isLoading = false;
+          this.ErrorGit = true
+          setTimeout(() => {
+            this.ErrorGit = false
+          }, 2000);
 
         })
       }
@@ -243,23 +251,13 @@ export class AddItemToStoreComponent implements OnInit {
     this.isLoading = true;
     this.api.getData(`api/ItemAPI/${this.sku}`).subscribe(
       (response) => {
-        this.imgUrl = response.image;
-        this.WebsitePrice = response.price
+        this.imgUrl = response.img;
         this.isLoading = false;
       },
       (error) => {
         const errorText = error.error?.text || error.error;
         console.log("Error text:", errorText);
-        this.imgUrl = errorText;
-        this.WebsitePrice = 0
         this.isLoading = false;
-        this.ErrorGit = !this.ErrorGit
-        setTimeout(() =>{
-      this.ErrorGit = !this.ErrorGit
-      this.FieldFirstGet = true;
-    }, 3000)
-
-
       }
     );
   }
@@ -268,17 +266,17 @@ export class AddItemToStoreComponent implements OnInit {
     if (this.html != null && this.html !== "") {
       const blob = new Blob([this.html], { type: 'text/plain' });
       const file = new File([blob], 'content.txt', { type: 'text/plain' });
-  
+
       const formData = new FormData();
       formData.append('htmlFile', file);
-  
+
       this.http.postData('api/SheIn', formData)
         .subscribe({
           next: res => {
             console.log('تم الإرسال بنجاح!', res);
             this.imgUrl = res.img,
-            this.WebsitePrice = res.price,
-            this.sku = res.sku
+              this.WebsitePrice = res.price,
+              this.sku = res.sku
           },
           error: err => {
             console.error('فشل الإرسال', err);
@@ -286,33 +284,55 @@ export class AddItemToStoreComponent implements OnInit {
         });
     }
   }
-  
-  
-  onSizeChange(event: any): void{
+
+
+  onSizeChange(event: any): void {
     this.SizeId = event.target.value;
+    console.log("SizeId:", this.SizeId);
+
   }
+  SaveItemInStore(): void {
 
-  SaveItemInStore(): void{
-
-    var CategoryId = this.subCategory !=null ? this.subCategory : this.categoryId
+    var CategoryId = this.categoryId != null ? this.subCategoryId : this.categoryId
     var PayLoad = {
       'upc': this.UPC,
-      'categoryId': this.categoryId,
-      'subCategoryId': this.subCategoryId,
+      'sku': this.sku,//
+      'categoryId': CategoryId,//
       'sizeId': this.SizeId,
-      'merchantId': this.MerchantId,
+      'size': this.SizeId,
+      'MerchantId': this.MerchantId,
       'price': this.WebsitePrice,
+      'imgUrl': this.imgUrl,//
+      'websitePrice': this.WebsitePrice,
+      'makeId': this.MakeId
     }
 
-    if(this.ItemId != null){
-      this.api.putData(`api/ItemAPI/${this.ItemId}`, PayLoad).subscribe(result =>{
+    // search by all sku
+    var PayLoad1 = {
+      'sku': this.sku,
+      'imgUrl': this.imgUrl,
+      'makeId': 1,
+      'categoryId': CategoryId,
+      'size': this.SizeId,
+      'websitePrice': this.WebsitePrice,
+      'MerchantId': this.MerchantId,
+    }
+    console.log(PayLoad1)
+
+    if (this.ItemId != null) {
+      this.api.putData(`api/ItemAPI/${this.ItemId}`, PayLoad).subscribe(result => {
         console.log(result)
-        this.router.navigate(['LangingPage/ShowItemsInStore'], { queryParams: { updated: 'true' }})
+        this.router.navigate(['LangingPage/ShowItemsInStore'], { queryParams: { updated: 'true' } })
       })
     }
-    else{
-      this.api.postData("api/OrderDetails", PayLoad).subscribe(result =>{
-        console.log(result)
+    else {
+      this.api.postData("api/OrderDetails", PayLoad1).subscribe(result => {
+        this.toastr.success('تمت الاضافة بنجاح')
+        this.router.navigate(['LangingPage/ShowItemsInStore'], { queryParams: { updated: 'true' } })
+
+      }, (err) => {
+        this.toastr.error('الرجاء التأكد من المعلومات والمحاولة مجددا')
+
       })
     }
   }
@@ -329,4 +349,3 @@ export class AddItemToStoreComponent implements OnInit {
 }
 
 
-        

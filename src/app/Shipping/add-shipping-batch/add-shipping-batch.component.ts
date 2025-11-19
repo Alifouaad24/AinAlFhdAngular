@@ -19,7 +19,7 @@ constructor(private route: Router, private router: ActivatedRoute) {}
 
     this.router.params.subscribe( params => {
       console.log("params in add is: ", params['params'])
-      this.ShippingType = params['params']
+      this.ShippingTypeId = +params['params']
 
 
     })
@@ -31,8 +31,8 @@ constructor(private route: Router, private router: ActivatedRoute) {}
         this.ShippingDate = data.shippingDate 
         ? new Date(data.shippingDate).toISOString().split('T')[0] 
         : new Date().toISOString().split('T')[0];    
-          this.ArriveDate = new Date(data.arrivelDate).toISOString().split('T')[0]
-          this.EntryDate = new Date(data.entryDate).toISOString().split('T')[0]
+          this.ArriveDate = new Date(data.arrivelDate).toLocaleDateString('yyyy-MM-dd').split('T')[0]
+          this.EntryDate = new Date(data.entryDate).toLocaleDateString('yyyy-MM-dd').split('T')[0]
           this.ShippingTypeId = data.shippingTypeId
           this.ShippingBatchId = data.shippingBatchId
           this.CostInUSD = data.batchCostUS
@@ -42,7 +42,7 @@ constructor(private route: Router, private router: ActivatedRoute) {}
     this.GetAllShippingTypes();
   }
 
-  ShippingType?: string
+  ShippingType?: number
   ShippingDate: string = new Date().toISOString().split('T')[0];
   ArriveDate: string = new Date().toISOString().split('T')[0];
   EntryDate: string = new Date().toISOString().split('T')[0];
@@ -58,14 +58,10 @@ constructor(private route: Router, private router: ActivatedRoute) {}
     this.api.getData('api/ShippingTypes').subscribe((data) => {
       console.log(data);
       this.shippingTypes = data;
-      const matchingType = this.shippingTypes.find(el => el.description && el.description.includes("جوي"));
-      this.ShippingTypeId = matchingType ? matchingType.shippingTypeId : null;
-  
-      console.log("this.ShippingTypeId: ", this.ShippingTypeId);
+      this.ShippingTypeId = this.shippingTypes.find(el => el.shippingTypeId === this.ShippingTypeId).shippingTypeId;
     });
   }
   
-
   AddBatch(): void{
 
     if(this.ShippingBatchId == null){
@@ -77,13 +73,15 @@ constructor(private route: Router, private router: ActivatedRoute) {}
         'shippingTypeId': this.ShippingTypeId,
         'batchCostUS': this.CostInUSD
       }
+
+      console.log(payLoad)
   
       this.api.postData("api/ShippingBatch", payLoad).subscribe((res: any) => {
         if(res){}
         
       });
       
-      this.route.navigate(['LangingPage/ShippingBatch'])
+      this.route.navigate(['LangingPage/ShippingBatch'], { queryParams: { ShippId: this.ShippingTypeId }})
     }
     else{
       const payLoad = {
@@ -97,7 +95,7 @@ constructor(private route: Router, private router: ActivatedRoute) {}
   
       this.api.putData(`api/ShippingBatch/${this.ShippingBatchId}`, payLoad).subscribe((res: any) => {});
       
-      this.route.navigate(['LangingPage/ShippingBatch'])
+      this.route.navigate(['LangingPage/ShippingBatch'], { queryParams: { ShippId: this.ShippingTypeId }})
     }
 
   }

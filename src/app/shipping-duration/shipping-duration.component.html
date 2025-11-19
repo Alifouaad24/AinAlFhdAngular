@@ -1,0 +1,57 @@
+<div dir="rtl" class="container py-5 min-vh-100 d-flex flex-column align-items-center justify-content-start">
+
+  <div class="card shadow-lg border-0 rounded-4 p-4 col-12 col-md-8 col-lg-6">
+    <h4 class="fw-bold text-center mb-4 text-primary">🔎 تتبع شحنتك</h4>
+
+    <!-- نوع الشحن -->
+    <div class="mb-4">
+      <label for="shippingType" class="form-label fw-bold d-block mb-2 text-center text-secondary">اختر نوع
+        الشحن</label>
+      <div class="d-flex flex-column gap-2">
+        <div class="border rounded p-2 shadow-sm d-flex justify-content-between" dir="rtl">
+          <button *ngFor="let sh of SippingTypes ?? []; let i = index" class="btn me-2" [ngClass]="{
+          'btn-warning': sh.shippingTypeId == shippId,
+          'btn-success': sh.shippingTypeId != shippId
+        }" (click)="SetShippId(sh.shippingTypeId)">
+            {{ sh.description }}
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="mb-4">
+      <label class="form-label text-center fw-bold d-block mb-2 text-secondary">تاريخ وصول الطرد الى<span> {{ city }}
+        </span></label>
+      <input type="date" class="form-control shadow-sm" [(ngModel)]="arrivelDate" />
+    </div>
+
+
+
+    <!-- زر البحث -->
+    <div class="mb-3">
+      <button class="btn btn-primary w-100 py-2 shadow-sm fw-bold" (click)="Search()">
+        <i class="fa fa-search me-2"></i> بحث
+      </button>
+    </div>
+
+    <!-- النتيجة -->
+    <div style="font-size: large;" class="alert alert-dark text-center fw-semibold" *ngIf="ShowModel">
+      من المتوقع وصول الطرد بين
+      <span class="text-success">{{Start}}</span>
+      و
+      <span class="text-danger">{{End}}</span>
+      <br />
+      <hr />
+      <h4 class="m-3">
+        في حال حدوث تأخير يرجى التواصل مع الإدارة عبر الواتس
+        <button class="btn btn-sm btn-success mt-2" (click)="GoToWhatsApp()">
+          <i class="fab fa-whatsapp"></i>
+        </button>
+      </h4>
+
+    </div>
+  </div>
+
+</div>

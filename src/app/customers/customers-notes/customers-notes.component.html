@@ -1,0 +1,27 @@
+<div style="font-size: x-large;" class="text-center p-3 m-3 bg-warning text-light">ملاحظات الزبائن</div>
+<table class="table table-bordered table-striped text-center align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>تمت المشاهدة</th>
+            <th>الملاحظة</th>
+            <th>اسم الزبون</th>
+            <th>#</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let note of allNotes; let i = index">
+            <td>
+                <button class="btn btn-sm btn-warning" (click)="SetNoteAsRead(note.id)">
+                    <i class="fa fa-eye"></i>
+                </button>
+            </td>
+            <td>
+                <button class="btn btn-link p-0" (click)="showNote(note.description)">
+                    {{ note.description?.length > 30 ? (note.description | slice:0:30) + '...' : note.description }}
+                </button>
+            </td>
+            <td>{{ note.customer?.custName }}</td>
+            <td>{{ i + 1 }}</td>
+        </tr>
+    </tbody>
+</table>

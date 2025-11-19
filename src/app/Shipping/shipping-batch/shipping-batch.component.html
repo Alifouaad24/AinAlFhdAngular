@@ -12,6 +12,7 @@
               <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
               <thead>
                 <tr>
+                  <th></th>
                   <th *ngIf="IsAdmin()" style="width: 20%;">تعديلات</th>
                   <th>طباعة PDF</th>
                   <th>عدد الإيصالات</th>
@@ -22,6 +23,7 @@
               </thead>
               <tfoot>
                 <tr>
+                  <th></th>
                   <th *ngIf="IsAdmin()" style="width: 20%;">تعديلات</th>
                   <th>طباعة PDF</th>
                   <th>عدد الإيصالات</th>
@@ -32,6 +34,11 @@
               </tfoot>
                 <tbody>
                 <tr *ngFor="let ships of ShippingBatches; let i = index" class="odd">
+                  <td>
+                    <button class="btn btn-info" (click)="ShowReceipits(ships.shippingBatchId)">
+                      <i class="fa fa-eye"></i>
+                    </button>
+                  </td>
                   <td *ngIf="IsAdmin()">
                     <button [routerLink]="['AddUpdateShippingBatch', ships.shippingBatchId]" class="btn btn-sm btn-primary me-2">
                         <i class="fas fa-edit"></i>
@@ -126,6 +133,24 @@
     </div>
   </div>
 
+
+  <!-- //// -->
+<!-- Modal -->
+<div class="modal fade" id="userInfoModal" tabindex="-1" aria-labelledby="userInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" dir="rtl">
+      <div *ngFor="let r of receiptsToShow" class="modal-body d-flex flex-column col-md-12 align-items-start">
+        <div class="mb-2">{{ r.customer?.custName }}</div>
+        <div class="mb-2">{{ r.customer.city?.description }} - {{ r.customer.area?.description }}</div>
+        <div class="mb-2">{{ r.customer?.custMob }}</div> 
+        <div class="mb-2">
+          {{ r.sellingPrice | number:'1.0-0' }}&nbsp;(دينار عراقي | غير شامل للتوصيل)
+        </div>
+        ..........................
+      </div>
+    </div>
+  </div>
+</div>
 
 
   <!-- /////////////// -->

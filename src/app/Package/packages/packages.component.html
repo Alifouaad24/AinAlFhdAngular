@@ -1,0 +1,174 @@
+<div class="mb-4 text-end">
+  <a routerLink="/LangingPage/AddPackages" [queryParams]="{ shippType: ShippType }" class="btn btn-success mr-1">
+    <i class="fas fa-plus"></i> إضافة طرد
+  </a>
+  <a *ngIf="Packages.length > 0" routerLink="/LangingPage/customersbyshipptype" [queryParams]="{ shippType: ShippType }" class="btn btn-primary">
+    <i class="fas fa-users"></i>
+  </a>
+</div>
+<div class="row d-flex justify-content-end p-2 m-2">
+  <div *ngIf="packagesToPrint.length > 0" class="d-flex flex-column align-items-end m-1">
+    <label>.</label>
+    <button class="btn btn-warning" type="button" data-toggle="modal" (click)="calcTotals()"
+      data-target="#packagesModal">طباعة قصاصة</button>
+  </div>
+  <div class="d-flex flex-column align-items-end m-1">
+    <label>.</label>
+    <button class="btn btn-info" (click)="AllPackages()">الكل</button>
+  </div>
+  <div class="d-flex flex-column align-items-end m-1">
+    <label>.</label>
+    <button class="btn btn-warning" (click)="PrintPDF()">PDF</button>
+  </div>
+  <div class="d-flex flex-column align-items-end m-1">
+    <label>.</label>
+    <button class="btn btn-primary" (click)="FilterPackages()">بحث</button>
+  </div>
+  <div class="d-flex flex-column align-items-end m-1">
+    <label>الى تاريخ</label>
+    <input class="form-control" type="date" [(ngModel)]="endSearchDate" />
+  </div>
+  <div class="d-flex flex-column align-items-end m-1">
+    <label>من تاريخ</label>
+    <input class="form-control" type="date" [(ngModel)]="startSearchDate" />
+  </div>
+</div>
+
+<div class="card">
+  <h3 class="card-header text-center bg-primary text-light fs-4">الطرود</h3>
+  <h4 class="card-header text-center bg-primary text-light fs-4">{{ Packages[0]?.shippingType?.description ?? "" }}</h4>
+
+  <div class="card-body p-0">
+    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+      <table border="2" class="table table-bordered table-striped text-center align-middle mb-0">
+        <thead class="table-light" style="background-color: blanchedalmond;">
+          <tr>
+            <th>الإجراءات</th>
+            <th>المبيع بالعراقي</th>
+            <th>سعر البيع</th>
+            <th>سعر الشراء</th>
+            <th>الوزن الحجمي</th>
+            <th>الوزن الفعلي</th>
+            <th>تاريخ الطرد</th>
+            <th>العميل</th>
+            <th>#</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pkg of Packages; let i = index">
+            <td>
+              <button (click)="DeletePackage(pkg.packageId)" class="btn btn-sm m-1 btn-danger">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+              <a (click)="EditPackage(pkg.packageId)" class="btn btn-sm m-1 btn-warning">
+                <i class="fas fa-edit"></i>
+              </a>
+            </td>
+            <td>{{ pkg.sallingPriceIQ }} IQ</td>
+            <td style="color: brown;">{{ pkg.sallingPrice }} {{ pkg.saleCurrency.currency_name }}</td>
+            <td style="color: brown;">{{ pkg.purcheasCost }} {{ pkg.purchaseCurrency?.currency_name }}</td>
+            <td>{{ pkg.dimentioalWeight }}</td>
+            <td>{{ pkg.actualWeight }}</td>
+            <td>{{ pkg.packageDt }}</td>
+            <td><a [href]="'https://wa.me/' + '964' + pkg.customer?.custMob?.substring(1)">{{ pkg.customer?.custName }}</a></td>
+            <td><input type="checkbox" (change)="PushOrPupPackageTolIST(pkg)" /></td>
+
+          </tr>
+          <tr *ngIf="Packages == null">
+            <td colspan="10" class="text-center text-muted">لا توجد طرود</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr />
+
+    <!-- جدول الإجماليات تحت الجدول الأول -->
+    <table class="table table-bordered text-center mt-3">
+      <thead class="table-light" style="background-color: bisque;">
+        <tr>
+          <th>اجمالي الربح بالعراقي</th>
+          <th>اجمالي الربح بالدولار</th>
+          <th>اجمالي المبيع بالعراقي</th>
+          <th>اجمالي المبيع بالدولار</th>
+          <th>اجمالي التكلفة</th>
+          <th>اجمالي الوزن</th>
+          <th>عدد الطرود</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ totalProfitIQ | number:'1.2-2' }} IQ</td>
+          <td>{{ totalProfitDollar | number:'1.2-2' }} $</td>
+          <td>{{ totalSellIQ | number:'1.2-2' }} IQ</td>
+          <td>{{ totalSellDollar | number:'1.2-2' }} {{ saleCurrency }}</td>
+          <td>{{ totalCost | number:'1.2-2' }} {{ purcheasCurrency }}</td>
+          <td>{{ totalWeight | number:'1.2-2' }} KG</td>
+          <td>{{ allPackagesNumber }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- المودال -->
+<div class="modal fade" id="packagesModal" tabindex="-1" role="dialog" aria-labelledby="packagesModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" dir="rtl">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="packagesModalLabel">📦 الطرود المختارة</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="إغلاق">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body p-0">
+        <div class="table-responsive">
+          <table class="table table-striped mb-0 text-center">
+            <thead class="thead-light">
+              <tr>
+                <th>#</th>
+                <th>العميل</th>
+                <th>المدينة</th>
+                <th>المنطقة</th>
+                <th>رقم الهاتف</th>
+                <th>المبلغ</th>
+                <th>عدد الطرود</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let p of groupedPackages; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ p.customerName }}</td>
+                <td>{{ p.city }}</td>
+                <td>{{ p.area }}</td>
+                <td>{{ p.custMob }}</td>
+                <td>{{ cielNumber(p.totalSale) }} IQ</td>
+                <td>{{ p.count }}</td>
+              </tr>
+              <tr *ngIf="groupedPackages.length === 0">
+                <td colspan="7">🚫 لا توجد طرود مختارة</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-between">
+        <div class="text-right">
+          <div>💰 إجمالي التكلفة: <strong>{{ ttotalCost }}</strong></div>
+          <div>💵 إجمالي المبيع: <strong>{{ totalSale * ExchangeRate }}</strong></div>
+          <div>📊 صافي الحساب: <strong>{{ cielNumber((totalSale * ExchangeRate) - ttotalCost) }}</strong></div>
+        </div>
+        <button class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+      </div>
+    </div>
+  </div>
+</div>
+<button type="button" class="close" data-dismiss="modal">
+  <span>&times;</span>
+</button>

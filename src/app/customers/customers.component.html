@@ -1,1 +1,41 @@
-<p>customers works!</p>
+<!-- customers.component.html -->
+<div class="d-flex flex-wrap justify-content-between gap-3 m-2">
+  <label
+    *ngFor="let shipp of ShippingTypes"
+    class="shipping-option card text-center shadow-sm border-0"
+  >
+    <input
+      type="radio"
+      name="shipping"
+      [value]="shipp.shippingTypeId"
+      (change)="getCustomersbyShippId(shipp.shippingTypeId)"
+      class="d-none"
+    />
+    <div class="card-body py-3 px-4">
+      <i class="fas fa-truck text-success fs-3 mb-2"></i>
+      <h6 class="fw-bold text-dark m-0">{{ shipp.description }}</h6>
+    </div>
+  </label>
+</div>
+
+
+<h3 class="text-center bg-success text-light p-3 m-2">{{ labb }}</h3>
+<table class="table table-bordered text-center">
+  <thead>
+    <tr>
+      <th>رقم الجوال</th>
+      <th>اسم الزبون</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let customer of customers">
+        <td>
+            <a [href]="getWhatsAppLink(customer.customer.custMob)" target="_blank">
+                {{ customer.customer.custMob }}
+            </a>
+        </td>
+        <td>{{ customer.customer.custName }}</td>
+    </tr>
+  </tbody>
+</table>
+

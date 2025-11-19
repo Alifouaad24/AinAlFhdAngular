@@ -1,0 +1,20 @@
+.shipping-option {
+  width: 180px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 2px solid transparent;
+  border-radius: 12px;
+}
+
+.shipping-option:hover {
+  transform: translateY(-4px);
+  border-color: #a3e4d7;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.shipping-option input:checked + .card-body,
+.shipping-option:has(input:checked) {
+  background-color: #d1f7e3;
+  border: 2px solid #2ecc71;
+  box-shadow: 0 0 8px rgba(46, 204, 113, 0.6);
+}

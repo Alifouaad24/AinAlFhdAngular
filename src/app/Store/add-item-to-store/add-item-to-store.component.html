@@ -90,28 +90,26 @@
 
           <div [ngClass]="{'visiblity': !showDropDowns}" class="form-group mt-3">
               <label class="fw-bold text-secondary">📁 الفئة الفرعية</label>
-              <select class="form-control border-primary shadow-sm">
-                <option></option>
-
-                  <option *ngFor="let sub of subCategory" [value]="sub.categoryId">
-                      {{ sub.categoryName }}
-                  </option>
+              <select [(ngModel)]="subCategoryId" class="form-control" (change)="onSubCategoryChange($event)">
+                <option *ngFor="let sub of subCategory" [value]="sub.categoryId">
+                  {{ sub.categoryName }}
+                </option>
               </select>
+
           </div>
 
           <div [ngClass]="{'visiblity': !showDropDowns}" class="form-group mt-3">
             <label class="fw-bold text-secondary">📏 المقاس</label>
-              <select class="form-control border-primary shadow-sm" [(ngModel)]="SizeId" (change)="onSizeChange($event)">
-                <option></option>
-                  <option *ngFor="let s of size" [value]="s.id">
-                      {{ s.description }}
-                  </option>
+              <select class="form-control" [(ngModel)]="SizeId" (change)="onSizeChange($event)">
+                <option *ngFor="let s of size" [value]="s.id">
+                    {{ s.description }}
+                </option> 
               </select>
           </div>
 
           <div [ngClass]="{'visiblity': !showDropDowns}" class="mt-3">
             <label class="text-secondary fw-bold">سعر المنتج</label>
-            <input [(ngModel)]="WebsitePrice" class="form-control" type="text">
+            <input [(ngModel)]="WebsitePrice" class="form-control" type="number">
           </div>
           <div [ngClass]="{'visiblity': !showDropDowns}" class="mt-3">
             <label class="text-secondary fw-bold">رابط الصورة</label>
@@ -122,7 +120,7 @@
             <label class="fw-bold text-secondary">اسم التاجر</label>
             <select class="form-control border-primary shadow-sm" (change)="onMerchantChange($event)">
                 <option></option>
-                <option *ngFor="let merchant of Merchants" [value]="merchant.merchantId">
+                <option *ngFor="let merchant of Merchants" [value]="merchant.id">
                     {{ merchant.merchantName }}
                 </option>
             </select>

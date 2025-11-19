@@ -6,6 +6,7 @@ import { Receipt } from '../Models/Recipt';
 import { RoleService } from '../Auth/role.service';
 import { DecodeTokenService } from '../Services/decode-token.service';
 
+
 @Component({
   selector: 'app-langing-page',
   standalone: true,
@@ -21,22 +22,41 @@ export class LangingPageComponent {
   router = inject(Router);
   decodeToken = inject(DecodeTokenService)
 
-  constructor() {}
+  constructor() { }
+
+  hasShippingSubcategory(parentId: number): boolean {
+    return this.SubRoutes.some(sub => sub.sub_category_id === parentId && sub.name.includes('شحن'));
+  }
+
+  hasCustomerSubcategory(parentId: number): boolean {
+    return this.SubRoutes.some(sub => sub.sub_category_id === parentId && sub.name.includes('زبائن'));
+  }
+
+  getShippingSubId(parentId: number): number | null {
+    const match = this.SubRoutes.find(sub => sub.sub_category_id === parentId && sub.name.includes('شحن'));
+    return match ? match.id : null;
+  }
+
+  getCustomerSubId(parentId: number): number | null {
+    const match = this.SubRoutes.find(sub => sub.sub_category_id === parentId && sub.name.includes('زبائن'));
+    return match ? match.id : null;
+  }
+
 
   getUserRole(): string | null {
     const token = localStorage.getItem('token');
     if (!token) return null;
     const payload = token.split('.')[1];
     const decodedPayload = atob(payload);
-    const tokenData = JSON.parse(decodedPayload); 
+    const tokenData = JSON.parse(decodedPayload);
     return tokenData['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || null;
   }
 
-  GetCurrentUser(): void{
+  GetCurrentUser(): void {
     const token = localStorage.getItem('token');
     const payload = token!.split('.')[1];
     const decodedPayload = atob(payload);
-    const tokenData = JSON.parse(decodedPayload); 
+    const tokenData = JSON.parse(decodedPayload);
     var userName = tokenData['unique_name'];
     this.http.getData(`api/Account/${userName}`).subscribe((r: Receipt[]) => {
       this.currentUser = r;
@@ -45,12 +65,14 @@ export class LangingPageComponent {
 
   isAdmin: boolean = false
   recipts: Receipt[] = [];
-  selectSideBar: string ='';
+  selectSideBar: string = '';
   env: string = ''
   activeButton = ''
   currentUser: any = null;
   isSidebarOpen = false;
-  
+  Routes: any = null;
+  SubRoutes: any[] = [];
+
   getData(): void {
     this.http.getData("api/Reciept/GetLastFiveRecords").subscribe((r: Receipt[]) => {
       this.recipts = r;
@@ -58,12 +80,110 @@ export class LangingPageComponent {
     })
   }
 
-  showSideBar(selectSide: string): void{
+  showSideBar(selectSide: string): void {
     this.selectSideBar = selectSide;
     this.activeButton = selectSide
   }
 
+
+
+
+  GetSystems() {
+    this.http.getData("api/System/GetAllSystemsForAinAlFhd").subscribe(res => {
+      this.Routes = res;
+      console.log(this.Routes);
+
+      const dynamicRoutes = this.Routes.map((route: any) => ({
+        path: route.routingName,
+        loadComponent: () => this.getComponentByPath(route.routingName)
+      }));
+
+      const currentConfig = this.router.config;
+      const landingPageRoute = currentConfig.find(r => r.path === 'LangingPage');
+      if (landingPageRoute && landingPageRoute.children) {
+        landingPageRoute.children.push(...dynamicRoutes);
+      }
+
+      this.router.resetConfig(currentConfig);
+
+      this.SubRoutes = [];
+
+      this.Routes.forEach((el: any) => {
+        this.http.getData(`api/System/GetAllSystemsByMainSys/${el.id}`).subscribe((res: any[]) => {
+          this.SubRoutes.push(...res);
+
+          const dynamicRoutes = res
+            .filter(route => route.routingName)
+            .map((route: any) => ({
+              path: route.routingName,
+              loadComponent: () => this.getComponentByPath(route.routingName)
+            }));
+
+          const currentRoutes = this.router.config;
+          const landingPageRoute1 = currentRoutes.find(r => r.path === 'LangingPage');
+          if (landingPageRoute1 && landingPageRoute1.children) {
+            landingPageRoute1.children.push(...dynamicRoutes);
+          }
+        });
+      });
+      console.log("SubRoutes", this.SubRoutes)
+
+    });
+  }
+
+
+
+  async getComponentByPath(path: string): Promise<any> {
+    switch (path) {
+      case 'Store':
+        const { StoreComponent } = await import('../AinAlFhd/store/store.component');
+        return StoreComponent;
+
+      case 'CustomerServicesFromDB':
+        const { CustomerServicesComponent } = await import('../AinAlFhd/customer-services/customer-services.component');
+        return CustomerServicesComponent;
+
+      case 'Services':
+        const { ServicesComponent } = await import('../AinAlFhd/services/services.component');
+        return ServicesComponent;
+
+      case 'Seals':
+        const { SealesComponent } = await import('../AinAlFhd/seales/seales.component');
+        return SealesComponent;
+
+      case 'SearchCustomer':
+        const { CustomerSearchComponent } = await import('../customers/customer-search/customer-search.component');
+        return CustomerSearchComponent;
+
+      case 'Customers':
+        const { CustomersComponent } = await import('../customers/customers.component');
+        return CustomersComponent;
+
+      case 'AddSheInProduct':
+        const { AddItemToStoreComponent } = await import('../Store/add-item-to-store/add-item-to-store.component');
+        return AddItemToStoreComponent;
+
+      case 'myStore':
+        const { ShowInventoryComponent } = await import('../Store/show-inventory/show-inventory.component');
+        return ShowInventoryComponent;
+
+      case 'ShippingTypesNew':
+        const { ShowShippingTypesForNavigateComponent } = await import('../show-shipping-types-for-navigate/show-shipping-types-for-navigate.component');
+        return ShowShippingTypesForNavigateComponent;
+
+
+      case 'sheinIraq':
+        const { FixSheInCodesComponent } = await import('../Store/fix-she-in-codes/fix-she-in-codes.component');
+        return FixSheInCodesComponent;
+
+      default:
+        throw new Error(`No component found for path: ${path}`);
+    }
+  }
+
+
   ngOnInit(): void {
+    this.GetSystems()
     this.getData();
     this.http.getData("api/Enviroment").subscribe(res => {
       this.env = res.db_env;
@@ -97,13 +217,13 @@ export class LangingPageComponent {
 
 
   toggleSidebar() {
-      this.isSidebarOpen = !this.isSidebarOpen;
-      const sidebar = document.getElementById('accordionSidebar');
-      if (this.isSidebarOpen) {
-          sidebar?.classList.add('toggled');
-      } else {
-          sidebar?.classList.remove('toggled');
-      }
+    this.isSidebarOpen = !this.isSidebarOpen;
+    const sidebar = document.getElementById('accordionSidebar');
+    if (this.isSidebarOpen) {
+      sidebar?.classList.add('toggled');
+    } else {
+      sidebar?.classList.remove('toggled');
+    }
   }
 
 }

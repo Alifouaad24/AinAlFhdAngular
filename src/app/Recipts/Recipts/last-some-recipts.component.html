@@ -7,6 +7,19 @@
 </div>
 <div class="p-1">
   <button class="btn btn-success" (click)="PrintPDF()">Print <i class="fa fa-file-pdf"></i></button>
+<a class="btn btn-primary m-1"
+   [routerLink]="['/LangingPage/ShippingBatch']"
+   [queryParams]="{ ShippId: currectShippingType ?? ShipppIId }">
+   الوجبات <i class="fa fa-truck"></i>
+</a>
+
+  <a *ngIf="shipIdToFilter" class="btn btn-info m-1"
+  routerLink="LangingPage/ShippingBatch/AddRecipt"
+  [queryParams]="{ ShippId: shipIdToFilter }">
+  اضافة ايصال <i class="fa fa-plus"></i>
+</a>
+
+
 </div>
 
 <div class="row justify-content-end align-items-center g-3 p-2">
@@ -77,3 +90,18 @@
 
 
    
+<!-- Modal -->
+<div class="modal fade" id="userInfoModal" tabindex="-1" aria-labelledby="userInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" dir="rtl">
+      <div class="modal-body d-flex flex-column col-md-12 align-items-start" *ngIf="selectedRecipt">
+        <div class="mb-2">{{ selectedRecipt.customer?.custName }}</div>
+        <div class="mb-2">{{ selectedRecipt.customer.city?.description }} - {{ selectedRecipt.customer.area?.description }}</div>
+        <div class="mb-2">{{ selectedRecipt.customer?.custMob }}</div> 
+        <div class="mb-2">
+          {{ selectedRecipt.sellingPrice | number:'1.0-0' }}&nbsp;(دينار عراقي | غير شامل للتوصيل)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

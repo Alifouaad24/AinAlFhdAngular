@@ -7,7 +7,7 @@ import { RoleService } from '../../Auth/role.service';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 declare var $: any;
-
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-last-some-recipts',
@@ -37,7 +37,8 @@ oneKGProfitInIQ: number = 0
 totalCostIQ: number = 0
 pureAcc: number = 0;
 currentUser: string = ""
-
+currectShippingType?: number
+ShipppIId?: number;
   title = 'Ain AlFahd Company';
   http = inject(ApiService);
   httpp = inject(HttpClient);
@@ -46,25 +47,26 @@ currentUser: string = ""
     private route: ActivatedRoute,
     private router: Router, private zone: NgZone, private cdr: ChangeDetectorRef  ) {
 
-      this.getData(); 
   }
   ngOnInit(): void {
-    
-    this.getData();
-    this.getExChg();
     this.route.queryParams.subscribe(params => {
-      if (params['ShippIdToFilter']) {
+      if (params['ShippIdToFilter'] && params['ShippId']) {
         this.shipIdToFilter = +params['ShippIdToFilter']; 
+        this.ShipppIId = +params['ShippId']
         this.filterRecipts(this.shipIdToFilter);
       }
       else if (params['updated'] === 'true') {
         this.getData();
       }
+      else if (params['ShippId']) {
+        this.currectShippingType = +params['ShippId']
+        console.log("this.currectShippingType: ",this.currectShippingType)
+        this.getData();
+      }
   
 
     });
-  
-
+    this.getExChg();
     this.initializeDataTable();
   }
   
@@ -74,6 +76,7 @@ currentUser: string = ""
       $('#dataTable').DataTable().destroy();
     }
   }
+selectedRecipt: any = null;
 
   initializeDataTable() {
     if (!$.fn.dataTable.isDataTable('#dataTable')) {
@@ -83,6 +86,14 @@ currentUser: string = ""
         ordering: true,
         destroy: true,
         columns: [
+          {
+          render: (data: any, type: any, row: { recieptId: any; }) => {
+            return `
+              <button class="btn btn-info m-1 user-info-btn" data-id="${row.recieptId}">
+                <i class="fas fa-eye"></i>
+              </button>
+            `;
+          }},
           { 
             data: null, 
             title: 'العمليات', 
@@ -117,6 +128,18 @@ currentUser: string = ""
           this.DeleteRecipt(recieptId);
         });
 
+        $('#dataTable').on('click', '.user-info-btn', (event: any) => {
+          const id = $(event.currentTarget).data('id');
+          const selected = this.recipts.find(x => x.recieptId == id);
+          console.log(selected)
+          this.zone.run(() => {
+            this.selectedRecipt = selected;
+            const modal = new bootstrap.Modal(document.getElementById('userInfoModal')!);
+            modal.show();
+          });
+        });
+
+
         $('#dataTable').on('click', '.btn-warning', (event: { currentTarget: any; }) => {
           const recieptId = $(event.currentTarget).attr('id').replace('editBtn', '');
           this.zone.run(() => { 
@@ -143,7 +166,8 @@ currentUser: string = ""
 
   getData(): void {
 
-    this.http.getData("api/Reciept").subscribe((r: Receipt[]) => {
+    this.http.getData("api/Reciept").subscribe((r: any) => {
+      console.log("r: " , r)
       this.recipts = r;
       this.totalProfit = 0;
       this.totalCost = 0;
@@ -161,6 +185,14 @@ currentUser: string = ""
         const dateB = b.recieptDate ? new Date(b.recieptDate) : new Date(0);
         return dateB.getTime() - dateA.getTime(); 
       });
+
+      this.recipts = this.recipts.filter((receipt: any) => {
+        return receipt!.shippingBatch?.shippingTypeId! === this.currectShippingType;
+      });
+
+        console.log("recipts After: ",this.recipts)
+
+
       // حساب القيم الإجمالية
       this.recipts.forEach(recipt => {
         this.totalProfit += recipt.totalPriceFromCust!;
@@ -238,7 +270,10 @@ currentUser: string = ""
     this.oneKGProfitInUSD = 0;
     this.oneKGProfitInIQ = 0;
 
-    newFilter.map(el =>{
+    this.recipts = newFilter
+
+
+    this.recipts.map(el =>{
       this.totalProfit +=  el.totalPriceFromCust!;
       this.totalCost +=  el.cost!;
       this.totalLines++;
@@ -246,6 +281,8 @@ currentUser: string = ""
       //this.totalSellUSD += el.sellingUSD!;
       //this.totalCostIQ += el.costIQ!;
     });
+
+    console.log("newFilter: ", newFilter)
 
     this.totalCostIQ = this.totalCost * this.exChangeRate;
     this.totalSellUSD = this.totalProfit / this.exChangeRate;
@@ -269,12 +306,14 @@ currentUser: string = ""
         if(response){}
       },(error =>{
        this.zone.run(() => {
-        const afterDelete = this.recipts.filter(rec => rec.recieptId !== rId); // حذف الوصل من المصفوفة
-        if ($.fn.dataTable.isDataTable('#dataTable')) {
-          let table = $('#dataTable').DataTable(afterDelete);
-          table.clear().rows.add(this.recipts).draw(); // تحديث الجدول بعد الحذف
-        }
-        this.cdr.detectChanges();
+        this.recipts = this.recipts.filter(rec => rec.recieptId !== rId);
+
+      if ($.fn.dataTable.isDataTable('#dataTable')) {
+        const table = $('#dataTable').DataTable();
+        table.clear().rows.add(this.recipts).draw();
+      }
+
+      this.cdr.detectChanges();
       });
       })
     );
@@ -285,7 +324,7 @@ currentUser: string = ""
   PrintPDF(): void {
     const shipId = this.shipIdToFilter;
     let patch;
-    let url = `http://saifsfo-002-site19.atempurl.com/api/Reciept/GeneratePdf`;
+    let url = `http://saifsfo-002-site21.atempurl.com/api/Reciept/GeneratePdf`;
   
     if (shipId !== null && shipId !== undefined) {
       url += `/${shipId}`;
@@ -389,7 +428,7 @@ currentUser: string = ""
     const edate = new Date(year1, month1 - 1, day1); 
     const e = (edate.getMonth() + 1) + '-' + edate.getDate() + '-' + edate.getFullYear();
 
-    let url = `http://saifsfo-002-site19.atempurl.com/api/Reciept/GeneratePdfByDate/${s}/${e}`;
+    let url = `http://saifsfo-002-site21.atempurl.com/api/Reciept/GeneratePdfByDate/${s}/${e}`;
   
     this.httpp.get(url, { responseType: 'blob' }).subscribe(
       (response) => {

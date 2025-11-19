@@ -1,0 +1,25 @@
+.links-container {
+  display: flex;
+  flex-wrap: wrap;  /* يسمح للعناصر بالانتقال للسطر التالي عند الوصول للحد */
+  gap: 15px;        /* المسافة بين العناصر */
+}
+
+.link-item {
+  flex: 1 0 30%;    /* تجعل كل عنصر يشغل 30% من العرض */
+  min-width: 200px; /* حد أدنى لعرض العناصر */
+  box-sizing: border-box;
+}
+
+a {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  background-color: #746aaa;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+a.active {
+  background-color: #0056b3;
+}

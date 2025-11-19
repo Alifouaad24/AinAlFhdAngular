@@ -1,0 +1,32 @@
+<div class="container mt-4">
+  <h3 class="mb-3 text-center text-success fw-bold">قائمة الزبائن</h3>
+  <h3 class="mb-3 text-center text-danger fw-bold">{{ count }} <strong class="text-dark">:العدد</strong></h3>
+
+  <!-- نخلي التمرير على مستوى الـ table-container فقط -->
+  <div class="table-container shadow-sm rounded">
+    <table class="table table-hover align-middle text-center mb-0">
+      <thead class="sticky-header">
+        <tr>
+          <th style="width: 25%">رقم الهاتف</th>
+          <th style="width: 55%">اسم الزبون</th>
+          <th style="width: 20%">#</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let customer of customers; let i = index">
+          <td dir="ltr"> <a [href]="'https://wa.me/' + customer.customer.custMob" target="_blank"
+              class="text-success text-decoration-none">
+              {{ customer.customer.custMob }}
+            </a></td>
+          <td class="fw-bold text-dark">
+            <a [href]="'https://wa.me/' + customer.customer.custMob" target="_blank"
+              class="text-success text-decoration-none">
+              {{ customer.customer.custName }}
+            </a>
+          </td>
+          <td>{{ customer.customer.id }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

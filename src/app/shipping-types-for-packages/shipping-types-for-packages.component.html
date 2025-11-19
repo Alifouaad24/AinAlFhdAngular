@@ -1,0 +1,14 @@
+<h2 class="bg-success p-3 text-center text-light"> أنواع الشحن</h2>
+<br/>
+<hr/>
+
+<div class="links-container">
+  <div class="link-item" *ngFor="let sub of SubRoutes">
+   <a [routerLink]="['/LangingPage/' + 'Packages']" 
+      [queryParams]="{ shippType: sub.shippingTypeId}"
+     routerLinkActive="active">
+      {{ sub.description }}
+  </a>
+
+  </div>
+</div>

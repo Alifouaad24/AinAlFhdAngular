@@ -5,11 +5,12 @@
   }
 
   .form-label {
-    text-align: right !important; 
+    text-align: right !important;
     display: block;
   }
 
-  .form-control, .table {
+  .form-control,
+  .table {
     direction: rtl;
     text-align: right;
   }
@@ -17,45 +18,45 @@
 
 
 <div class="row col-12 p-1 d-flex justify-content-between">
-    <div class="col-md-4">
+  <div class="col-md-4">
     <div class="container mt-5">
       <div class="row justify-content-center">
         <h5 class="text-center text-dark mb-5">أدخل اسم العميل أو رقم الجوال للبحث</h5>
         <div class="col-md-10">
           <div class="d-flex justify-content-end">
-            <input class="form-control" #wordToseach (input)="filterSuggestions(wordToseach.value)" [ngModel]="searchTerm"
-            placeholder="ابحث هنا..." />
+            <input class="form-control" #wordToseach (input)="filterSuggestions(wordToseach.value)"
+              [ngModel]="searchTerm" placeholder="ابحث هنا..." />
           </div>
           <ul *ngIf="filteredSuggestions.length > 0" class="list-group"
             style="max-height: 300px; overflow-y: auto; cursor: pointer;">>
             <li *ngFor="let suggestion of filteredSuggestions" class="list-group-item"
-                (click)="selectSuggestion(suggestion)">
-                {{ suggestion }}
+              (click)="selectSuggestion(suggestion)">
+              {{ suggestion }}
             </li>
-        </ul>
+          </ul>
         </div>
       </div>
     </div>
     <div style="max-height: 200px; overflow-y: auto;" class="container mt-5 col-md-10" *ngIf="res1.length > 0">
       <table class="table table-striped table-bordered table-hover">
-          <thead class="table-dark">
-              <tr class="text-center">
-                <th>اسم العميل</th>
-                  <th>المعرف</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr *ngFor="let customer of res1; let i = index">
-                <td class="text-center" (click)="GiveId(customer)">
-                  {{customer.custName}}
-              </td>
-                  <td class="text-center" (click)="GiveId(customer)">
-                    {{ customer.id }}
-                  </td>
-              </tr>
-          </tbody>
+        <thead class="table-dark">
+          <tr class="text-center">
+            <th>اسم العميل</th>
+            <th>المعرف</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let customer of res1; let i = index">
+            <td class="text-center" (click)="GiveId(customer)">
+              {{customer.custName}}
+            </td>
+            <td class="text-center" (click)="GiveId(customer)">
+              {{ customer.id }}
+            </td>
+          </tr>
+        </tbody>
       </table>
-   </div>
+    </div>
   </div>
 
   <div class="col-md-7 rtl">
@@ -66,12 +67,14 @@
       <div class="col-md-12 mb-2">
         <label class="form-label text-dark text-start">تاريخ الوجبة</label>
         <select class="form-control" formControlName="shippingBatchId">
-          <option *ngFor="let batch of shippingBatchs" [value]="batch.shippingBatchId">
-            {{ batch.arrivelDate | date: 'dd-MM-yyyy' }}
-          </option>
+            <option *ngFor="let batch of shippingBatchs" [value]="batch.shippingBatchId">
+              {{ batch.arrivelDate | date: 'dd-MM-yyyy' }}
+            </option>
+ 
+
         </select>
       </div>
-  
+
       <div class="form-group mb-3 row col-md-12">
         <input formControlName="recieptId" class="form-control" hidden />
         <div class="form-group mb-3 col-md-2">
@@ -81,279 +84,145 @@
             <p class="m-2">كغ</p>
           </div>
         </div>
-  
-        <div class="form-group mb-1 col-md-2" >
+
+        <div class="form-group mb-1 col-md-2">
           <label for="costSelect" class="form-label text-dark text-end">تكلفة</label>
-          <select
-            id="costSelect"
-            [(ngModel)]="selectedCostSaif"
-            [ngModelOptions]="{ standalone: true }"
-            (change)="onCostChange($event)"
-            class="border-1 form-control text-center ms-1"
-            style="width: 70px"
-          >
+          <select id="costSelect" [(ngModel)]="selectedCostSaif" [ngModelOptions]="{ standalone: true }"
+            (change)="onCostChange($event)" class="border-1 form-control text-center ms-1" style="width: 70px">
             <option *ngFor="let cost1 of unitCost" [value]="cost1">
               {{ cost1 }}
             </option>
           </select>
         </div>
-  
+
         <div class="form-group mb-3 col-md-2">
-          <label for="cost" class="form-label text-dark text-end">الكلفة IO</label>
+          <label for="cost" class="form-label text-dark text-end">الكلفة IQ</label>
           <input id="cost" formControlName="costIQ" class="form-control" readonly />
         </div>
 
-<div hidden class="form-group mb-3 col-md-2" style="width: 120px;">
-  <input
-    [(ngModel)]="realCurrIQ"
-    [ngModelOptions]="{ standalone: true }"
-    class="form-control"
-    (ngModelChange)="onRealIQChange()"
-  />
-</div>
-  
-        <div class="form-group mb-3 col-md-2"
-        style="width: 80px;">
+        <div hidden class="form-group mb-3 col-md-2" style="width: 120px;">
+          <input [(ngModel)]="realCurrIQ" [ngModelOptions]="{ standalone: true }" class="form-control"
+            (ngModelChange)="onRealIQChange()" />
+        </div>
+
+        <div class="form-group mb-3 col-md-2" style="width: 80px;">
           <label for="cost" class="form-label text-dark text-end">الكلفة $</label>
           <input id="cost" formControlName="cost" class="form-control" readonly />
         </div>
-  
-        <div class="form-group mb-3 col-md-2"
-          style="width: 80px;"
-        >
+
+        <div class="form-group mb-3 col-md-2" style="width: 80px;">
           <label for="discount" class="form-label text-dark text-end">الخصم$</label>
           <input id="discount" formControlName="discount" class="form-control" />
         </div>
-  
-        <div class="form-group mb-3 col-md-2"
-           style="width: 120px;">
+
+        <div class="form-group mb-3 col-md-2" style="width: 120px;">
           <label for="currency" class="form-label text-dark text-end">العملة</label>
-          <input
-            id="currency"
-            [(ngModel)]="currency"
-            [ngModelOptions]="{ standalone: true }"
-            class="form-control"
-            readonly
-          />
+          <input id="currency" [(ngModel)]="currency" [ngModelOptions]="{ standalone: true }" class="form-control"
+            readonly />
         </div>
 
-<div class="form-group mb-3 col-md-2" style="width: 120px;">
-  <label class="form-label text-dark text-end">التكلفة الفعليةIQ</label>
-  <input
-    [(ngModel)]="realIQ"
-    [ngModelOptions]="{ standalone: true }"
-    class="form-control"
-    (ngModelChange)="onRealIQChange()"
-  />
-</div>
+        <div class="form-group mb-3 col-md-2" style="width: 120px;">
+          <label class="form-label text-dark text-end">التكلفة الفعليةIQ</label>
+          <input [(ngModel)]="realIQ" [ngModelOptions]="{ standalone: true }" class="form-control"
+            (ngModelChange)="onRealIQChange()" />
+        </div>
 
-<div class="form-group mb-3 col-md-2" style="width: 120px;">
-  <label class="form-label text-dark text-end">التكلفة الفعلية$</label>
-  <input
-    [(ngModel)]="realDo"
-    [ngModelOptions]="{ standalone: true }"
-    class="form-control"
-    (ngModelChange)="onRealDoChange()"
-  />
-</div>
-</div>
+        <div class="form-group mb-3 col-md-2" style="width: 120px;">
+          <label class="form-label text-dark text-end">التكلفة الفعلية$</label>
+          <input [(ngModel)]="realDo" [ngModelOptions]="{ standalone: true }" class="form-control"
+            (ngModelChange)="onRealDoChange()" />
+        </div>
+      </div>
 
-  
+
       <div class="form-group mb-3 col-md-12"></div>
       <div class="row">
         <div class="form-group mb-3 col-md-12">
-          <label for="recieptDate" class="form-label text-dark text-end"
-            >تاريخ الوصل</label
-          >
-          <input
-            id="recieptDate"
-            type="date"
-            formControlName="recieptDate"
-            class="form-control"
-          />
+          <label for="recieptDate" class="form-label text-dark text-end">تاريخ الوصل</label>
+          <input id="recieptDate" type="date" formControlName="recieptDate" class="form-control" />
         </div>
       </div>
-  
+
       <div class="row">
         <div class="form-group mb-3 col-md-4">
           <input id="customerId" formControlName="customerId" hidden />
         </div>
         <div class="form-group mb-3 col-md-10">
           <label class="form-label text-dark text-start">اسم العميل</label>
-          <input
-            [(ngModel)]="nameCust"
-            [ngModelOptions]="{ standalone: true }"
-            class="form-control"
-            readonly
-          />
+          <input [(ngModel)]="nameCust" [ngModelOptions]="{ standalone: true }" class="form-control" readonly />
         </div>
         <div class="form-group mb-3 col-md-2">
-          <label for="exchangeRate" class="form-label text-dark text-start"
-            >سعر الصرف</label
-          >
-          <input
-            id="exchangeRate"
-            [(ngModel)]="exchangeRate"
-            [ngModelOptions]="{ standalone: true }"
-            class="form-control"
-            readonly
-          />
+          <label for="exchangeRate" class="form-label text-dark text-start">سعر الصرف</label>
+          <input id="exchangeRate" [(ngModel)]="exchangeRate" [ngModelOptions]="{ standalone: true }"
+            class="form-control" readonly />
         </div>
       </div>
-  
+
       <div class="row mt-4">
-        <div
-          style="margin-left: 2px"
-          class="form-group mb-3 col-md-1">
-          <label for="sellingPrice" class="form-label text-dark text-start">الوزن</label
-          >
-          <input
-            id="sellingPrice"
-            style="width: 50px;"
-            [(ngModel)]="weightUp"
-            [ngModelOptions]="{ standalone: true }"
-            class="form-control"
-            readonly
-          />
+        <div style="margin-left: 2px" class="form-group mb-3 col-md-1">
+          <label for="sellingPrice" class="form-label text-dark text-start">الوزن</label>
+          <input id="sellingPrice" style="width: 50px;" [(ngModel)]="weightUp" [ngModelOptions]="{ standalone: true }"
+            class="form-control" readonly />
         </div>
-  
-        <div class="form-group mb-1 col-md-1"
-        style="width: 50px; margin-left: 10px;">
+
+        <div class="form-group mb-1 col-md-1" style="width: 50px; margin-left: 10px;">
           <label for="costSelect" class="form-label text-dark text-end">تكلفة</label>
-          <select
-            id="costSelect"
-            [(ngModel)]="costSelectOfSaif"
-            [ngModelOptions]="{ standalone: true }"
-            (change)="onCostSaifChange($event)"
-            class="border-1 form-control text-center ms-1"
-            style="width: 65px"
-          >
+          <select id="costSelect" [(ngModel)]="costSelectOfSaif" [ngModelOptions]="{ standalone: true }"
+            (change)="onCostSaifChange($event)" class="border-1 form-control text-center ms-1" style="width: 65px">
             <option *ngFor="let cost of unitCostSaif" [value]="cost">
               {{ cost }}
             </option>
           </select>
         </div>
-  
-        <div class="form-group mb-3 col-md-2">
-          <label
-            for="sellingUSD"
-            class="form-label text-dark text-start"
-            >$المبيع</label
-          >
-          <input
-            id="sellingUSD"
-            formControlName="sellingUSD"
-            class="form-control"
-            readonly
-            style="width: 65px"
 
-          />
+        <div class="form-group mb-3 col-md-2">
+          <label for="sellingUSD" class="form-label text-dark text-start">$المبيع</label>
+          <input id="sellingUSD" formControlName="sellingUSD" class="form-control" readonly style="width: 65px" />
         </div>
         <div class="form-group mb-3 col-md-2" style="width: 100px; margin-right: 5px">
           <label for="tota" class="form-label text-dark text-end">التعديل$</label>
-          <input
-            id="tota"
-            [(ngModel)]="EditDolar"
-            [ngModelOptions]="{ standalone: true }"
-            (ngModelChange)="recalculateTotal()"
-            class="form-control"
-            type="number"
-          />
+          <input id="tota" [(ngModel)]="EditDolar" [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="recalculateTotal()" class="form-control" type="number" />
         </div>
 
         <div class="form-group mb-3 col-md-2" style="width: 100px; margin-right: 5px">
           <label for="totaq" class="form-label text-dark text-end">التعديلIQ</label>
-          <input
-            id="totaq"
-            [(ngModel)]="EditIIQQ"
-            [ngModelOptions]="{ standalone: true }"
-            (ngModelChange)="recalculateTotalDinar()"
-            class="form-control"
-          />
+          <input id="totaq" [(ngModel)]="EditIIQQ" [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="recalculateTotalDinar()" class="form-control" />
         </div>
-        
-  
+
+
         <div class="form-group mb-3 col-md-2">
-          <label
-            for="sellingPrice"
-            class="form-label text-dark text-start"
-            >IQ المبيع</label
-          >
-          <input
-            id="sellingPrice"
-            formControlName="sellingPrice"
-            class="form-control"
-            readonly
-          />
-          <input
-          id="selliPriceq"
-          [(ngModel)]="EditAiiiii"
-          [ngModelOptions]="{ standalone: true }"
-          class="form-control"
-          readonly
-          hidden
-        />
+          <label for="sellingPrice" class="form-label text-dark text-start">IQ المبيع</label>
+          <input id="sellingPrice" formControlName="sellingPrice" class="form-control" readonly />
+          <input id="selliPriceq" [(ngModel)]="EditAiiiii" [ngModelOptions]="{ standalone: true }" class="form-control"
+            readonly hidden />
         </div>
-  
-        <div class="form-group mb-3 col-md-2"
-        style="width: 100px; margin-right: 5px">
-          <label
-            for="sellingDiscount"
-            class="form-label text-dark text-end"
-            >التعديلات IQ</label
-          >
-          <input
-            id="sellingDiscount"
-            formControlName="sellingDiscount"
-            class="form-control"
-            readonly
-          />
+
+        <div class="form-group mb-3 col-md-2" style="width: 100px; margin-right: 5px">
+          <label for="sellingDiscount" class="form-label text-dark text-end">التعديلات IQ</label>
+          <input id="sellingDiscount" formControlName="sellingDiscount" class="form-control" readonly />
         </div>
-  
-        <div class="form-group mb-3 col-md-2"
-        style="width: 100px; margin-right: 5px"
-        >
-          <label
-            for="totalPriceFromCust"
-            class="form-label text-dark text-end"
-            >المبلغ</label
-          >
-          <input
-            id="totalPriceFromCust"
-            formControlName="totalPriceFromCust"
-            class="form-control"
-          />
+
+        <div class="form-group mb-3 col-md-2" style="width: 100px; margin-right: 5px">
+          <label for="totalPriceFromCust" class="form-label text-dark text-end">المبلغ</label>
+          <input id="totalPriceFromCust" formControlName="totalPriceFromCust" class="form-control" />
         </div>
-  
-        <div
-          style="width: 80px; margin-right: 10px"
-          class="form-group mb-3 col-md-1">
-          <label
-            for="sellingCurrency"
-            class="form-label text-dark text-end"
-            >العملة</label
-          >
-          <input
-            id="sellingCurrency"
-            [(ngModel)]="sellingCurrency"
-            [ngModelOptions]="{ standalone: true }"
-            class="form-control"
-            style="width: 55px;"
-            readonly
-          />
+
+        <div style="width: 80px; margin-right: 10px" class="form-group mb-3 col-md-1">
+          <label for="sellingCurrency" class="form-label text-dark text-end">العملة</label>
+          <input id="sellingCurrency" [(ngModel)]="sellingCurrency" [ngModelOptions]="{ standalone: true }"
+            class="form-control" style="width: 55px;" readonly />
         </div>
       </div>
-  
+
       <div class="form-group mb-3 col-md-12">
         <label for="notes" class="form-label text-dark text-end">ملاحظات</label>
         <input id="notes" formControlName="notes" class="form-control" />
       </div>
-  
+
       <div class="form-group mb-3 col-md-12 text-center">
-        <button
-          type="submit"
-          class="col-md-4 btn btn-primary"
-        >
+        <button type="submit" class="col-md-4 btn btn-primary">
           {{ isAdd ? "تحديث" : "حفظ" }}
         </button>
       </div>
@@ -362,14 +231,14 @@
 
 
 
-      <!-- إظهار البو بب -->
-      <div class="popup position-fixed top-50 start-50 translate-middle bg-white p-4 rounded shadow-lg" *ngIf="showPopupAddedConfirm" style="max-width: 400px; z-index: 1050;">
-        <h2 class="h5 mb-3 text-center"></h2>
-        <p class="mb-4">{{popDesc}}</p>
-        <div class="text-center">
-          <button class="btn btn-primary" (click)="closePopup()">موافق</button>
-        </div>
-      </div>
+  <!-- إظهار البو بب -->
+  <div class="popup position-fixed top-50 start-50 translate-middle bg-white p-4 rounded shadow-lg"
+    *ngIf="showPopupAddedConfirm" style="max-width: 400px; z-index: 1050;">
+    <h2 class="h5 mb-3 text-center"></h2>
+    <p class="mb-4">{{popDesc}}</p>
+    <div class="text-center">
+      <button class="btn btn-primary" (click)="closePopup()">موافق</button>
+    </div>
+  </div>
 
-      <!-- نهاية البو بب -->
-  
+  <!-- نهاية البو بب -->

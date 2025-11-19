@@ -49,8 +49,8 @@ export class AddReciptComponent implements OnInit {
   customers: any[] = [];
   searchTerm = '';
   id?: number;
-  unitCost = [5, 6, 7, 8, 9, 10]
-  unitCostSaif = [8, 9, 10, 11, 12, 13, 14]
+  unitCost = [4.75, 5, 6, 7, 8, 9, 10]
+  unitCostSaif = [7, 8, 9, 10, 11, 12, 13, 14]
   cost = 0
   filteredSuggestions: string[] = [];
   filteredSuggestion: string = '';
@@ -71,7 +71,8 @@ export class AddReciptComponent implements OnInit {
   EditAiiiii?: number
   totalPriceFromCust2: number = 0
   ConstCost?: number
-  
+  shippingTypeId?: number
+  dateOfShipp?: number    
   openPopup2(message: string) {
     this.showPopupAddedConfirm = true;
     this.popDesc = message;
@@ -94,6 +95,11 @@ export class AddReciptComponent implements OnInit {
       this.GetRecipt(this.recId);
       this.isAdd = this.recId !== null;
     }
+
+    this.route.queryParams.subscribe(r => {
+      this.shippingTypeId = +r['ShippId']
+      console.log("dateOfShipp: ", this.dateOfShipp)
+    })
 
 
   }
@@ -133,21 +139,18 @@ export class AddReciptComponent implements OnInit {
 
 onRealIQChange() {
   const enteredIQ = this.realIQ || 0;
-
   const discount = this.realCurrIQ - enteredIQ;
   const costUSD = enteredIQ / this.exchangeRate;
 
   this.receiptForm.get('discount')?.patchValue(discount, { emitEvent: false });
   this.receiptForm.get('costIQ')?.patchValue(enteredIQ, { emitEvent: false });
   this.receiptForm.get('cost')?.patchValue(costUSD.toFixed(2), { emitEvent: false });
-
   this.realDo = parseFloat(costUSD.toFixed(2));
 }
 
 
 onRealDoChange() {
   const discount = ((this.ConstCost ?? 0) -  this.realDo) * this.exchangeRate;
-
   this.receiptForm.get('discount')?.patchValue(discount, { emitEvent: false });
   this.receiptForm.get('costIQ')?.patchValue(this.realDo * this.exchangeRate, { emitEvent: false });
   this.receiptForm.get('cost')?.patchValue(this.realDo, { emitEvent: false });
@@ -160,16 +163,13 @@ onRealDoChange() {
       this.ssId = this.shippingBatchs[0]!.shippingBatchId
 
       this.route.queryParams.subscribe((params) => {
-        if(params['ShippId']){
+        if(params['shipDate']){
           this.receiptForm.patchValue({
-            shippingBatchId: +params['ShippId']
+            shippingBatchId: +params['shipDate'],
           },{ emitEvent: false }) 
         }
-       
-      });
-
+      })
   
-      //this.receiptForm.patchValue({shippingBatchId: this.shippingBatchs[0]!.shippingBatchId})
     })
   }
 
@@ -323,7 +323,7 @@ onRealDoChange() {
       totalPriceFromCust: final,
       sellingDiscount: 0
 
-    });
+    }, {emitEvent: false});
   }
   
   loadShippingBatches() {
@@ -340,7 +340,7 @@ onRealDoChange() {
           (response: any) => {
             if (response) {
               //this.router.navigate(['/LangingPage/Recipts'], { queryParams: { updated: 'true' } });
-              this.router.navigate(['/LangingPage/ShippingBatch']);
+              this.router.navigate(['/LangingPage/Recipts']);
             } else {
               this.toastr.error('حدث خطأ أثناء تحديث السجل.', '')
 
@@ -370,7 +370,7 @@ onRealDoChange() {
               this.toastr.success('تم حفظ الإيصال بنجاح', '')
               setTimeout(() => {
                 this.isAdded = false; 
-                this.router.navigate(['/LangingPage/ShippingBatch']);
+                this.router.navigate(['/LangingPage/ShippingBatch'], { queryParams: {ShippId : this.shippingTypeId}});
               }, 1000);
             } else {
               this.openPopup2(response.error)
@@ -422,7 +422,7 @@ onRealDoChange() {
   }
 
   GiveId(customer: any): void{
-    this.receiptForm.patchValue({ customerId: customer.id});
+    this.receiptForm.patchValue({ customerId: customer.id}, { emitEvent: false });
     this.nameCust = customer.custName
     this.filteredSuggestions = [];
   }

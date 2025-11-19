@@ -7,6 +7,7 @@ import { PopupComponent } from '../../popup/popup.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RoleService } from '../../Auth/role.service';
 import { HttpClient } from '@angular/common/http';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-shipping-batch',
@@ -21,13 +22,13 @@ export class ShippingBatchComponent implements OnInit {
   constructor(private api: ApiService, private router: Router, private route: ActivatedRoute,
     private dialog: MatDialog, private roleService: RoleService, private httpp: HttpClient) {}
   ShippingBatches: any [] = [];
-  param: string =''
+  param: number = 0
   showPopup = false;
   showPopupDeleteConfirm = false;
   selectIdForDelete?: number | undefined
   PopTitle?: string
   popDesc?: string
-
+  receiptsToShow?: any
   numOfRecipts: number = 0
   totalCost: number = 0
   totalSellIQ: number = 0
@@ -38,12 +39,28 @@ export class ShippingBatchComponent implements OnInit {
 
   ngOnInit(): void {
     this.getExChg()
-    this.GetAllShippingBatch();
-    this.route.params.subscribe(params => {
-      this.param = params['Shipping'];
-      this.GetAllShippingBatch();
+    this.route.queryParams.subscribe(params => {
+      if(params['ShippId']){
+         this.param = +params['ShippId'];
+         console.log("ShippId", this.param)
+         this.GetAllShippingBatch();
+      }
+     
     })
   }
+
+  ShowReceipits(id: number) {    
+    this.api.getData("api/Reciept").subscribe((response: any) => {
+      this.receiptsToShow = response;
+      this.receiptsToShow = this.receiptsToShow.filter((r: any) => r.shippingBatchId == id)
+      console.log(this.receiptsToShow);
+      const modal = new bootstrap.Modal(document.getElementById('userInfoModal')!);
+      modal.show();
+    }, error => {
+      console.error("خطأ في جلب البيانات:", error);
+    });
+  }
+
 
     getUserRole(): string | null {
     const token = localStorage.getItem('token');
@@ -87,6 +104,11 @@ export class ShippingBatchComponent implements OnInit {
 
     this.api.getData('api/ShippingBatch').subscribe(res =>{
       this.ShippingBatches = res;
+
+      this.ShippingBatches = this.ShippingBatches.filter((sh: any) => {
+        return sh?.shippingTypeId === this.param
+      })
+
       console.log("this.ShippingBatches ", this.ShippingBatches);
       this.numOfRecipts = 0
       this.totalCost = 0
@@ -121,12 +143,12 @@ export class ShippingBatchComponent implements OnInit {
   goToAddRecipt(id: number): void{
 
     if(this.IsAdmin()){
-      this.router.navigate(['LangingPage/ShippingBatch/AddRecipt'], { queryParams: { ShippId: id } });
+      this.router.navigate(['LangingPage/ShippingBatch/AddRecipt'], { queryParams: { ShippId: this.param, shipDate: id } });
     }
   }
 
   goToShippTransactions(id: number){
-    this.router.navigate(['LangingPage/Recipts'], {queryParams: { ShippIdToFilter: id }});
+    this.router.navigate(['LangingPage/Recipts'], {queryParams: { ShippIdToFilter: id , ShippId: this.param}});
   }
 
 

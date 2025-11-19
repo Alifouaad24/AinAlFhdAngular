@@ -29,7 +29,7 @@ export class LogInComponent implements OnInit {
   email: string = '';
   password: string = '';
   errorMessage: string = '';
-
+  loading = false
 
   togglePassword() {
     const passwordInput = document.getElementById('password') as HTMLInputElement;
@@ -38,7 +38,7 @@ export class LogInComponent implements OnInit {
   }
 
   onSubmit() {
-
+this.loading = true;
     var payLoad = {
       'email': this.email,
       'password': this.password
@@ -46,16 +46,17 @@ export class LogInComponent implements OnInit {
 
     this.http.postData('api/Account/LogIn', payLoad).subscribe((response) => {
       localStorage.setItem('token', response.token)
-      console.log(response)
+
       this.toastr.success("اهلا بكم في موقع عين الفهد", "تم تسجيل الدخول بنجاح",
         { progressAnimation: 'increasing',
           progressBar: true
 
          })
+               this.loading = false;
       this.router.navigate(['/LangingPage/MainScreenForMain']);
     },(error) =>{
             console.log(error.error)
-
+      this.loading = false;
       this.toastr.error("يرجى التحقق من البريد الإلكتروني او كلمة المرو", "فشل تسجيل الدخول",
         { 
           progressBar: true,
