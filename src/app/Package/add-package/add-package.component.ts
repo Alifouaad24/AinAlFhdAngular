@@ -44,6 +44,9 @@ export class AddPackageComponent implements OnInit {
   isUpdate: boolean = false
   packageId = 0
   idToUpdate?: number
+  NotesForPckage: string = ' '
+  WithShipping = false
+
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       const id = +params['id']
@@ -63,13 +66,15 @@ export class AddPackageComponent implements OnInit {
       }
     })
 
-    this.http.getData('api/Enviroment/GetExChg').subscribe(res => {
-      this.ExchangeRate = res.exchangeRate
+    this.http.getData('api/AinAlfhdEnviroment/GetExChg').subscribe(res => {
+      console.log("rescscs")
+      console.log(res)
+      this.ExchangeRate = res.exchange_rate
     })
   }
 
   GetPacgageById(id: number) {
-    this.http.getData(`api/Packages/GetById/${id}`).subscribe(res => {
+    this.http.getData(`api/AinAlfhdPackages/GetById/${id}`).subscribe(res => {
       this.weight = res.actualWeight
       this.dimemweight = res.dimentioalWeight
       this.purcheasCost = res.purcheasCost
@@ -96,7 +101,7 @@ export class AddPackageComponent implements OnInit {
 
 
   GetPriceRolesForShipp(shippId: number) {
-    this.http.getData(`api/PriceingRoles/${shippId}`).subscribe(res => {
+    this.http.getData(`api/AinAlfhdPricingRoles/${shippId}`).subscribe(res => {
       this.ShippingPriceRoles = res
       console.log("ShippingPriceRoles: ", this.ShippingPriceRoles)
       this.ShippingType = res[0].shippingTypes.description
@@ -109,15 +114,25 @@ export class AddPackageComponent implements OnInit {
     var weight = this.weight
     if (this.shippingId == 19 || this.shippingId == 1) {
       if (weight < 10) {
-        this.dimemweight = weight
-        var purcheasCostFor1KG = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 1 && s.shipping_type_id == this.shippingId).price;
+        if (weight > 0 && weight < 5 && this.shippingId == 19) {
+          this.dimemweight = weight
+          // here must to come from db
+          var purcheasCostFor1KGr = 10000;
+          this.purcheasCost = purcheasCostFor1KGr
+          this.purcheasCurrency = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 1 && s.shipping_type_id == this.shippingId).currency.currency_name;
+          this.purcheasCurrencyId = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 1 && s.shipping_type_id == this.shippingId).currency.currency_id;
+        }
+        else {
+          this.dimemweight = weight
+          var purcheasCostFor1KG = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 1 && s.shipping_type_id == this.shippingId).price;
+          this.purcheasCost = this.shippingId == 19 ? Math.ceil(weight * purcheasCostFor1KG / 1000) * 1000 : weight * purcheasCostFor1KG
+          this.purcheasCurrency = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 1 && s.shipping_type_id == this.shippingId).currency.currency_name;
+          this.purcheasCurrencyId = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 1 && s.shipping_type_id == this.shippingId).currency.currency_id;;
+        }
+      }
 
-        this.purcheasCost = this.shippingId == 19 ?  Math.ceil(weight * purcheasCostFor1KG / 1000) * 1000 : weight * purcheasCostFor1KG
-        this.purcheasCurrency = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 1 && s.shipping_type_id == this.shippingId).currency.currency_name;
-        this.purcheasCurrencyId = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 1 && s.shipping_type_id == this.shippingId).currency.currency_id;;
 
-
-      } else {
+      else {
         this.dimemweight = weight
         this.purcheasCost = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 3 && s.trade_type_id == 1 && s.shipping_type_id == this.shippingId).price;
         this.purcheasCurrency = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 3 && s.trade_type_id == 1 && s.shipping_type_id == this.shippingId).currency.currency_name;
@@ -138,20 +153,58 @@ export class AddPackageComponent implements OnInit {
     this.GetCorrectValuesForDimentioal()
   }
 
+  AddShippingToTotalPrice() {
+    var weight = this.RoundTheCustWeight(this.dimemweight)
+    if (this.WithShipping) {
+      if (weight < 10 && weight > 0) {
+        this.saleingPrice += this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).delivery_fees
+        this.saleingPriceIq = this.RoundToCloseThouthend(this.saleingPrice)
+      } else {
+        this.saleingPrice += this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 3 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).delivery_fees;
+        this.saleingPriceIq = this.RoundToCloseThouthend(this.saleingPrice)
+      }
+    } else {
+      if (weight < 10 && weight > 0) {
+        this.saleingPrice -= this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).delivery_fees
+        this.saleingPriceIq = this.RoundToCloseThouthend(this.saleingPrice)
+      } else {
+        this.saleingPrice -= this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 3 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).delivery_fees;
+        this.saleingPriceIq = this.RoundToCloseThouthend(this.saleingPrice)
+      }
+    }
+
+  }
+
   GetCorrectValuesForDimentioal() {
     var weight = this.RoundTheCustWeight(this.dimemweight)
     this.weightForCustomer = weight
 
-    if (this.shippingId == 19 || this.shippingId == 1) {
+    if (this.shippingId == 19) {
       if (weight < 10) {
         var sellFor1KG = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).price;
-        this.saleingPrice = weight * sellFor1KG
+        this.saleingPrice = (weight * sellFor1KG) //+ this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).delivery_fees
         this.saleingCurrency = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).currency.currency_name;
         this.saleingCurrencyId = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).currency.currency_id;;
         this.saleingPriceIq = this.RoundToCloseThouthend(this.saleingPrice)
 
       } else {
-        this.saleingPrice = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 3 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).price;
+        this.saleingPrice = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 3 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).price
+        //+ this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 3 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).delivery_fees;
+        this.saleingCurrency = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 3 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).currency.currency_name;
+        this.saleingCurrencyId = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 3 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).currency.currency_id;;
+        this.saleingPriceIq = this.RoundToCloseThouthend(this.saleingPrice)
+
+      }
+    } if (this.shippingId == 1) {
+      if (weight < 10) {
+        var sellFor1KG = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).price;
+        this.saleingPrice = (weight * sellFor1KG)
+        this.saleingCurrency = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).currency.currency_name;
+        this.saleingCurrencyId = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 1 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).currency.currency_id;;
+        this.saleingPriceIq = this.RoundToCloseThouthend(this.saleingPrice)
+
+      } else {
+        this.saleingPrice = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 3 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).price
         this.saleingCurrency = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 3 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).currency.currency_name;
         this.saleingCurrencyId = this.ShippingPriceRoles.find((s: any) => s.shipping_cat_id == 3 && s.trade_type_id == 2 && s.shipping_type_id == this.shippingId).currency.currency_id;;
         this.saleingPriceIq = this.RoundToCloseThouthend(this.saleingPrice)
@@ -210,7 +263,8 @@ export class AddPackageComponent implements OnInit {
       'actualWeightForCustomer': this.weightForCustomer,
       'sallingPrice': this.saleingPrice,
       'packageDt': this.PackageDate,
-      'sallingPriceIQ': this.saleingPriceIq
+      'sallingPriceIQ': this.saleingPriceIq,
+      'notes': this.NotesForPckage
     }
     console.log(payLoad)
     console.log(this.isUpdate)
@@ -220,7 +274,7 @@ export class AddPackageComponent implements OnInit {
 
       if (this.isUpdate == false) {
         this.isAdding = true
-        this.http.postData(`api/Packages`, payLoad).subscribe(res => {
+        this.http.postData(`api/AinAlfhdPackages`, payLoad).subscribe(res => {
           console.log(res)
           this.toastr.success('تم ادخال الطرد بنجاح')
           this.isAdding = false
@@ -232,7 +286,7 @@ export class AddPackageComponent implements OnInit {
         })
       } else {
         this.isAdding = true
-        this.http.putData(`api/Packages/${this.packageId}`, payLoad).subscribe(res => {
+        this.http.putData(`api/AinAlfhdPackages/${this.packageId}`, payLoad).subscribe(res => {
           console.log(res)
           this.toastr.success('تم تعديل الطرد بنجاح')
           this.isAdding = false
@@ -265,7 +319,8 @@ export class AddPackageComponent implements OnInit {
       'actualWeightForCustomer': this.weightForCustomer,
       'sallingPrice': this.saleingPrice,
       'packageDt': this.PackageDate,
-      'sallingPriceIQ': this.saleingPriceIq
+      'sallingPriceIQ': this.saleingPriceIq,
+      'notes': this.NotesForPckage
     }
     console.log(payLoad)
     console.log(this.isUpdate)
@@ -275,7 +330,7 @@ export class AddPackageComponent implements OnInit {
 
       if (this.isUpdate == false) {
         this.isAdding = true
-        this.http.postData(`api/Packages`, payLoad).subscribe(res => {
+        this.http.postData(`api/AinAlfhdPackages`, payLoad).subscribe(res => {
           console.log(res)
           this.toastr.success('تم ادخال الطرد بنجاح')
           this.isAdding = false
@@ -286,7 +341,7 @@ export class AddPackageComponent implements OnInit {
         })
       } else {
         this.isAdding = true
-        this.http.putData(`api/Packages/${this.packageId}`, payLoad).subscribe(res => {
+        this.http.putData(`api/AinAlfhdPackages/${this.packageId}`, payLoad).subscribe(res => {
           console.log(res)
           this.toastr.success('تم تعديل الطرد بنجاح')
           this.isAdding = false
@@ -313,13 +368,13 @@ export class AddPackageComponent implements OnInit {
     if (value.length >= 3) {
       if (/^\d/.test(value)) {
         this.filteredSuggestions.pop();
-        this.http.getData(`api/Customers/SearchAboutDetectedCustomerApi/${value}`).subscribe((result) => {
+        this.http.getData(`api/AinAlfhdCustomer/SearchAboutDetectedCustomerApi/${value}`).subscribe((result) => {
           this.res = result;
           this.filteredSuggestions.push(result.custName);
         })
 
       } else {
-        this.http.getData(`api/Customers/SearchAboutCustomerApi/${value}`).subscribe((result) => {
+        this.http.getData(`api/AinAlfhdCustomer/SearchAboutCustomerApi/${value}`).subscribe((result) => {
           this.filteredSuggestions = result.map((el: any) => {
             return el.custName;
           });
@@ -338,7 +393,7 @@ export class AddPackageComponent implements OnInit {
     const search = encodeURIComponent(suggestion);
 
 
-    this.http.getData(`api/Customers/SearchAboutCustomerApi/${search}`).subscribe((result1: any) => {
+    this.http.getData(`api/AinAlfhdCustomer/SearchAboutCustomerApi/${search}`).subscribe((result1: any) => {
       this.res1 = result1
       console.log("this.res1: ", this.res1)
     })
@@ -351,14 +406,14 @@ export class AddPackageComponent implements OnInit {
     this.custName = customer.custName
     this.custId = customer.id
     this.filteredSuggestions = [];
-    this.http.getData(`api/RequestNotes/${this.custId}`).subscribe(res => {
+    this.http.getData(`api/AinAlfhdReqNotes/${this.custId}`).subscribe(res => {
       console.log(res)
       this.Notes = res
     })
   }
 
   ConvertToSeen(id: number) {
-    this.http.putData(`api/RequestNotes/${id}`, {}).subscribe(res => {
+    this.http.putData(`api/AinAlfhdReqNotes/${id}`, {}).subscribe(res => {
       this.Notes = this.Notes.filter(el => {
         return el.id != id
       })

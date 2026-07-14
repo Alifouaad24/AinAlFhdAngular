@@ -46,13 +46,14 @@ export class PackagesComponent {
         this.GetPackagesByShippingType(id)
       }
     })
-    this.http.getData('api/Enviroment/GetExChg').subscribe(res => {
-      this.ExchangeRate = res.exchangeRate
+    this.http.getData('api/AinAlfhdEnviroment/GetExChg').subscribe(res => {
+      console.log(res)
+      this.ExchangeRate = res.exchange_rate
     })
   }
 
   GetPackagesByShippingType(id: number) {
-    this.http.getData(`api/Packages/${id}`).subscribe(res => {
+    this.http.getData(`api/AinAlfhdPackages/${id}`).subscribe(res => {
       this.shd.clearData();
       this.shd.setData(res);
       this.Packages = res
@@ -92,7 +93,7 @@ export class PackagesComponent {
       cancelButtonColor: '#3085d6'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http.deleteData(`api/Packages/${id}`).subscribe(
+        this.http.deleteData(`api/AinAlfhdPackages/${id}`).subscribe(
           res => {
             this.toastr.success('تم الحذف بنجاح');
             this.Packages = this.Packages.filter((el: any) => el.packageId !== id);
@@ -181,7 +182,7 @@ export class PackagesComponent {
 
   PrintPDF() {
 
-    let url = `http://saifsfo-002-site21.atempurl.com/api/Packages/GeneratePdf/${this.ShippType}/${this.startSearchDate}/${this.endSearchDate}`;
+    let url = `https://dutyapi.somee.com/api/AinAlfhdPackages/GeneratePdf/${this.ShippType}/${this.startSearchDate}/${this.endSearchDate}`;
 
     this.httpp.get(url, { responseType: 'blob' }).subscribe(
       (response) => {

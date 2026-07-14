@@ -27,7 +27,7 @@ export class CustomersComponent implements OnInit {
   }
 
   GetAllShippingTypes() {
-    this.http.getData(`api/ShippingTypes`).subscribe((res: any[]) => {
+    this.http.getData(`api/AinAlfhdShippingType`).subscribe((res: any[]) => {
       console.log(res)
       this.ShippingTypes = res
 
@@ -40,25 +40,25 @@ export class CustomersComponent implements OnInit {
   }
 
   GetAllCustomers() {
-    this.http.getData('api/Packages').subscribe(res => {
+    this.http.getData('api/AinAlfhdPackages').subscribe(res => {
       console.log(res)
       this.customers = res
       this.originalCustomers = res
     })
   }
 
-getCustomersbyShippId(shippId: number) {
-  this.customers = this.originalCustomers;
-  this.customers = this.customers.filter((c: any) => c.shippingType.shippingTypeId === shippId);
-  this.customers = this.customers.filter(
-    (value: any, index: any, self: any) =>
-      index === self.findIndex(
-        (t: any) => t.customer.custMob === value.customer.custMob
-      )
-  );
+  getCustomersbyShippId(shippId: number) {
+    this.customers = this.originalCustomers;
+    this.customers = this.customers.filter((c: any) => c.shippingType.shippingTypeId === shippId);
+    this.customers = this.customers.filter(
+      (value: any, index: any, self: any) =>
+        index === self.findIndex(
+          (t: any) => t.customer.custMob === value.customer.custMob
+        )
+    );
 
-  const found = this.ShippingTypes.find((s: any) => s.shippingTypeId === shippId);
-  this.labb = found ? `زبائن ${found.description}` : '';
-}
+    const found = this.ShippingTypes.find((s: any) => s.shippingTypeId === shippId);
+    this.labb = found ? `زبائن ${found.description}` : '';
+  }
 
 }

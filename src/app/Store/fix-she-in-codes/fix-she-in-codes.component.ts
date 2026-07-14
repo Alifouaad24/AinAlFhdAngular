@@ -32,7 +32,7 @@ export class FixSheInCodesComponent {
 
   search() {
     this.isLoading = true
-    this.http.getData(`api/OrderAPI/SearchAboutOrderByDate/${this.today}`).subscribe((response) => {
+    this.http.getData(`api/AinAlfhdOrder/SearchAboutOrderByDate/${this.today}`).subscribe((response) => {
       this.orders = response
       console.log(this.orders)
       this.isLoading = false
@@ -45,7 +45,7 @@ export class FixSheInCodesComponent {
     const newSKU = newCodeInput.value;
 
     if(newSKU != null && newSKU != ""){
-      this.http.postData(`api/OrderAPI/${order.item.id}/${newSKU}`, {}).subscribe((response) => {
+      this.http.postData(`api/AinAlfhdOrder/${order.item.id}/${newSKU}`, {}).subscribe((response) => {
         order.item.pCode = response.pcCode
         order.item.oldCode = response.olldCode
         newCodeInput.value = '';

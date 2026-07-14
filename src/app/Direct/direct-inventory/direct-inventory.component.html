@@ -32,19 +32,19 @@
   <table class="table table-hover table-bordered align-middle text-center mb-0 mt-3">
     <thead class="table-primary text-dark">
       <tr>
-        <th>عمليات</th>
-        <th>الكمية</th>
+        <!-- <th>عمليات</th> -->
+        <!-- <th>الكمية</th>
         <th>السعر</th>
         <th>المقاس</th>
         <th>الفئة</th>
-        <th>SKU</th>
+        <th>SKU</th> -->
         <th>صورة المنتج</th>
       </tr>
     </thead>
 
     <tbody *ngIf="ItemsInventory; else noData">
       <tr *ngFor="let item of ItemsInventory">
-        <td class="d-flex flex-wrap gap-1 justify-content-center">
+        <!-- <td class="d-flex flex-wrap gap-1 justify-content-center">
           <button (click)="openModalToEdit(item)" class="btn btn-warning btn-sm shadow-sm" title="تعديل">
             <i class="fas fa-edit"></i>
           </button>
@@ -53,9 +53,9 @@
             title="حذف">
             <i class="fas fa-trash"></i>
           </button>
-        </td>
+        </td> -->
 
-        <td class="fw-bold">{{ item.qty }}</td>
+        <!-- <td class="fw-bold">{{ item.qty }}</td>
         <td class="text-success fw-bold">{{ item.sellingprice }}</td>
         <td>{{ item.size?.description || '-' }}</td>
         <td>{{ item.item?.category?.categoryName || '-' }}</td>
@@ -64,7 +64,7 @@
           <a [href]="'https://ar.shein.com/pdsearch/' + item.item?.pCode" target="_blank">
             {{ item.item?.pCode }}
           </a>
-        </td>
+        </td> -->
 
         <td>
           <img (click)="openImage(item.item_notes, item.item.pCode)" [src]="item.item_notes"
@@ -106,7 +106,7 @@
 
 
 <!-- Edit Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+<!-- <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content shadow-lg border-0 rounded-3">
 
@@ -156,4 +156,4 @@
 
     </div>
   </div>
-</div>
+</div> -->

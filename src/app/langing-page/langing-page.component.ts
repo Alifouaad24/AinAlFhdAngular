@@ -74,7 +74,7 @@ export class LangingPageComponent {
   SubRoutes: any[] = [];
 
   getData(): void {
-    this.http.getData("api/Reciept/GetLastFiveRecords").subscribe((r: Receipt[]) => {
+    this.http.getData("api/AinAlfhdSystem/GetLastFiveRecords").subscribe((r: Receipt[]) => {
       this.recipts = r;
       console.log(r)
     })
@@ -89,7 +89,7 @@ export class LangingPageComponent {
 
 
   GetSystems() {
-    this.http.getData("api/System/GetAllSystemsForAinAlFhd").subscribe(res => {
+    this.http.getData("api/AinAlfhdSystem/GetAllSystemsForAinAlFhd").subscribe(res => {
       this.Routes = res;
       console.log(this.Routes);
 
@@ -109,7 +109,7 @@ export class LangingPageComponent {
       this.SubRoutes = [];
 
       this.Routes.forEach((el: any) => {
-        this.http.getData(`api/System/GetAllSystemsByMainSys/${el.id}`).subscribe((res: any[]) => {
+        this.http.getData(`api/AinAlfhdSystem/GetAllSystemsByMainSys/${el.id}`).subscribe((res: any[]) => {
           this.SubRoutes.push(...res);
 
           const dynamicRoutes = res

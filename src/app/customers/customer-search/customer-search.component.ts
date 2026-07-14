@@ -75,18 +75,18 @@ export class CustomerSearchComponent implements OnInit {
   }
   ngOnInit(): void {
     this.GetAllServices()
-    this.api.getData("api/Cities").subscribe(response => {
+    this.api.getData("api/AinAlfhdCities").subscribe(response => {
       console.log("cities", response)
       this.cities = response;
     });
 
-    this.api.getData("api/Area").subscribe(response => {
+    this.api.getData("api/AinAlfhdArea").subscribe(response => {
       console.log("areas", response)
       this.areas = response
       this.allAreas = response
     });
 
-    this.api.getData("api/MerchantAPI").subscribe(response => {
+    this.api.getData("api/AinAlfhdMerchant").subscribe(response => {
       console.log("MerchantAPI", response)
       this.Merchants = response
     });
@@ -122,7 +122,7 @@ export class CustomerSearchComponent implements OnInit {
     }
     const payLoad = this.customerForm?.value;
     console.log(payLoad)
-    this.api.postData("api/Customers", payLoad).subscribe(response => {
+    this.api.postData("api/AinAlfhdCustomer", payLoad).subscribe(response => {
       this.toastr.success('تم اضافة الزبون بنجاح')
     })
 
@@ -133,13 +133,13 @@ export class CustomerSearchComponent implements OnInit {
   filterSuggestions(value: string): void {
     if (value.length >= 3) {
       if (/^\d/.test(value)) {
-        this.api.getData(`api/Customers/SearchAboutCustomerApi/${value}`).subscribe((result) => {
+        this.api.getData(`api/AinAlfhdCustomer/SearchAboutCustomerApi/${value}`).subscribe((result) => {
           console.log(result)
           this.filteredSuggestions = []
           this.filteredSuggestions = result.map((el: any) => el.custName);
         });
       } else {
-        this.api.getData(`api/Customers/SearchAboutCustomerApi/${value}`).subscribe((result) => {
+        this.api.getData(`api/AinAlfhdCustomer/SearchAboutCustomerApi/${value}`).subscribe((result) => {
           this.filteredSuggestions = result.map((el: any) => el.custName);
         });
       }
@@ -157,7 +157,7 @@ export class CustomerSearchComponent implements OnInit {
     const search = encodeURIComponent(suggestion);
 
 
-    this.api.getData(`api/Customers/SearchAboutDetectedCustomerApi/${search}`).subscribe((result1) => {
+    this.api.getData(`api/AinAlfhdCustomer/SearchAboutDetectedCustomerApi/${search}`).subscribe((result1) => {
       this.res1 = result1
       this.CustomerId = result1.customer.id
       this.areas = this.areas.filter(el => el.cityId === result1.customer.custCity)
@@ -181,7 +181,7 @@ export class CustomerSearchComponent implements OnInit {
       'merchantId': customer.merchantId
     };
     console.log(payLoad, this.custId);
-    this.api.putData(`api/Customers/${customer.id}`, payLoad).subscribe(res => { });
+    this.api.putData(`api/AinAlfhdCustomer/${customer.id}`, payLoad).subscribe(res => { });
     this.updated = true;
     setTimeout(() => {
       this.updated = !this.updated;
@@ -191,7 +191,7 @@ export class CustomerSearchComponent implements OnInit {
 
   UnBlockCustomer() {
     var customerId = this.CustomerId
-    this.api.putData(`api/Customers/UnBlockCustomer/${customerId}`, {}).subscribe(res => {
+    this.api.putData(`api/AinAlfhdCustomer/UnBlockCustomer/${customerId}`, {}).subscribe(res => {
       console.log(res)
       this.toastr.success("تم رفع الحظر بنجاح")
     }, (error) => {
@@ -209,7 +209,7 @@ export class CustomerSearchComponent implements OnInit {
   roles: any[] = []
 
   GetAllOrdersForCustomer(word: string) {
-    this.api.getData(`api/Customers/GetAllOrders/${word}`).subscribe((res) => {
+    this.api.getData(`api/AinAlfhdCustomer/GetAllOrders/${word}`).subscribe((res) => {
       this.LastOrder = res?.lastOrder ?? 'no recent orders'
       this.CountOfOrders = res?.count ?? 0
       //this.CustumerName = res.orders[0].customer.custName
@@ -225,7 +225,7 @@ export class CustomerSearchComponent implements OnInit {
   selectedServices: { [key: number]: number } = {};
 
   GetAllServices() {
-    this.api.getData(`api/CustomerServices/GetAllServices`).subscribe((result: any[]) => {
+    this.api.getData(`api/AinAlfhdCustomerServices/GetAllServices`).subscribe((result: any[]) => {
       console.log("✅ roles:", result);
       this.roles = result;
     });
@@ -237,7 +237,7 @@ export class CustomerSearchComponent implements OnInit {
   }
 
   GetService(id: number): void {
-    this.api.getData(`api/CustomerServices/GetCustomerServices/${id}`).subscribe((result11) => {
+    this.api.getData(`api/AinAlfhdCustomerServices/GetCustomerServices/${id}`).subscribe((result11) => {
       result11.map((e: any) => {
         this.detectRoles.push(e)
         console.log("detectRole: ", e)
@@ -265,7 +265,7 @@ export class CustomerSearchComponent implements OnInit {
     console.log('Selected Service IDs:', payload);
 
     if (custId && custId > 0) {
-      this.api.postData(`api/CustomerServices/addServicesForCustomer?custId=${custId}`, payload)
+      this.api.postData(`api/AinAlfhdCustomerServices/addServicesForCustomer?custId=${custId}`, payload)
         .pipe(
           tap((response) => {
             console.log('تم الحفظ بنجاح:', response);
@@ -288,7 +288,7 @@ export class CustomerSearchComponent implements OnInit {
   }
 
   GetNotes(id: number) {
-    this.api.getData(`api/RequestNotes/${id}`).subscribe(res => {
+    this.api.getData(`api/AinAlfhdReqNotes/${id}`).subscribe(res => {
       this.customerNotes = res
     })
   }
@@ -301,7 +301,7 @@ export class CustomerSearchComponent implements OnInit {
         'requestDate': new Date().toISOString().split('T')[0]
       }
       if (payLoad) {
-        this.api.postData('api/RequestNotes', payLoad).subscribe(res => {
+        this.api.postData('api/AinAlfhdReqNotes', payLoad).subscribe(res => {
           this.toastr.success('تم اضافة الملاحظة بنجاح')
           this.customerNotes.push({
             description: this.NoteToAdd,

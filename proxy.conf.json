@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://dutyapi.somee.com",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

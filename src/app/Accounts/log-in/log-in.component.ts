@@ -9,15 +9,15 @@ import { ToastrService, ToastNoAnimation } from 'ngx-toastr';
 @Component({
   selector: 'app-log-in',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, FormsModule, CommonModule ],
+  imports: [RouterLink, RouterOutlet, FormsModule, CommonModule],
   templateUrl: './log-in.component.html',
   styleUrl: './log-in.component.scss'
 })
 export class LogInComponent implements OnInit {
 
   constructor(private router: Router, private api: ApiService,
-     private roleService: RoleService, private http: ApiService,
-      private toastr: ToastrService) {}
+    private roleService: RoleService, private http: ApiService,
+    private toastr: ToastrService) { }
   ngOnInit(): void {
     history.pushState(null, '', location.href);
     window.onpopstate = () => {
@@ -38,7 +38,7 @@ export class LogInComponent implements OnInit {
   }
 
   onSubmit() {
-this.loading = true;
+    this.loading = true;
     var payLoad = {
       'email': this.email,
       'password': this.password
@@ -48,21 +48,22 @@ this.loading = true;
       localStorage.setItem('token', response.token)
 
       this.toastr.success("اهلا بكم في موقع عين الفهد", "تم تسجيل الدخول بنجاح",
-        { progressAnimation: 'increasing',
+        {
+          progressAnimation: 'increasing',
           progressBar: true
 
-         })
-               this.loading = false;
+        })
+      this.loading = false;
       this.router.navigate(['/LangingPage/MainScreenForMain']);
-    },(error) =>{
-            console.log(error.error)
+    }, (error) => {
+      console.log(error.error)
       this.loading = false;
       this.toastr.error("يرجى التحقق من البريد الإلكتروني او كلمة المرو", "فشل تسجيل الدخول",
-        { 
+        {
           progressBar: true,
           timeOut: 2000
 
-         })  
+        })
     })
 
     // if (this.email === 'Saif@saif.com' && this.password === '123456' ||

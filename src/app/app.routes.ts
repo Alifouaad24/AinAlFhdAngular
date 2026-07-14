@@ -36,6 +36,7 @@ import { ShippingTypesForPackagesComponent } from './shipping-types-for-packages
 import { ShippingDurationComponent } from './shipping-duration/shipping-duration.component';
 import { CustomersNotesComponent } from './customers/customers-notes/customers-notes.component';
 import { ShowCustsByShippTypeComponent } from './show-custs-by-shipp-type/show-custs-by-shipp-type.component';
+import { DirectInventoryComponent } from './Direct/direct-inventory/direct-inventory.component';
 export const routes: Routes = [
     {
         path: 'LangingPage',
@@ -98,10 +99,12 @@ export const routes: Routes = [
             {
                 path: 'customersbyshipptype',
                 component: ShowCustsByShippTypeComponent
-            }, 
+            },
+
         ],
     },
     { path: 'shippingDuration', component: ShippingDurationComponent },
+    { path: 'directInventory', component: DirectInventoryComponent },
     { path: 'login', component: LogInComponent },
     { path: 'register', component: RegisterComponent },
     { path: '', redirectTo: 'login', pathMatch: 'full' },

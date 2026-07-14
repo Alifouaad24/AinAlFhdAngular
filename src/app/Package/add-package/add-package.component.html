@@ -120,7 +120,19 @@
           <input readonly class="form-control" value="IQ" />
         </div>
       </div>
-      <br/>
+      <br />
+      <div class="row mb-3">
+        <div class="col-md-10">
+          <label class="form-label d-block text-center">الملاحظات</label>
+          <input [(ngModel)]="NotesForPckage" class="form-control" placeholder="...." />
+        </div>
+        <div class="col-md-2" *ngIf="shippingId == 19">
+          <label class="form-label d-block text-center">اضافة اجور الشحن؟</label>
+          <input type="checkbox" [(ngModel)]="WithShipping" (change)="AddShippingToTotalPrice()"
+             class="form-control" value="IQ" />
+        </div>
+      </div>
+      <br />
       <div class="row mb-3 ">
         <div *ngIf="idToUpdate == null" class="col-md-6 d-flex justify-content-center">
           <button [disabled]="isAdding" (click)="AddPackageToDB()" class="btn btn-success col-md-4">

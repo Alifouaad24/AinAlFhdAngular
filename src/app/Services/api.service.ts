@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ApiService {
 
-  baseUrl: string = "http://saifsfo-002-site21.atempurl.com/";
+  baseUrl: string = "https://dutyapi.somee.com/";
   constructor(private http: HttpClient) { }
 
   getData(endPoint: string): Observable<any> {

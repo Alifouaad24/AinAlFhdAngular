@@ -147,7 +147,7 @@
                 <td>{{ p.city }}</td>
                 <td>{{ p.area }}</td>
                 <td>{{ p.custMob }}</td>
-                <td>{{ cielNumber(p.totalSale) }} IQ</td>
+                <td>{{ cielNumber(p.totalSale) | number:'1.0-0' }} IQ</td>
                 <td>{{ p.count }}</td>
               </tr>
               <tr *ngIf="groupedPackages.length === 0">

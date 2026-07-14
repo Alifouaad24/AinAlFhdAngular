@@ -32,14 +32,14 @@ constructor(private route: ActivatedRoute) {
 }
 
 GetAllShippingTypes() {
-  this.http.getData(`api/ShippingTypes`).subscribe((res: any[]) => {
+  this.http.getData(`api/AinAlfhdShippingType`).subscribe((res: any[]) => {
         console.log(res)
       });
 }
 
 
   GetSystems(id: number) {
-  this.http.getData(`api/System/GetAllSystemsByMainSys/${id}`).subscribe((res: any[]) => {
+  this.http.getData(`api/AinAlfhdSystem/GetAllSystemsByMainSys/${id}`).subscribe((res: any[]) => {
         this.SubRoutes.push(...res);
         const dynamicRoutes = res
           .filter(route => route.routingName) 

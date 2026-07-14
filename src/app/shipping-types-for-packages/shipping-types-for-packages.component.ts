@@ -25,7 +25,7 @@ export class ShippingTypesForPackagesComponent {
   constructor(private route: ActivatedRoute) { }
 
   GetAllShippingTypes() {
-    this.http.getData(`api/ShippingTypes`).subscribe((res: any[]) => {
+    this.http.getData(`api/AinAlfhdShippingType`).subscribe((res: any[]) => {
       console.log(res)
       this.SubRoutes = res
 

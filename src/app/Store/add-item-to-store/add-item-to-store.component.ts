@@ -30,7 +30,7 @@ export class AddItemToStoreComponent implements OnInit {
   }
 
   GetOrderDetailsById(id: number): void {
-    this.http.getData(`api/OrderDetails/${id}`).subscribe((response: any) => {
+    this.http.getData(`api/AinAlfhdOrderDetails/${id}`).subscribe((response: any) => {
       console.log(response)
       this.GatSizesAll();
       if (response.item.categoryId != null) {
@@ -50,6 +50,7 @@ export class AddItemToStoreComponent implements OnInit {
   }
   Count?: Number | null;
   Categories?: any[] = []
+  AllCategories?: any[] = []
   Merchants?: any[] = []
   subCategory?: any = []
   size?: any = []
@@ -88,7 +89,7 @@ export class AddItemToStoreComponent implements OnInit {
       this.imgUrl = "";
       if (this.sku?.length !== 0) {
         this.isLoading = true;
-        this.api.getData(`api/ItemAPI/GetByFinalUrl/${this.sku}`).subscribe(
+        this.api.getData(`api/AinAlfhdItem/GetByFinalUrl/${this.sku}`).subscribe(
           (response) => {
             this.imgUrl = response.image;
             this.WebsitePrice = response.price
@@ -112,14 +113,15 @@ export class AddItemToStoreComponent implements OnInit {
   }
 
   GatCategories(): void {
-    this.api.getData("api/CategoriesAPI").subscribe((result) => {
-      this.Categories = result
+    this.api.getData("api/AinAlfhdCategoriesAPI").subscribe((result) => {
+      this.AllCategories = result
+      this.Categories = this.AllCategories?.filter((category: any) => category.mainCategoryId == null)
       console.log("Categories: ", this.Categories)
     })
   }
 
   GatSubCategories(id: number): void {
-    this.subCategory = this.Categories?.filter((category: any) => category.mainCategoryId == id)
+    this.subCategory = this.AllCategories?.filter((category: any) => category.mainCategoryId == id)
     console.log("subCategory: ", this.subCategory)
   }
 
@@ -135,7 +137,7 @@ export class AddItemToStoreComponent implements OnInit {
   GatSizes(id: number): void {
     console.log("id: ", id)
     if (id > 0) {
-      this.api.getData(`api/SizesAPI/${id}`).subscribe((result) => {
+      this.api.getData(`api/AinAlfhdSizesAPI/${id}`).subscribe((result) => {
         this.size = result
       })
     } else {
@@ -159,7 +161,7 @@ export class AddItemToStoreComponent implements OnInit {
 
 
   GatSizesAll(): void {
-    this.api.getData(`api/SizesAPI`).subscribe((result) => {
+    this.api.getData(`api/AinAlfhdSizesAPI`).subscribe((result) => {
       this.size = result
     })
   }
@@ -183,7 +185,7 @@ export class AddItemToStoreComponent implements OnInit {
   }
 
   GetAllMerchants(): void {
-    this.api.getData(`api/MerchantAPI`).subscribe((response: any) => {
+    this.api.getData(`api/AinAlfhdMerchant`).subscribe((response: any) => {
       this.Merchants = response
       console.log(this.Merchants)
     })
@@ -221,7 +223,7 @@ export class AddItemToStoreComponent implements OnInit {
         this.isLoading = true;
         this.ErrorGit = false;
 
-        this.http.getData(`api/OrderDetails/GetOrderDetailsByLastFourDigits/${this.sku}`).subscribe((response) => {
+        this.http.getData(`api/AinAlfhdOrderDetails/GetOrderDetailsByLastFourDigits/${this.sku}`).subscribe((response) => {
           console.log(response)
           this.imgUrl = response.orderDetails[0].item?.imgUrl;
           this.WebsitePrice = response.orderDetails[0].price
@@ -249,7 +251,7 @@ export class AddItemToStoreComponent implements OnInit {
 
   searchAboutItemBySKU(): void {
     this.isLoading = true;
-    this.api.getData(`api/ItemAPI/${this.sku}`).subscribe(
+    this.api.getData(`api/AinAlfhdItem/${this.sku}`).subscribe(
       (response) => {
         this.imgUrl = response.img;
         this.isLoading = false;
@@ -270,7 +272,7 @@ export class AddItemToStoreComponent implements OnInit {
       const formData = new FormData();
       formData.append('htmlFile', file);
 
-      this.http.postData('api/SheIn', formData)
+      this.http.postData('api/AinAlfhdSheIn', formData)
         .subscribe({
           next: res => {
             console.log('تم الإرسال بنجاح!', res);
@@ -291,50 +293,32 @@ export class AddItemToStoreComponent implements OnInit {
     console.log("SizeId:", this.SizeId);
 
   }
+
   SaveItemInStore(): void {
 
-    var CategoryId = this.categoryId != null ? this.subCategoryId : this.categoryId
-    var PayLoad = {
-      'upc': this.UPC,
-      'sku': this.sku,//
-      'categoryId': CategoryId,//
-      'sizeId': this.SizeId,
-      'size': this.SizeId,
-      'MerchantId': this.MerchantId,
-      'price': this.WebsitePrice,
-      'imgUrl': this.imgUrl,//
-      'websitePrice': this.WebsitePrice,
-      'makeId': this.MakeId
-    }
+    var CategoryId = Number(this.subCategoryId ?? this.categoryId);
 
-    // search by all sku
     var PayLoad1 = {
       'sku': this.sku,
       'imgUrl': this.imgUrl,
       'makeId': 1,
       'categoryId': CategoryId,
-      'size': this.SizeId,
-      'websitePrice': this.WebsitePrice,
-      'MerchantId': this.MerchantId,
+      'size': Number.parseInt(this.SizeId!),
+      'websitePrice': Number(this.WebsitePrice),
+      'merchantId': Number(this.MerchantId),
     }
     console.log(PayLoad1)
 
-    if (this.ItemId != null) {
-      this.api.putData(`api/ItemAPI/${this.ItemId}`, PayLoad).subscribe(result => {
-        console.log(result)
-        this.router.navigate(['LangingPage/ShowItemsInStore'], { queryParams: { updated: 'true' } })
-      })
-    }
-    else {
-      this.api.postData("api/OrderDetails", PayLoad1).subscribe(result => {
-        this.toastr.success('تمت الاضافة بنجاح')
-        this.router.navigate(['LangingPage/ShowItemsInStore'], { queryParams: { updated: 'true' } })
+    this.api.postData("api/AinAlfhdOrderDetails", PayLoad1).subscribe(result => {
+      this.toastr.success('تمت الاضافة بنجاح')
+      console.log(result)
+      //this.router.navigate(['LangingPage/myStore'])
 
-      }, (err) => {
-        this.toastr.error('الرجاء التأكد من المعلومات والمحاولة مجددا')
+    }, (err) => {
+      this.toastr.error('الرجاء التأكد من المعلومات والمحاولة مجددا')
 
-      })
-    }
+    })
+    // }
   }
 
   isModalOpen = false;
